@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}日報の一覧{% endblock title %}
+
+{% block extrahead %}
+<style>
+table {
+  margin-top: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    <h3 class="page-header">日報の一覧</h3>
+    <a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm">追加</a>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>投稿日時</th>
+          <th>投稿者名</th>
+          <th>タイトル</th>
+          <th>本文</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for daily in dailys %}
+        <tr>
+          <td>{{ daily.id }}</td>
+          <td>{{ daily.date }}</td>
+          <td>{{ daily.user }}</td>
+          <td>{{ daily.title }}</td>
+          <td>{{ daily.report }}</td>
+          <td>
+            <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">修正</a>
+            <a href="{% url 'cms:daily_del' daily_id=daily.id %}" class="btn btn-default btn-sm">削除</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock content %}

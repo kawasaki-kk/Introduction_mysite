@@ -24,6 +24,8 @@ $RECYCLE.BIN/
 # OSX
 # =========================
 
+settings.py
+
 .DS_Store
 .AppleDouble
 .LSOverride

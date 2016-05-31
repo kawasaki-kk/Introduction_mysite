@@ -1,10 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
-from cms.models import Book, Impression
-from cms.forms import BookForm, ImpressionForm
+from cms.models import Book, Impression, User, Daily, Comment
+from cms.forms import BookForm, ImpressionForm, UserForm, DailyForm, CommentForm
 from django.views.generic.list import ListView
-
 
 
 def book_list(request):
@@ -87,3 +86,40 @@ def impression_del(request, book_id, impression_id):
     impression = get_object_or_404(Impression, pk=impression_id)
     impression.delete()
     return redirect('cms:impression_list', book_id=book_id)
+
+
+def daily_list(request):
+    """日報の一覧"""
+#    return HttpResponse('日報の一覧')
+    dailys = Daily.objects.all().order_by('date')
+    return render(request,
+                  'cms/daily_list.html',     # 使用するテンプレート
+                  {'dailys': dailys})         # テンプレートに渡すデータ
+
+
+def daily_edit(request, daily_id=None):
+    """日報の編集"""
+#     return HttpResponse('書籍の編集')
+    if daily_id:   # book_id が指定されている (修正時)
+        daily = get_object_or_404(Daily, pk=daily_id)
+    else:         # book_id が指定されていない (追加時)
+        daily = Daily()
+
+    if request.method == 'POST':
+        form = DailyForm(request.POST, instance=daily)  # POST された request データからフォームを作成
+        if form.is_valid():    # フォームのバリデーション
+            daily = form.save(commit=False)
+            daily.save()
+            return redirect('cms:daily_list')
+    else:    # GET の時
+        form = DailyForm(instance=daily)  # book インスタンスからフォームを作成
+
+    return render(request, 'cms/daily_edit.html', dict(form=form, daily_id=daily_id))
+
+
+def daily_del(request, daily_id):
+    """書籍の削除"""
+#     return HttpResponse('書籍の削除')
+    daily = get_object_or_404(Daily, pk=daily_id)
+    daily.delete()
+    return redirect('cms:daily_list')
