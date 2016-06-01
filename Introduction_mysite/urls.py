@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include   # ←, includeを追加
 from django.contrib import admin
+from accounts import views
 
 urlpatterns = [
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'accounts/logout.html'}, name='logout'),
+    url(r'^register/$', views.register, name='register'),
     url(r'^admin/', admin.site.urls),
     url(r'^cms/', include('cms.urls', namespace='cms')),   # ←ここを追加
 ]

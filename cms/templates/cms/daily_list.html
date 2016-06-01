@@ -15,6 +15,7 @@ table {
     {% if user.is_anonymous %}
 		<dd div class="operation">
   		<a href="{% url 'login' %}">ログインする</a>
+  		<a href="{% url 'register' %}">ユーザー登録する</a>
 	</dd>
 	<hr />
 	{% else %}

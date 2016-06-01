@@ -1,9 +1,18 @@
 {% extends "base.html" %}
+{% load bootstrap %}
 
-{% block title %}logout{% endblock title %}
+{% block title %}register{% endblock title %}
 
 {% block content %}
-
-    <h3 class="page-header">logout complate</h3>
-
+    <h3 class="page-header">register</h3>
+    <form action="{% url 'register' %}" method="post" class="form-horizontal" role="form">
+      {% csrf_token %}
+      {{ form|bootstrap_horizontal }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-primary">registration</button>
+        </div>
+      </div>
+    </form>
+    <a href="{% url 'login' %}" class="btn btn-default btn-sm">back to login page</a>
 {% endblock content %}

@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
         Creates and saves a User with the given username, email and password.
         """
         if not username:
-            raise ValueError('The given username must be set')
+            raise ValueError(u'ユーザー名を入力してください！')
         user = self.model(username=username, is_superuser=is_superuser, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
