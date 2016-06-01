@@ -26,6 +26,7 @@ $RECYCLE.BIN/
 
 settings.py
 ex_password.py
+__pycache__
 
 .DS_Store
 .AppleDouble
