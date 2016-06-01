@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from cms.models import Daily, Comment
 from cms.forms import DailyForm, CommentForm
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 
 
@@ -15,6 +16,12 @@ def daily_list(request):
     return render(request,
                   'cms/daily_list.html',     # 使用するテンプレート
                   {'dailys': dailys})         # テンプレートに渡すデータ
+
+
+class daily_detail(DetailView):
+    model = Daily
+    template_name = 'cms/daily_detail.html'
+
 
 
 # 日報の編集

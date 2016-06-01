@@ -48,10 +48,12 @@ table {
           <td>{{ daily.report }}</td>
           <td>
           	{% if user == daily.user %}
+          		<a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm">詳細</a>
             	<a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">修正</a>
             	<a href="{% url 'cms:daily_del' daily_id=daily.id %}" class="btn btn-default btn-sm">削除</a>
             	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
             {% else %}
+            	<a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm">詳細</a>
             	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
             {% endif %}
           </td>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap %}
 
-{% block title %}ÉçÉOÉCÉì{% endblock title %}
+{% block title %}login{% endblock title %}
 
 {% block content %}
     <h3 class="page-header">login</h3>
@@ -21,7 +21,7 @@
 		</tr>
 	</table>
 	<button type="submit" class="btn btn-primary">login</button>
-	<a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">go to report page in not login</a>
+	<a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">go to report page whitout to login</a>
 	<input type="hidden" name="next" value="{{ next }}" />
 </form>
 {% endblock %}
