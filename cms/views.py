@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
-from cms.models import Book, Impression, User, Daily, Comment
-from cms.forms import BookForm, ImpressionForm, UserForm, DailyForm, CommentForm
+from cms.models import Book, Impression, Daily, Comment
+from cms.forms import BookForm, ImpressionForm, DailyForm, CommentForm
 from django.views.generic.list import ListView
 
 

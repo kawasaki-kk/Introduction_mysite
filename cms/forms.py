@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from cms.models import Book, Impression, User, Daily, Comment
+from cms.models import Book, Impression, Daily, Comment
 
 
 class BookForm(ModelForm):
@@ -21,13 +21,6 @@ class DailyForm(ModelForm):
     class Meta:
         model = Daily
         fields = ('report', )
-
-
-class UserForm(ModelForm):
-    """日報のフォーム"""
-    class Meta:
-        model = User
-        fields = ('id', 'name', 'password',)
 
 
 class CommentForm(ModelForm):

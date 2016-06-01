@@ -25,6 +25,7 @@ $RECYCLE.BIN/
 # =========================
 
 settings.py
+ex_password.py
 
 .DS_Store
 .AppleDouble
