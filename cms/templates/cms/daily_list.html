@@ -22,7 +22,7 @@ table {
   		<a href="{% url 'logout' %}"> [ログアウト]</a>
 		</p>
 		<dd div class="operation">
-  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm">追加</a>
+  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm">日報の投稿</a>
 	</dd>
 	<hr />
 	{% endif %}
@@ -46,9 +46,13 @@ table {
           <td>{{ daily.title }}</td>
           <td>{{ daily.report }}</td>
           <td>
-            <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">修正</a>
-            <a href="{% url 'cms:daily_del' daily_id=daily.id %}" class="btn btn-default btn-sm">削除</a>
-            <a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
+          	{% if user == daily.user %}
+            	<a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">修正</a>
+            	<a href="{% url 'cms:daily_del' daily_id=daily.id %}" class="btn btn-default btn-sm">削除</a>
+            	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
+            {% else %}
+            	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
+            {% endif %}
           </td>
         </tr>
         {% endfor %}
