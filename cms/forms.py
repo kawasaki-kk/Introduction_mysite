@@ -20,7 +20,7 @@ class DailyForm(ModelForm):
     """日報のフォーム"""
     class Meta:
         model = Daily
-        fields = ('report', )
+        fields = ('title', 'report', )
 
 
 class CommentForm(ModelForm):

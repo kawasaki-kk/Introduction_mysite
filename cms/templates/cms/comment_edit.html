@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load bootstrap %}
 
-{% block title %}日報の編集{% endblock title %}
+{% block title %}コメントの編集{% endblock title %}
 
 {% block content %}
-    <h3 class="page-header">日報の編集</h3>
-    {% if daily_id %}
-    <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
+    <h3 class="page-header">コメントの編集</h3>
+    {% if impression_id %}
+    <form action="{% url 'cms:comment_mod' daily_id=daily_id comment_id=comment_id %}" method="post" class="form-horizontal" role="form">
     {% else %}
-    <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'cms:comment_add' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
     {% endif %}
       {% csrf_token %}
       {{ form|bootstrap_horizontal }}
