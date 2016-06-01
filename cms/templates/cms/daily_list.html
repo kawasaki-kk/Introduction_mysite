@@ -12,7 +12,20 @@ table {
 
 {% block content %}
     <h3 class="page-header">日報の一覧</h3>
-    <a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm">追加</a>
+    {% if user.is_anonymous %}
+		<dd div class="operation">
+  		<a href="{% url 'login' %}">ログインする</a>
+	</dd>
+	<hr />
+	{% else %}
+		<p>username: <b>{{ user.username }}</b> 
+  		<a href="{% url 'logout' %}"> [ログアウト]</a>
+		</p>
+		<dd div class="operation">
+  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm">追加</a>
+	</dd>
+	<hr />
+	{% endif %}
     <table class="table table-striped table-bordered">
       <thead>
         <tr>

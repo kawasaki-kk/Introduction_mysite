@@ -6,4 +6,4 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     """ユーザー"""
-    group_name = models.CharField('所属', max_length=255)
+    group_name = models.CharField('所属', max_length=255, blank=True)
