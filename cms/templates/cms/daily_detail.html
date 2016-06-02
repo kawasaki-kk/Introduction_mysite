@@ -1,12 +1,44 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>Detail</title>
-</head>
-<body>
-Detail
-<h1>{{ object.title }}</h1>
-<h1>{{ object.report }}</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}日報の詳細{% endblock title %}
+
+{% block extrahead %}
+<style>
+table {
+  margin-top: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    <h3 class="page-header">日報の詳細</h3>
+    {% if user.is_anonymous %}
+		<dd div class="operation">
+  		<a href="{% url 'login' %}">ログインする</a>
+  		<a href="{% url 'register' %}">ユーザー登録する</a>
+	</dd>
+	<hr />
+	{% else %}
+		<p>username: <b>{{ user.username }}</b> 
+  		<a href="{% url 'logout' %}"> [ログアウト]</a>
+		</p>
+		<dd div class="operation">
+  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm">日報の投稿</a>
+	</dd>
+	<hr />
+	{% endif %}
+    <div class="panel panel-default">
+  		<div class="panel-heading">
+    		<h3 class="panel-title">タイトル</h3>
+  		</div>
+  		<div class="panel-body">
+    		{{ object.title }}
+  		</div>
+  		<div class="panel-heading">
+    		<h3 class="panel-title">本文</h3>
+  		</div>
+  		<div class="panel-body">
+    		{{ object.report }}
+  		</div>
+	</div>
+{% endblock content %}
