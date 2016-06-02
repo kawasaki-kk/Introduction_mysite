@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load filters %}
 {% block title %}日報の一覧{% endblock title %}
 
 {% block extrahead %}
@@ -45,7 +45,7 @@ table {
           <td>{{ daily.date }}</td>
           <td>{{ daily.user }}</td>
           <td>{{ daily.title }}</td>
-          <td>{{ daily.report }}</td>
+          <td>{{ daily.report|truncate:"30" }}</td>
           <td>
           	{% if user == daily.user %}
           		<a href="{% url 'cms:daily_detail' pk=daily.id %}" class="btn btn-default btn-sm">詳細</a>
