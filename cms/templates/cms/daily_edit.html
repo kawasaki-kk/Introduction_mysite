@@ -10,6 +10,20 @@
     {% else %}
     <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
     {% endif %}
+    {% if user.is_anonymous %}
+		<dd div class="operation">
+  		<a href="{% url 'login' %}">ログインする</a>
+  		<a href="{% url 'register' %}">ユーザー登録する</a>
+	</dd>
+	<hr />
+	{% else %}
+		<p>username: <b>{{ user.username }}</b> 
+  		<a href="{% url 'logout' %}"> [ログアウト]</a>
+		</p>
+		<dd div class="operation">
+	</dd>
+	<hr />
+	{% endif %}
       {% csrf_token %}
       {{ form|bootstrap_horizontal }}
       <div class="form-group">
