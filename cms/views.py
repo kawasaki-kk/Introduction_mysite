@@ -23,7 +23,6 @@ class daily_detail(DetailView):
     template_name = 'cms/daily_detail.html'
 
 
-
 # 日報の編集
 def daily_edit(request, daily_id=None):
     """日報の編集"""
