@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
 from cms.models import Daily, Comment
-from cms.forms import DailyForm, CommentForm
+from cms.forms import DailyForm, CommentForm, SearchForm
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 # 日報の一覧
@@ -28,6 +29,8 @@ def daily_edit(request, daily_id=None):
     """日報の編集"""
     if daily_id:   # id が指定されている (修正時)
         daily = get_object_or_404(Daily, pk=daily_id)
+        if daily.user != request.user:  # 投稿者とログインユーザが異なる場合
+            return redirect('login')
     else:         # id が指定されていない (追加時)
         daily = Daily(user=request.user)
 
@@ -53,9 +56,9 @@ def daily_del(request, daily_id):
 
 # 日報の検索
 def daily_search(request):
-    dailys = Daily.objects.all()
-    books = dailys.filter(Q(title__contains=form.cleaned_data['title']) |
-                        Q(subtitle__contains=form.cleaned_data['title']))
+    form = SearchForm(request.POST)
+    dailys = Daily.objects.all().filter(Q(title__contains=form.cleaned_data['keyword']) |
+                                        Q(report__contains=form.cleaned_data['keyword']))
     return render(request,
                   'cms/daily_list.html',  # 使用するテンプレート
                   {'dailys': dailys})  # テンプレートに渡すデータ

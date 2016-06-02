@@ -19,4 +19,4 @@ class CommentForm(ModelForm):
 
 # 検索用フォーム
 class SearchForm(forms.Form):
-    keyword = forms.charField()
+    keyword = forms.CharField()

@@ -27,13 +27,14 @@ table {
 	    		{{ user.username }}
 	  		</div>
 		</div>
-  		<a href="{% url 'logout' %}" class="btn btn-default btn-sm btn-primary">ログアウト</a>
+  			<a href="{% url 'logout' %}" class="btn btn-default btn-sm btn-primary">ログアウト</a>
 		</p>
 		<dd div class="operation">
-  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm btn-primary">日報の投稿</a>
-	</dd>
+  			<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm btn-primary">日報の投稿</a>
+		</dd>
 	<hr />
 	{% endif %}
+	<a href="{% url 'cms:daily_search' %}" class="btn btn-default btn-sm btn-primary">検索</a>
     <table class="table table-striped table-bordered">
       <thead>
         <tr>

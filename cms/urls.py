@@ -15,5 +15,5 @@ urlpatterns = [
     # 詳細
     url(r'^dailyreport/detail/(?P<pk>\d+)/$', views.daily_detail.as_view(), name='daily_detail'),
     # 検索
-    # url(r'^dailyreport/search/$', views.daily_search, name='daily_search'),
+    url(r'^dailyreport/search/$', views.daily_search, name='daily_search'),
 ]
