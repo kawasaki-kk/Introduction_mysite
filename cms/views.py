@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-
+from django.template import Context, loader, RequestContext
 from cms.models import Daily, Comment
 from cms.forms import DailyForm, CommentForm, SearchForm
 from django.views.generic.list import ListView
@@ -58,12 +58,18 @@ def daily_del(request, daily_id):
 
 # 日報の検索
 def daily_search(request):
-    form = SearchForm(request.POST)
-    dailys = Daily.objects.all().filter(Q(title__contains=form.cleaned_data['keyword']) |
-                                        Q(report__contains=form.cleaned_data['keyword']))
-    return render(request,
-                  'cms/daily_list.html',  # 使用するテンプレート
-                  {'dailys': dailys})  # テンプレートに渡すデータ
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            tpl = loader.get_template('cms/daily_search.html')
+            keyword = form.cleaned_data['keyword']
+            dailys = Daily.objects.all().filter(Q(title__contains=form.cleaned_data['keyword']) |
+                                                Q(report__contains=form.cleaned_data['keyword']))
+            return HttpResponse(tpl.render(RequestContext(request, {'form': form, 'dailys': dailys})))
+        else:
+            form = SearchForm()
+        tpl = loader.get_template('cms/daily_search.html')
+        return HttpResponse(tpl.render(RequestContext(request, {'form': form})))
 
 
 # コメントの編集
