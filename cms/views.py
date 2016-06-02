@@ -51,6 +51,16 @@ def daily_del(request, daily_id):
     return redirect('cms:daily_list')
 
 
+# 日報の検索
+def daily_search(request):
+    dailys = Daily.objects.all()
+    books = dailys.filter(Q(title__contains=form.cleaned_data['title']) |
+                        Q(subtitle__contains=form.cleaned_data['title']))
+    return render(request,
+                  'cms/daily_list.html',  # 使用するテンプレート
+                  {'dailys': dailys})  # テンプレートに渡すデータ
+
+
 # コメントの編集
 def comment_edit(request, daily_id, comment_id=None):
     """感想の編集"""

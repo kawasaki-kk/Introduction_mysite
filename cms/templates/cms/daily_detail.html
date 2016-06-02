@@ -14,16 +14,23 @@ table {
     <h3 class="page-header">日報の詳細</h3>
     {% if user.is_anonymous %}
 		<dd div class="operation">
-  		<a href="{% url 'login' %}">ログインする</a>
-  		<a href="{% url 'register' %}">ユーザー登録する</a>
+  		<a href="{% url 'login' %}" class="btn btn-default btn-sm btn-primary">ログインする</a>
+  		<a href="{% url 'register' %}" class="btn btn-default btn-sm">ユーザー登録する</a>
 	</dd>
 	<hr />
 	{% else %}
-		<p>username: <b>{{ user.username }}</b> 
-  		<a href="{% url 'logout' %}"> [ログアウト]</a>
+		<div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">ログインユーザー</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		{{ user.username }}
+	  		</div>
+		</div>
+  		<a href="{% url 'logout' %}" class="btn btn-default btn-sm btn-primary">ログアウト</a>
 		</p>
 		<dd div class="operation">
-  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm">日報の投稿</a>
+  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm btn-primary">日報の投稿</a>
 	</dd>
 	<hr />
 	{% endif %}

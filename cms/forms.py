@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from cms.models import Daily, Comment
+from django import forms
 
 
 class DailyForm(ModelForm):
@@ -15,3 +16,7 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ('comment', )
 
+
+# 検索用フォーム
+class SearchForm(forms.Form):
+    keyword = forms.charField()
