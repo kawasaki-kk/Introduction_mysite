@@ -51,7 +51,7 @@ table {
           <td>{{ daily.id }}</td>
           <td>{{ daily.date }}</td>
           <td>{{ daily.user }}</td>
-          <td>{{ daily.title }}</td>
+          <td><a href="{% url 'cms:daily_detail' pk=daily.id %}"> {{ daily.title }}</a></td>
           <td>{{ daily.report|truncate:"30" }}</td>
           <td>
           	{% if user == daily.user %}
