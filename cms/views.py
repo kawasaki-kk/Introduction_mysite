@@ -50,6 +50,8 @@ def daily_edit(request, daily_id=None):
 def daily_del(request, daily_id):
     """日報の削除"""
     daily = get_object_or_404(Daily, pk=daily_id)
+    if daily.user != request.user:  # 投稿者とログインユーザが異なる場合
+        return redirect('login')
     daily.delete()
     return redirect('cms:daily_list')
 
