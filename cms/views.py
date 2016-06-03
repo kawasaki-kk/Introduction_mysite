@@ -7,9 +7,11 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 
 # 日報の一覧
+@login_required
 def daily_list(request):
     """日報の一覧"""
     # return HttpResponse('日報の一覧')
