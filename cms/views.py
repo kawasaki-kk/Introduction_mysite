@@ -14,9 +14,10 @@ def daily_list(request):
     """日報の一覧"""
 #    return HttpResponse('日報の一覧')
     dailys = Daily.objects.all().order_by('date')
+    form = SearchForm()
     return render(request,
                   'cms/daily_list.html',     # 使用するテンプレート
-                  {'dailys': dailys})         # テンプレートに渡すデータ
+                  {'form': form, 'dailys': dailys})         # テンプレートに渡すデータ
 
 
 class daily_detail(DetailView):
@@ -61,14 +62,14 @@ def daily_search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            tpl = loader.get_template('cms/daily_search.html')
+            tpl = loader.get_template('cms/daily_list.html')
             keyword = form.cleaned_data['keyword']
             dailys = Daily.objects.all().filter(Q(title__contains=form.cleaned_data['keyword']) |
-                                                Q(report__contains=form.cleaned_data['keyword']))
+                                                Q(report__contains=form.cleaned_data['keyword'])).order_by('date')
             return HttpResponse(tpl.render(RequestContext(request, {'form': form, 'dailys': dailys})))
         else:
             form = SearchForm()
-        tpl = loader.get_template('cms/daily_search.html')
+        tpl = loader.get_template('cms/daily_list.html')
         return HttpResponse(tpl.render(RequestContext(request, {'form': form})))
 
 
