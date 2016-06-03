@@ -23,12 +23,22 @@ def daily_list(request):
                   'cms/daily_list.html',                   # 使用するテンプレート
                   {'form': form, 'dailys': dailys})         # テンプレートに渡すデータ・フォーム
 
+
 # 日報の詳細画面のクラス
 class daily_detail(DetailView):
     # 表示対象となるモデルの指定
     model = Daily
     # 表示に使用するテンプレートを指定
     template_name = 'cms/daily_detail.html'
+    '''
+    def get(self, request, *args, **kwargs):
+        daily = get_object_or_404(Daily, pk=kwargs['daily_id'])
+        comments = daily.comment.all().order_by('id')
+        self.object_list = comments
+
+        context = self.get_context_data(object_list=self.object_list, daily=daily)
+        return self.render_to_response(context)
+    '''
 
 
 # 日報の編集
@@ -84,6 +94,21 @@ def daily_search(request):
         return HttpResponse(tpl.render(RequestContext(request, {'form': form})))
 
 
+class comment_list(ListView):
+    """コメントの一覧"""
+    context_object_name = 'comments'
+    template_name = 'cms/comment_list.html'
+    # paginate_by = 2  # １ページは最大2件ずつでページングする
+
+    def get(self, request, *args, **kwargs):
+        daily = get_object_or_404(Daily, pk=kwargs['daily_id'])  # 親の日報を読む
+        comments = daily.comment.all().order_by('date')  # 日報の子供の、コメントを読む
+        self.object_list = comments
+
+        context = self.get_context_data(object_list=self.object_list, daily=daily)
+        return self.render_to_response(context)
+
+
 # コメントの編集
 def comment_edit(request, daily_id, comment_id=None):
     """感想の編集"""
@@ -106,3 +131,10 @@ def comment_edit(request, daily_id, comment_id=None):
     return render(request,
                   'cms/comment_edit.html',
                   dict(form=form, daily_id=daily_id, comment_id=comment_id))
+
+
+def comment_del(request, daily_id, comment_id):
+    """感想の削除"""
+    comment = get_object_or_404(Comment, pk=comment_id)
+    comment.delete()
+    return redirect('cms:comment_list', daily_id=daily_id)
