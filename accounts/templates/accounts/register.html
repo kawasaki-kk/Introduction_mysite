@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap %}
 
-{% block title %}register{% endblock title %}
+{% block title %}ユーザー登録{% endblock title %}
 
 {% block content %}
     <h3 class="page-header">register</h3>
@@ -10,9 +10,9 @@
       {{ form|bootstrap_horizontal }}
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">registration</button>
+          <button type="submit" class="btn btn-primary">登録</button>
         </div>
       </div>
     </form>
-    <a href="{% url 'login' %}" class="btn btn-default btn-sm">back to login page</a>
+    <a href="{% url 'login' %}" class="btn btn-default btn-sm">ログインページに戻る</a>
 {% endblock content %}
