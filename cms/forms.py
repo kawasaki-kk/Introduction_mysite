@@ -19,6 +19,7 @@ class CommentForm(ModelForm):
 
 # 検索用フォーム
 class SearchForm(forms.Form):
+    # 検索キーワード
     keyword = forms.CharField(max_length=100, required=False)
 
 

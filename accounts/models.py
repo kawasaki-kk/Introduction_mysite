@@ -22,7 +22,10 @@ class UserManager(BaseUserManager):
         return self._create_user(username, password, True, **extra_fields)
 
 
+# django既定のユーザーテーブルをもとに、自作できるようAbstractBaseUserとPermissionsMixinを継承
 class User(AbstractBaseUser, PermissionsMixin):
+    # ユーザーテーブルの要素を定義
+    # idは自動生成されるものを使用
     username = models.CharField('ユーザー名', max_length=30, unique=True)
     screenname = models.CharField('ユーザー名（表示用）', max_length=255)
     is_active = models.BooleanField('有効フラグ', default=True)
@@ -37,6 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'ユーザー'
         verbose_name_plural = verbose_name
 
+    # 必須メソッドを定義
     def get_full_name(self):
         return self.__str__()
 

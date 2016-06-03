@@ -12,8 +12,8 @@ urlpatterns = [
     # コメント操作
     url(r'^dailyreport/comment/add/(?P<daily_id>\d+)/$', views.comment_edit, name='comment_add'),  # 登録
     url(r'^dailyreport/comment/mod/(?P<daily_id>\d+)/(?P<comment_id>\d+)/$', views.comment_edit, name='comment_mod'),  # 修正
-    # 詳細
+    # 日報詳細
     url(r'^dailyreport/detail/(?P<pk>\d+)/$', views.daily_detail.as_view(), name='daily_detail'),
-    # 検索
+    # 日報検索
     url(r'^dailyreport/search/$', views.daily_search, name='daily_search'),
 ]
