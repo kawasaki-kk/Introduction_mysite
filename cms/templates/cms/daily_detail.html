@@ -48,6 +48,7 @@ table {
     		{{ object.report|linebreaks }}
   		</div>
 	</div>
-	<a href="{% url 'cms:comment_list' daily_id=object.id %}" class="btn btn-default btn-sm btn-primary">コメントの一覧</a>
+	<a href="{% url 'cms:comment_add' daily_id=object.id %}" class="btn btn-default btn-sm btn-primary">コメントの追加</a>
+	<a href="{% url 'cms:comment_list' daily_id=object.id %}" class="btn btn-default btn-sm">コメントの一覧</a>
 	<a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">トップへ戻る</a>
 {% endblock content %}
