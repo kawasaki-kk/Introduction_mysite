@@ -87,7 +87,8 @@ def daily_search(request):
             tpl = loader.get_template('cms/daily_list.html')
             # 検索対象中にキーワードが存在するか検索
             # filterを使用、複数条件検索のためQを使用
-            dailys = Daily.objects.all().filter(Q(title__contains=form.cleaned_data['keyword']) |
+            dailys = Daily.objects.all().filter(Q(user__username__contains=form.cleaned_data['keyword']) |
+                                                Q(title__contains=form.cleaned_data['keyword']) |
                                                 Q(report__contains=form.cleaned_data['keyword'])).order_by('date')
             return HttpResponse(tpl.render(RequestContext(request, {'form': form, 'dailys': dailys})))
         else:
