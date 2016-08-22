@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load markdown_deux_tags %}
 {% block title %}日報の詳細{% endblock title %}
 
 {% block extrahead %}
@@ -45,7 +45,9 @@ table {
     		<h3 class="panel-title">本文</h3>
   		</div>
   		<div class="panel-body">
-    		{{ object.report|linebreaks }}
+            <text>
+    		    {{ object.report|markdown|linebreaks }}
+            </text>
   		</div>
 	</div>
 	<a href="{% url 'cms:comment_add' daily_id=object.id %}" class="btn btn-default btn-sm btn-primary">コメントの追加</a>
