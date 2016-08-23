@@ -100,6 +100,17 @@ def daily_search(request):
         return HttpResponse(tpl.render(RequestContext(request, {'form': form})))
 
 
+def user_info(request, user_id):
+    dailys = Daily.objects.filter(user=user_id).order_by('date')  # 表示する日報のリストを取得
+    # 検索フォームを生成
+    form = SearchForm()
+    flag = True
+
+    return render(request,
+                  'cms/daily_list.html',  # 使用するテンプレート
+                  {'form': form, 'dailys': dailys, 'title': flag})  # テンプレートに渡すデータ・フォーム
+
+
 class comment_list(ListView):
     """コメントの一覧"""
     context_object_name = 'comments'

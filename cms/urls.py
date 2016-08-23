@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^dailyreport/detail/(?P<daily_id>\d+)/$', views.daily_detail, name='daily_detail'),
     # 日報検索
     url(r'^dailyreport/search/$', views.daily_search, name='daily_search'),
+    url(r'^dailyreport/userinfo/(?P<user_id>\d+)/$', views.user_info, name='user_info'),
 ]
