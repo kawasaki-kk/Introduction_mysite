@@ -2,22 +2,6 @@
 {% load filters %}
 {% block title %}日報の一覧{% endblock title %}
 
-{% block extrahead %}
-<script>
-    $(function() {
-        $('.del_confirm').on('click', function () {
-            $("#del_pk").text($(this).attr("pk"));
-            $('#del_url').attr('href', $(this).attr("url"));
-        });
-    });
-</script>
-<style>
-    table {
-        margin-top: 8px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
     {% if userinfo %}
         <h3 class="page-header">{{userinfo.username}}さんの投稿</h3>
