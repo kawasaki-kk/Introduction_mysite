@@ -36,22 +36,20 @@
     <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>投稿日時</th>
-            <th>投稿者名</th>
+            <th>投稿者</th>
             <th>タイトル</th>
             <th>本文</th>
-            <th>操作</th>
+            <th>投稿日時</th>
+            <th></th>
         </tr>
     </thead>
         <tbody>
             {% for daily in dailys %}
             <tr>
-                <td>{{ daily.id }}</td>
-                <td>{{ daily.date }}</td>
                 <td>{{ daily.user }}</td>
                 <td><a href="{% url 'cms:daily_detail' daily_id=daily.id %}"> {{ daily.title }}</a></td>
                 <td>{{ daily.report|truncate:"30" }}</td>
+                <td>{{ daily.date }}</td>
                 <td>
                     {% if title %}
                     <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary">詳細</a>
