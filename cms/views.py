@@ -72,7 +72,7 @@ def daily_edit(request, daily_id=None):
         if form.is_valid():    # フォームのバリデーション
             daily = form.save(commit=False)
             daily.save()    # 日報の登録
-            return redirect('cms:daily_list')
+            return redirect('cms:daily_detail', daily_id=daily.id)
     else:    # GET の時
         form = DailyForm(instance=daily)  # book インスタンスからフォームを作成
 
