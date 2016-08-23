@@ -4,15 +4,16 @@
 {% block title %}日報の編集{% endblock title %}
 
 {% block content %}
+<form>
     <h3 class="page-header">日報の編集</h3>
-      {% csrf_token %}
-        <text>
-      {{ form|bootstrap_horizontal }}
-            </text>
-      <div class="form-group">
+    {% csrf_token %}
+    <text>
+        {{ form|bootstrap_horizontal }}
+    </text>
+    <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">送信</button>
+            <button type="submit" class="btn btn-primary">送信</button>
         </div>
-      </div>
-    </form>
+    </div>
+</form>
 {% endblock content %}
