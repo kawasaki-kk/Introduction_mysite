@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.contrib import auth
 
 
 # 日報の一覧
@@ -114,11 +115,11 @@ def user_info(request, user_id):
     dailys = Daily.objects.filter(user=user_id).order_by('date')  # 表示する日報のリストを取得
     # 検索フォームを生成
     form = SearchForm()
-    flag = True
+    userinfo = get_object_or_404(auth.get_user_model(), pk=user_id)
 
     return render(request,
                   'cms/daily_list.html',  # 使用するテンプレート
-                  {'form': form, 'dailys': dailys, 'title': flag})  # テンプレートに渡すデータ・フォーム
+                  {'form': form, 'dailys': dailys, 'userinfo': userinfo})  # テンプレートに渡すデータ・フォーム
 
 
 class comment_list(ListView):

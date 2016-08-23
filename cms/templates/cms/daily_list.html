@@ -19,8 +19,8 @@
 {% endblock %}
 
 {% block content %}
-    {% if title %}
-    <h3 class="page-header">{{user.username}}さんの投稿</h3>
+    {% if userinfo %}
+    <h3 class="page-header">{{userinfo.username}}さんの投稿</h3>
     {% else %}
     <h3 class="page-header">日報の一覧</h3>
     {% endif %}
@@ -46,12 +46,12 @@
         <tbody>
             {% for daily in dailys %}
             <tr>
-                <td>{{ daily.user }}</td>
+                <td><a href="{% url 'cms:user_info' user_id=daily.user.id %}">{{ daily.user }}</a></td>
                 <td><a href="{% url 'cms:daily_detail' daily_id=daily.id %}"> {{ daily.title }}</a></td>
                 <td>{{ daily.report|truncate:"30" }}</td>
                 <td>{{ daily.date }}</td>
                 <td>
-                    {% if title %}
+                    {% if daily.user == user %}
                     <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary">詳細</a>
                     <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">修正</a>
                     <button class="btn btn-default btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ daily.id }}" url="{% url 'cms:daily_del' daily_id=daily.id %}">削除</button>
