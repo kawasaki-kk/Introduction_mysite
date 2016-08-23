@@ -6,13 +6,13 @@
 {% block content %}
     <h3 class="page-header">register</h3>
     <form action="{% url 'register' %}" method="post" class="form-horizontal" role="form">
-      {% csrf_token %}
-      {{ form|bootstrap_horizontal }}
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">登録</button>
+        {% csrf_token %}
+        {{ form|bootstrap_horizontal }}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">登録</button>
+            </div>
         </div>
-      </div>
     </form>
     <a href="{% url 'login' %}" class="btn btn-default btn-sm">ログインページに戻る</a>
 {% endblock content %}
