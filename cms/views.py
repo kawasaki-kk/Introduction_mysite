@@ -26,22 +26,25 @@ def daily_list(request):
                   {'form': form, 'dailys': dailys})         # テンプレートに渡すデータ・フォーム
 
 
+@login_required
+def daily_detail(request, daily_id):
+    daily = get_object_or_404(Daily, pk=daily_id)
+    comments = daily.comment.all().order_by('date')  # 日報の子供の、コメントを読む
+    form = SearchForm()
+
+    return render(request,
+                  'cms/daily_detail.html',
+                  {'form': form, 'daily': daily, 'comments': comments})
+
+'''
 # 日報の詳細画面のクラス
 class daily_detail(DetailView):
     # 表示対象となるモデルの指定
     model = Daily
     # 表示に使用するテンプレートを指定
     template_name = 'cms/daily_detail.html'
-    '''
-    def get(self, request, *args, **kwargs):
-        daily = get_object_or_404(Daily, pk=kwargs['daily_id'])
-        comments = daily.comment.all().order_by('id')
-        self.object_list = comments
 
-        context = self.get_context_data(object_list=self.object_list, daily=daily)
-        return self.render_to_response(context)
-    '''
-
+'''
 
 # 日報の編集
 def daily_edit(request, daily_id=None):

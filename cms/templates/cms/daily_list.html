@@ -68,16 +68,16 @@ table {
           <td>{{ daily.id }}</td>
           <td>{{ daily.date }}</td>
           <td>{{ daily.user }}</td>
-          <td><a href="{% url 'cms:daily_detail' pk=daily.id %}"> {{ daily.title }}</a></td>
+          <td><a href="{% url 'cms:daily_detail' daily_id=daily.id %}"> {{ daily.title }}</a></td>
           <td>{{ daily.report|truncate:"30" }}</td>
           <td>
           	{% if user == daily.user %}
-          		<a href="{% url 'cms:daily_detail' pk=daily.id %}" class="btn btn-default btn-sm btn-primary">詳細</a>
+          		<a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary">詳細</a>
             	<a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">修正</a>
             	<button class="btn btn-default btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ daily.id }}" url="{% url 'cms:daily_del' daily_id=daily.id %}">削除</button>
             	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
             {% else %}
-            	<a href="{% url 'cms:daily_detail' pk=daily.id %}" class="btn btn-default btn-sm btn-primary">詳細</a>
+            	<a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary">詳細</a>
             	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
             {% endif %}
           </td>
