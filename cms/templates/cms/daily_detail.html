@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
+{% load bootstrap %}
 {% block title %}日報の詳細{% endblock title %}
 
 {% block extrahead %}
@@ -50,5 +51,13 @@ table {
             {% endfor %}
         </tbody>
     </table>
-	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary">コメントの追加</a>
+    <form action="{% url 'cms:comment_add' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
+        {% csrf_token %}
+        {{ commentForm|bootstrap_horizontal }}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">投稿</button>
+            </div>
+        </div>
+    </form>
 {% endblock content %}

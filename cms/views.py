@@ -32,9 +32,19 @@ def daily_detail(request, daily_id):
     comments = daily.comment.all().order_by('date')  # 日報の子供の、コメントを読む
     form = SearchForm()
 
+    comment = Comment(user=request.user)
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST, instance=comment)  # POST された request データからフォームを作成
+        if form.is_valid():  # フォームのバリデーション
+            comment = form.save(commit=False)
+            comment.daily = daily  # このコメントの、親のコメントをセット
+            comment.save()
+    else:  # GET の時
+        comment_form = CommentForm(instance=comment)  # impression インスタンスからフォームを作成
+
     return render(request,
                   'cms/daily_detail.html',
-                  {'form': form, 'daily': daily, 'comments': comments})
+                  {'commentForm': comment_form,'form': form, 'daily': daily, 'comments': comments})
 
 '''
 # 日報の詳細画面のクラス
@@ -141,7 +151,7 @@ def comment_edit(request, daily_id, comment_id=None):
             comment = form.save(commit=False)
             comment.daily = daily  # このコメントの、親のコメントをセット
             comment.save()
-            return redirect('cms:daily_list')
+            return redirect('cms:daily_detail', daily_id=daily.id)
     else:    # GET の時
         form = CommentForm(instance=comment)  # impression インスタンスからフォームを作成
 
