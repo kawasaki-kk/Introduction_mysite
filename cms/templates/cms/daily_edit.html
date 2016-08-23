@@ -4,7 +4,11 @@
 {% block title %}日報の編集{% endblock title %}
 
 {% block content %}
-<form>
+{% if daily_id %}
+<form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
+{% else %}
+<form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
+{% endif %}
     <h3 class="page-header">日報の編集</h3>
     {% csrf_token %}
     <text>
