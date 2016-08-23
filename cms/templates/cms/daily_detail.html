@@ -21,7 +21,7 @@ table {
   		<div class="panel-heading">
     		投稿者：　{{ daily.user }}
             {% if daily.user == user %}
-            <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
+                <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
             {% endif %}
   		</div>
   		<div class="panel-body">
@@ -44,12 +44,12 @@ table {
                 <td>{{ comment.user }}</td>
                 <td>{{ comment.comment }}</td>
                 {% if comment.user == user %}
-                <td>
-                    <a href="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">修正</a>
-                    <button class="btn btn-default btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'cms:comment_del' daily_id=daily.id comment_id=comment.id %}">削除</button>
-                </td>
+                    <td>
+                        <a href="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">修正</a>
+                        <button class="btn btn-default btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'cms:comment_del' daily_id=daily.id comment_id=comment.id %}">削除</button>
+                    </td>
                 {% else %}
-                <td></td>
+                    <td></td>
                 {% endif %}
             </tr>
             {% endfor %}
