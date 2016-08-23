@@ -5,33 +5,6 @@
 
 {% block content %}
     <h3 class="page-header">日報の編集</h3>
-    {% if daily_id %}
-    <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
-    {% else %}
-    <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
-    {% endif %}
-    {% if user.is_anonymous %}
-		<dd div class="operation">
-  		<a href="{% url 'login' %}" class="btn btn-default btn-sm btn-primary">ログインする</a>
-  		<a href="{% url 'register' %}" class="btn btn-default btn-sm">ユーザー登録する</a>
-	</dd>
-	<hr />
-	{% else %}
-		<div class="panel panel-default">
-	  		<div class="panel-heading">
-	    		<h3 class="panel-title">ログインユーザー</h3>
-	  		</div>
-	  		<div class="panel-body">
-	    		{{ user.username }}
-	  		</div>
-		</div>
-  		<a href="{% url 'logout' %}" class="btn btn-default btn-sm btn-primary">ログアウト</a>
-		</p>
-		<dd div class="operation">
-  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm btn-primary">日報の投稿</a>
-	</dd>
-	<hr />
-	{% endif %}
       {% csrf_token %}
         <text>
       {{ form|bootstrap_horizontal }}
@@ -42,5 +15,4 @@
         </div>
       </div>
     </form>
-    <a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">トップへ戻る</a>
 {% endblock content %}

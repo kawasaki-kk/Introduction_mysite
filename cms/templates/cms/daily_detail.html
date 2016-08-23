@@ -12,28 +12,6 @@ table {
 
 {% block content %}
     <h3 class="page-header">日報の詳細</h3>
-    {% if user.is_anonymous %}
-		<dd div class="operation">
-  		<a href="{% url 'login' %}" class="btn btn-default btn-sm btn-primary">ログインする</a>
-  		<a href="{% url 'register' %}" class="btn btn-default btn-sm">ユーザー登録する</a>
-	</dd>
-	<hr />
-	{% else %}
-		<div class="panel panel-default">
-	  		<div class="panel-heading">
-	    		<h3 class="panel-title">ログインユーザー</h3>
-	  		</div>
-	  		<div class="panel-body">
-	    		{{ user.username }}
-	  		</div>
-		</div>
-  		<a href="{% url 'logout' %}" class="btn btn-default btn-sm btn-primary">ログアウト</a>
-		</p>
-		<dd div class="operation">
-  		<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm btn-primary">日報の投稿</a>
-	</dd>
-	<hr />
-	{% endif %}
     <div class="panel panel-default">
   		<div class="panel-heading">
     		<h3 class="panel-title">タイトル</h3>
@@ -69,6 +47,4 @@ table {
       </tbody>
     </table>
 	<a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary">コメントの追加</a>
-	<a href="{% url 'cms:comment_list' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの一覧</a>
-	<a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">トップへ戻る</a>
 {% endblock content %}

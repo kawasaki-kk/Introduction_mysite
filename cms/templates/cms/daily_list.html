@@ -20,28 +20,6 @@ table {
 
 {% block content %}
     <h3 class="page-header">日報の一覧</h3>
-    {% if user.is_anonymous %}
-		<dd div class="operation">
-  		<a href="{% url 'login' %}" class="btn btn-default btn-sm btn-primary">ログインする</a>
-  		<a href="{% url 'register' %}" class="btn btn-default btn-sm">ユーザー登録する</a>
-	</dd>
-	<hr />
-	{% else %}
-		<div class="panel panel-default">
-	  		<div class="panel-heading">
-	    		<h3 class="panel-title">ログインユーザー</h3>
-	  		</div>
-	  		<div class="panel-body">
-	    		{{ user.username }}
-	  		</div>
-		</div>
-  			<a href="{% url 'logout' %}" class="btn btn-default btn-sm btn-primary">ログアウト</a>
-		</p>
-		<dd div class="operation">
-  			<a href="{% url 'cms:daily_add' %}" class="btn btn-default btn-sm btn-primary">日報の投稿</a>
-		</dd>
-	<hr />
-	{% endif %}
 	<form method="post" action="{% url 'cms:daily_search' %}">
 	{% csrf_token %}
 	<table>
@@ -85,7 +63,6 @@ table {
         {% endfor %}
       </tbody>
     </table>
-    <a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">トップへ戻る</a>
     
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
