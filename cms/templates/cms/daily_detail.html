@@ -15,6 +15,9 @@ table {
     <div class="panel panel-default">
   		<div class="panel-heading">
     		投稿者：　{{ daily.user }}
+            {% if daily.user == user %}
+            <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
+            {% endif %}
   		</div>
   		<div class="panel-body">
             <h5><text>
