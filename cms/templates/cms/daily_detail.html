@@ -11,11 +11,8 @@ table {
 {% endblock %}
 
 {% block content %}
-    <h3 class="page-header">日報の詳細</h3>
+    <h3 class="page-header">{{ daily.title }}</h3>
     <div class="panel panel-default">
-  		<div class="panel-heading">
-    		<h3>{{ daily.title }}</h3>
-  		</div>
   		<div class="panel-heading">
     		投稿者：　{{ daily.user }}
   		</div>
