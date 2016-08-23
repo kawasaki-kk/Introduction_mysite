@@ -24,7 +24,6 @@ $RECYCLE.BIN/
 # OSX
 # =========================
 
-settings.py
 ex_password.py
 __pycache__
 
