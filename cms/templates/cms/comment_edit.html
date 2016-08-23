@@ -5,7 +5,7 @@
 
 {% block content %}
     <h3 class="page-header">コメントの編集</h3>
-    {% if impression_id %}
+    {% if comment_id %}
     <form action="{% url 'cms:comment_mod' daily_id=daily_id comment_id=comment_id %}" method="post" class="form-horizontal" role="form">
     {% else %}
     <form action="{% url 'cms:comment_add' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
