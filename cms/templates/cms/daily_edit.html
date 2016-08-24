@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap %}
-
+{% load markdown_deux_tags %}
 {% block title %}日報の編集{% endblock title %}
 
 {% block content %}
@@ -9,15 +9,22 @@
 {% else %}
     <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
 {% endif %}
-    <h3 class="page-header">日報の編集</h3>
-    {% csrf_token %}
-    <text>
-        {{ form|bootstrap_horizontal }}
-    </text>
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">送信</button>
+        <h3 class="page-header">日報の編集</h3>
+        <div>
+            {% csrf_token %}
+            <text>
+                {{ form.title|bootstrap_horizontal }}
+            </text>
+            <text>
+                {{ form.report|bootstrap_horizontal }}
+            </text>
         </div>
-    </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" name='preview' class="btn btn-default">プレビュー</button>
+                <button type="submit" name='release' class="btn btn-primary">公開</button>
+            </div>
+        </div>
 </form>
 {% endblock content %}

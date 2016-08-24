@@ -9,7 +9,11 @@
     <div class="panel-heading">
         投稿者：　{{ daily.user }}
         {% if daily.user == user %}
-            <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
+            {% if daily.release %}
+                <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
+            {% else %}
+                <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-primary">修正して公開する</a>
+            {% endif %}
         {% endif %}
     </div>
     <div class="panel-body">
@@ -18,6 +22,7 @@
         </text></h4>
     </div>
 </div>
+{% if daily.release %}
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -52,4 +57,5 @@
         </div>
     </div>
 </form>
+{% endif %}
 {% endblock content %}

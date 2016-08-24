@@ -10,6 +10,7 @@ class Daily(models.Model):
     title = models.CharField('タイトル', max_length=255)
     report = models.TextField('日報', blank=False)
     date = models.DateTimeField(default=now)
+    release = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

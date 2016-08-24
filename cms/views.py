@@ -18,7 +18,7 @@ def daily_list(request):
     # return HttpResponse('日報の一覧')
     # 表示する日報のリストを取得
     # 最初に呼び出されるビューなので日報すべてを日付順に取得
-    dailys = Daily.objects.all().order_by('date')   # 表示する日報のリストを取得
+    dailys = Daily.objects.all().filter(release=True).order_by('date')   # 表示する日報のリストを取得
     # 検索フォームを生成
     form = SearchForm()
 
@@ -57,6 +57,7 @@ class daily_detail(DetailView):
 
 '''
 
+
 # 日報の編集
 def daily_edit(request, daily_id=None):
     """日報の編集"""
@@ -71,6 +72,8 @@ def daily_edit(request, daily_id=None):
         form = DailyForm(request.POST, instance=daily)  # POST された request データからフォームを作成
         if form.is_valid():    # フォームのバリデーション
             daily = form.save(commit=False)
+            if 'release' in request.POST:
+                daily.release = True
             daily.save()    # 日報の登録
             return redirect('cms:daily_detail', daily_id=daily.id)
     else:    # GET の時
