@@ -4,20 +4,20 @@
 {% block title %}日報の編集{% endblock title %}
 
 {% block content %}
-    {% if daily_id %}
-        <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
-    {% else %}
-        <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
-    {% endif %}
-        <h3 class="page-header">日報の編集</h3>
-        {% csrf_token %}
-        <text>
-            {{ form|bootstrap_horizontal }}
-        </text>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">送信</button>
-            </div>
+{% if daily_id %}
+    <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
+{% else %}
+    <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
+{% endif %}
+    <h3 class="page-header">日報の編集</h3>
+    {% csrf_token %}
+    <text>
+        {{ form|bootstrap_horizontal }}
+    </text>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">送信</button>
         </div>
-    </form>
+    </div>
+</form>
 {% endblock content %}

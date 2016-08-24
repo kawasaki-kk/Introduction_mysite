@@ -30,9 +30,13 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class=""><a href="{% url 'cms:user_info' user_id=user.id %}">{{user.username}}のページ</a></li>
-                        <li class=""><a href="{% url 'cms:daily_add' %}">新規投稿</a></li>
-                        <li class=""><a href="{% url 'logout' %}">ログアウト</a></li>
+                        {% if user.is_anonymous %}
+
+                        {% else %}
+                            <li class=""><a href="{% url 'cms:user_info' user_id=user.id %}">{{user.username}}のページ</a></li>
+                            <li class=""><a href="{% url 'cms:daily_add' %}">新規投稿</a></li>
+                            <li class=""><a href="{% url 'logout' %}">ログアウト</a></li>
+                        {% endif %}
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
