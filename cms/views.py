@@ -24,7 +24,7 @@ def daily_list(request):
 
     return render(request,
                   'cms/daily_list.html',                   # 使用するテンプレート
-                  {'form': form, 'dailys': dailys})         # テンプレートに渡すデータ・フォーム
+                  {'search_form': form, 'dailys': dailys})         # テンプレートに渡すデータ・フォーム
 
 
 @login_required
@@ -45,7 +45,7 @@ def daily_detail(request, daily_id):
 
     return render(request,
                   'cms/daily_detail.html',
-                  {'commentForm': comment_form,'form': form, 'daily': daily, 'comments': comments})
+                  {'commentForm': comment_form, 'search_form': form, 'daily': daily, 'comments': comments})
 
 '''
 # 日報の詳細画面のクラス
@@ -109,11 +109,11 @@ def daily_search(request):
             dailys = Daily.objects.all().filter(Q(user__username__contains=form.cleaned_data['keyword']) |
                                                 Q(title__contains=form.cleaned_data['keyword']) |
                                                 Q(report__contains=form.cleaned_data['keyword'])).order_by('date')
-            return HttpResponse(tpl.render(RequestContext(request, {'form': form, 'dailys': dailys})))
+            return HttpResponse(tpl.render(RequestContext(request, {'search_form': form, 'dailys': dailys})))
         else:
             form = SearchForm()
         tpl = loader.get_template('cms/daily_list.html')
-        return HttpResponse(tpl.render(RequestContext(request, {'form': form})))
+        return HttpResponse(tpl.render(RequestContext(request, {'search_form': form})))
 
 
 def user_info(request, user_id):
@@ -124,7 +124,7 @@ def user_info(request, user_id):
 
     return render(request,
                   'cms/daily_list.html',  # 使用するテンプレート
-                  {'form': form, 'dailys': dailys, 'userinfo': userinfo})  # テンプレートに渡すデータ・フォーム
+                  {'search_form': form, 'dailys': dailys, 'userinfo': userinfo})  # テンプレートに渡すデータ・フォーム
 
 
 class comment_list(ListView):
