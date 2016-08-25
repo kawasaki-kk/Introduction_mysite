@@ -79,7 +79,9 @@ def daily_edit(request, daily_id=None):
     else:    # GET の時
         form = DailyForm(instance=daily)  # book インスタンスからフォームを作成
 
-    return render(request, 'cms/daily_edit.html', dict(form=form, daily_id=daily_id))
+    search_form = SearchForm()
+
+    return render(request, 'cms/daily_edit.html', dict(search_form=search_form, edit_form=form, daily_id=daily_id))
 
 
 # 日報の削除

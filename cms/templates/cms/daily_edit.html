@@ -4,6 +4,15 @@
 {% block title %}日報の編集{% endblock title %}
 
 {% block content %}
+<form method="post" action="{% url 'cms:daily_search' %}">
+{% csrf_token %}
+<table>
+    <tr>
+        <td>{{ search_form.keyword }}</td>
+        <td><button type="submit" class="btn btn-default btn-sm">検索</button></td>
+    </tr>
+</table>
+</form>
 {% if daily_id %}
     <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
 {% else %}
@@ -13,10 +22,10 @@
         <div>
             {% csrf_token %}
             <text>
-                {{ form.title|bootstrap_horizontal }}
+                {{ edit_form.title|bootstrap_horizontal }}
             </text>
             <text>
-                {{ form.report|bootstrap_horizontal }}
+                {{ edit_form.report|bootstrap_horizontal }}
             </text>
         </div>
 
