@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load filters %}
+{% load bootstrap %}
 {% block title %}日報の一覧{% endblock title %}
 
 {% block content %}
@@ -44,6 +45,34 @@
         {% endfor %}
     </tbody>
 </table>
+
+<form action="{% url 'cms:task_mod' %}" method="post">
+    {{ tasky_form.management_form }}
+    {% for form in tasky_form %}
+        {% csrf_token %}
+        {% if forloop.last %}
+            {{form.id}}
+            {{form.complete_task}}
+            {{form.implement_date.label_tag}}{{form.implement_date}}
+            {{form.name}}<br>
+            予定{{form.time_plan}}
+            /実績{{form.time_real}}<br>
+        {% else %}
+            {{form.id}}
+            {{form.complete_task}}
+            {{form.implement_date.label_tag}}{{form.implement_date.value}}
+            {{form.name.value}}<br>
+            予定{{form.time_plan.value}}
+            /実績{{form.time_real}}<br>
+            <a style="display:none">{{form.implement_date}}</a>
+            <a style="display:none">{{form.name}}</a>
+            <a style="display:none">{{form.time_plan}}</a>
+            <a style="display:none">{{form.time_real}}</a>
+        {% endif %}
+    {% endfor %}
+    <button type="submit" name='edit' class="btn btn-default">修正</button>
+    <button type="submit" name='add' class="btn btn-primary">追加</button>
+</form>
 
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">

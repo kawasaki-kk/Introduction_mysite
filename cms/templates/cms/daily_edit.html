@@ -4,19 +4,31 @@
 {% block title %}日報の編集{% endblock title %}
 
 {% block content %}
+<h3 class="page-header">日報の編集</h3>
 {% if daily_id %}
+    <form action="{% url 'cms:task_mod' daily_id=daily_id %}" method="post">
+        {% csrf_token %}
+        {{tasky_form|bootstrap_horizontal}}
+        <button type="submit" name='edit' class="btn btn-default">修正</button>
+        <button type="submit" name='add' class="btn btn-primary">追加</button>
+    </form>
     <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
 {% else %}
     <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
 {% endif %}
-        <h3 class="page-header">日報の編集</h3>
         <div>
             {% csrf_token %}
             <th>
-                {{ edit_form.title|bootstrap_horizontal }}
+                {{ report_form.title|bootstrap_horizontal }}
             </th>
             <text>
-                {{ edit_form.report|bootstrap_horizontal }}
+                {{ report_form.report_y|bootstrap_horizontal }}
+            </text>
+            <text>
+                {{ report_form.report_w|bootstrap_horizontal }}
+            </text>
+            <text>
+                {{ report_form.report_t|bootstrap_horizontal }}
             </text>
         </div>
 
@@ -27,4 +39,11 @@
             </div>
         </div>
 </form>
+<form action="{% url 'cms:task_mod' daily_id=daily_id %}" method="post">
+    {% csrf_token %}
+    {{taskt_form|bootstrap_horizontal}}
+    <button type="submit" name='edit' class="btn btn-default">修正</button>
+    <button type="submit" name='add' class="btn btn-primary">追加</button>
+</form>
+
 {% endblock content %}
