@@ -26,8 +26,10 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     # ユーザーテーブルの要素を定義
     # idは自動生成されるものを使用
-    username = models.CharField('ユーザー名', max_length=30, unique=True)
-    screenname = models.CharField('ユーザー名（表示用）', max_length=255)
+    username = models.CharField('ユーザー名', max_length=30, unique=True,
+                                help_texxt="This using user ID and use login or logout")
+    screenname = models.CharField('ユーザー名（表示用）', max_length=255,
+                                  help_text="")
     is_active = models.BooleanField('有効フラグ', default=True)
     is_staff = models.BooleanField('スタッフ', default=True)
     created_date = models.DateTimeField('登録日時', auto_now_add=True)
