@@ -195,7 +195,7 @@ def user_info(request, user_id):
     userinfo = get_object_or_404(auth.get_user_model(), pk=user_id)
     tasky_form = forms.TaskFormSet(queryset=Task.objects.filter(
         user=request.user,
-        implement_date=datetime.date.today()
+        implement_date__lte=datetime.date.today()
     ).order_by('name'))
     return render(request,
                   'cms/daily_list.html',  # 使用するテンプレート
