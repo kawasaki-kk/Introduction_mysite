@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from cms.models import Daily, Comment, Task
-from cms.forms import DailyForm, CommentForm, SearchForm
+from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet
 from . import forms
 import datetime
 
@@ -12,12 +12,12 @@ def init_form():
 
 def create_task_form(user_id, daily_id=None):
     if daily_id:
-        form = forms.TaskFormSet(queryset=Task.objects.filter(
+        form = TaskFormSet(queryset=Task.objects.filter(
             user=user_id,
             daily=daily_id
         ).order_by('name'))
     else:
-        form = forms.TaskFormSet(queryset=Task.objects.filter(
+        form = TaskFormSet(queryset=Task.objects.filter(
             user=user_id,
             implement_date__lte=datetime.date.today()
         ).order_by('name'))
@@ -86,7 +86,7 @@ def edit_task(request, daily=None):
         daily = Daily.objects.filter(user=request.user).order_by('-create_date')[0]
 
     if request.method == 'POST':
-        formset = forms.TaskFormSet(request.POST or None)
+        formset = TaskFormSet(request.POST or None)
         if formset.is_valid():
             if 'edit' in request.POST:
                 formset.save()
