@@ -14,5 +14,5 @@ class UserForm(ModelForm):
     """ユーザーのフォーム"""
     class Meta:
         model = User
-        fields = ('username', 'password', 'screenname', )
+        fields = ('username', 'password', 'first_name', 'last_name', )
 
