@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load bootstrap %}
+{% block title %}タスクの一覧{% endblock title %}
+
+{% block content %}
+<h3 class="page-header">タスクの一覧</h3>
+<a href="{% url 'cms:daily_list' %}" class="btn btn-default">日報一覧へ戻る</a>
+<form action="{% url 'cms:date_assign' %}" method="GET">
+    {% csrf_token %}
+    {{ date_form.date }}
+    <button type="submit" class="btn btn-default">絞り込み</button>
+    <a href="{% url 'cms:task_mod' %}" class="btn btn-default">すべて表示</a>
+</form>
+{% if date %}
+    <form action="{% url 'cms:task_mod' date=date %}" method="post">
+{% else %}
+    <form action="{% url 'cms:task_mod' %}" method="post">
+{% endif %}
+    {{ task_form.management_form }}
+    {% for form in task_form %}
+        {% csrf_token %}
+        {% if forloop.last %}
+            {{form.id}}
+            {{form.complete_task}}
+            {{form.implement_date.label_tag}}{{form.implement_date}}
+            {{form.name}}<br>
+            予定{{form.time_plan}}
+            /実績{{form.time_real}}<br>
+        {% else %}
+            {{form.id}}
+            {{form.complete_task}}
+            {{form.implement_date.label_tag}}{{form.implement_date.value}}
+            {{form.name.value}}<br>
+            予定{{form.time_plan.value}}
+            /実績{{form.time_real}}<br>
+            <a style="display:none">{{form.implement_date}}</a>
+            <a style="display:none">{{form.name}}</a>
+            <a style="display:none">{{form.time_plan}}</a>
+            <a style="display:none">{{form.time_real}}</a>
+        {% endif %}
+    {% endfor %}
+    <button type="submit" name='edit' class="btn btn-default">修正</button>
+    <button type="submit" name='add' class="btn btn-primary">追加</button>
+</form>
+{% endblock content %}

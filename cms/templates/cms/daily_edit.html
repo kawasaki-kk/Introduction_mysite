@@ -6,12 +6,6 @@
 {% block content %}
 <h3 class="page-header">日報の編集</h3>
 {% if daily_id %}
-    <form action="{% url 'cms:task_mod' daily_id=daily_id %}" method="post">
-        {% csrf_token %}
-        {{tasky_form|bootstrap_horizontal}}
-        <button type="submit" name='edit' class="btn btn-default">修正</button>
-        <button type="submit" name='add' class="btn btn-primary">追加</button>
-    </form>
     <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
 {% else %}
     <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
@@ -19,31 +13,39 @@
         <div>
             {% csrf_token %}
             <th>
-                {{ report_form.title|bootstrap_horizontal }}
+                {{ report_form.create_date }}/{{ report_form.title }}<br>
             </th>
+            {% for task in task_y %}
+                {{task.complete_task}}
+                {{task.implement_date.label_tag}}{{task.implement_date}}
+                {{task.name}}<br>
+                予定{{task.time_plan}}
+                /実績{{task.time_real}}<br>
+            {% endfor %}
             <text>
-                {{ report_form.report_y|bootstrap_horizontal }}
+                Y：やったこと<br>{{ report_form.report_y }}<br>
             </text>
             <text>
-                {{ report_form.report_w|bootstrap_horizontal }}
+                W：わかったこと<br>{{ report_form.report_w }}<br>
             </text>
             <text>
-                {{ report_form.report_t|bootstrap_horizontal }}
+                T：つぎにやること<br>{{ report_form.report_t }}<br>
             </text>
+             {% for task in task_t %}
+                {{task.complete_task}}
+                {{task.implement_date.label}}{{task.implement_date}}
+                {{task.name}}<br>
+                予定{{task.time_plan}}
+                /実績{{task.time_real}}<br>
+            {% endfor %}
         </div>
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
+                <a href="{% url 'cms:task_mod' %}" class="btn btn-default">タスクの編集</a>
                 <button type="submit" name='preview' class="btn btn-default">プレビュー</button>
                 <button type="submit" name='release' class="btn btn-primary">公開</button>
             </div>
         </div>
 </form>
-<form action="{% url 'cms:task_mod' daily_id=daily_id %}" method="post">
-    {% csrf_token %}
-    {{taskt_form|bootstrap_horizontal}}
-    <button type="submit" name='edit' class="btn btn-default">修正</button>
-    <button type="submit" name='add' class="btn btn-primary">追加</button>
-</form>
-
 {% endblock content %}

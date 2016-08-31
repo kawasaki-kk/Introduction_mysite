@@ -1,263 +1,313 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
-from django.template import Context, loader, RequestContext
 from cms.models import Daily, Comment, Task
-from cms.forms import DailyForm, CommentForm, SearchForm
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.contrib.auth.models import User
+from cms.forms import SearchForm, DateForm, TaskFormSet
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
-from . import forms
-import datetime
+from . import services
+from django.utils import timezone
+
+u"""views.py
+    各関数は、辞書型で引数をまとめ、renderにhtmlファイルの指定とともに渡します
+    本ファイル中で、直接モデルにアクセスする処理は書かないようにしています
+        services.pyで行います
+
+    各関数ではservices.init_form()を呼んでいます
+    init_form()は、検索フォームなど共通の情報を初期情報として登録するためのものです
+    daily_list()において軽く触れますが、以降の関数では触れませんのでご了承ください
+
+    NAME最後の()内は対応するCRUDの属性です
+        ex) 日報詳細(R)
+            RはReadの頭文字であり、日報詳細はCRUDのRに対応する関数である
+        なお、すべてのモデルに対して、すべてのCRUDを実装しているわけではありません
+"""
 
 
 # 日報の一覧
 @login_required
 def daily_list(request):
-    """日報の一覧"""
-    # return HttpResponse('日報の一覧')
-    # 表示する日報のリストを取得
-    # 最初に呼び出されるビューなので日報すべてを日付順に取得
-    dailys = Daily.objects.all().filter(release=True).order_by('create_date')   # 表示する日報のリストを取得
-    # 検索フォームを生成
-    search_form = SearchForm()
+    u"""日報一覧
+        日報の一覧を取得し、レンダリングを指示します
 
-    tasky_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=request.user,
-        implement_date=datetime.date.today()
-    ).order_by('name'))
+        lists:
+            init:キーワード検索フォーム
+            init:日付絞込みフォーム
+            公開済みの全日報のクエリセット
+            当日分のタスク一覧(フォーム形式)
+            明日以降分のタスク一覧(フォーム形式)
+    :param request: 関数が呼ばれたときにhtmlから送られてきた情報。ここでは使用しない。
+    :return:レンダリング対象のhtmlファイル'cms/daily_list.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
-    taskt_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=request.user,
-        daily=daily_id
-    ).order_by('name'))
-    """
+    lists = services.init_form(request=request)
+    lists.update(dailys=services.get_all_daily_list(True))
+    lists.update(task_form=services.create_task_form_in_queryset(
+        services.get_task_from_implement(request.user, timezone.now().date())
+    ))
+    lists.update(task_form_next=services.create_task_form_in_queryset(
+        services.get_next_task(request.user, timezone.now().date())
+    ))
 
-    return render(request,
-                  'cms/daily_list.html',                   # 使用するテンプレート
-                  {'search_form': search_form, 'tasky_form': tasky_form, 'dailys': dailys})         # テンプレートに渡すデータ・フォーム
+    return render(request, 'cms/daily_list.html', lists)
 
 
 @login_required
 def daily_detail(request, daily_id):
-    daily = get_object_or_404(Daily, pk=daily_id)
-    comments = daily.comment.all().order_by('create_date')  # 日報の子供の、コメントを読む
+    u"""日報詳細(R)
+        日報の詳細を取得し、レンダリングを指示します
+        表示対象は以下の通り
+            ある日報のレコード
+            日報の作成日に実施されたタスク
+            日報の作成日に作成されたタスク
+        lists:
+            日報
+            日報の作成日に実施されたタスク(implement_date)
+            日報の作成日に作成されたタスク(create_date)
+            日報に紐付けられたコメント一覧
+            コメント入力フォーム
+            当日分のタスク一覧(フォーム形式)
+            明日以降分のタスク一覧(フォーム形式)
+    :param request: ユーザー情報の取得
+    :param daily_id: 表示対象の日報取得
+    :return: レンダリング対象のhtmlファイル'cms/daily_detail.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    """
+    lists = services.init_form(request=request, daily_id=daily_id)
+    lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
+    lists.update(comments=services.get_comments_from_daily(lists['daily']))
+    lists.update(task_form=services.create_task_form_in_queryset(
+        services.get_task_from_implement(request.user, timezone.now().date())
+    ))
+    lists.update(task_form_next=services.create_task_form_in_queryset(
+        services.get_next_task(request.user, timezone.now().date())
+    ))
+    lists.update(implement_task=services.get_task_from_implement(
+        user=lists['daily'].user, date=lists['daily'].create_date))
+    lists.update(create_task=services.get_task_from_create(
+        user=lists['daily'].user, date=lists['daily'].create_date))
+    lists.update(comment_form=services.edit_comment(
+        request=request, daily=lists['daily'],  comment=services.get_or_create_comment(request.user)))
 
-    form = SearchForm()
-    tasky_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=request.user,
-        implement_date__lte=daily.create_date
-    ).order_by('name'))
-
-    task_y = Task.objects.filter(user=daily.user, implement_date__lte=daily.create_date).order_by('name')
-    task_t = Task.objects.filter(user=daily.user, daily__id=daily_id).order_by('name')
-
-    comment = Comment(user=request.user)
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST, instance=comment)  # POST された request データからフォームを作成
-        if form.is_valid():  # フォームのバリデーション
-            comment = form.save(commit=False)
-            comment.daily = daily  # このコメントの、親のコメントをセット
-            comment.save()
-    else:  # GET の時
-        comment_form = CommentForm(instance=comment)  # impression インスタンスからフォームを作成
-
-    return render(request,
-                  'cms/daily_detail.html',
-                  {'comment_form': comment_form, 'search_form': form,
-                   'tasky_form': tasky_form,
-                   'daily': daily, 'comments': comments,
-                   'task_y': task_y, 'task_t': task_t
-                   })
+    return render(request, 'cms/daily_detail.html', lists)
 
 
 # 日報の編集
 def daily_edit(request, daily_id=None):
-    """日報の編集"""
-    if daily_id:   # id が指定されている (修正時)
-        daily = get_object_or_404(Daily, pk=daily_id)
-        if daily.user != request.user:      # 投稿者とログインユーザが異なる場合
-            return redirect('login')
-    else:         # id が指定されていない (追加時)
-        daily = Daily(user=request.user)    # 編集をリクエストしたユーザーの情報を登録し、新規作成
-
-    if request.method == 'POST':
-        report_form = DailyForm(request.POST, instance=daily)  # POST された request データからフォームを作成
-        if report_form.is_valid():    # フォームのバリデーション
-            daily = report_form.save(commit=False)
-            if 'release' in request.POST:
-                daily.release = True
-            daily.save()    # 日報の登録
-            return redirect('cms:daily_detail', daily_id=daily.id)
-    else:    # GET の時
-        report_form = DailyForm(instance=daily)  # book インスタンスからフォームを作成
-
-    search_form = SearchForm()
-    tasky_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=daily.user,
-        implement_date__lte=daily.create_date
-    ).order_by('name'))
-
-    taskt_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=daily.user,
-        daily=daily.id
-    ).order_by('name'))
-
-    return render(request, 'cms/daily_edit.html', dict(
-        search_form=search_form, report_form=report_form, tasky_form=tasky_form, taskt_form=taskt_form,
-        daily_id=daily_id))
-
-
-def task_edit(request, daily_id=None):
-    if daily_id:
-        daily = get_object_or_404(Daily, pk=daily_id)
-    else:
-        daily = Daily.objects.filter(user=request.user).order_by('-create_date')[0]
-
-    if request.method == 'POST':
-        formset = forms.TaskFormSet(request.POST or None)
-        if formset.is_valid():
-            if 'edit' in request.POST:
-                formset.save()
-            elif 'add' in request.POST:
-                task = Task(daily=daily, user=request.user,
-                            name=formset.forms[-1].cleaned_data['name'],
-                            time_plan=formset.forms[-1].cleaned_data['time_plan'],
-                            time_real=formset.forms[-1].cleaned_data['time_real'],
-                            implement_date=formset.forms[-1].cleaned_data['implement_date'], )
-                task.save()
-    else:
-        pass
-
-    tasky_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=daily.user,
-        implement_date__lte=daily.create_date
-    ).order_by('name'))
-
-    taskt_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=daily.user,
-        daily=daily.id
-    ).order_by('name'))
-    report_form = DailyForm(instance=daily)
-    search_form = SearchForm()
+    u"""日報編集(U)
+        日報を編集し、編集後の日報詳細を表示する
+        表示対象は以下の通り
+            日報
+            日報の作成日または当日(新規作成時)に実施されたタスク
+            日報の作成日または当日(新規作成時)に作成されたタスク
+        なお、日報編集ページではタスクの編集は行わない
+            トップページなどの画面中に表示されているタスク編集フォームを利用して逐次更新が行われているものとする
+        lists:
+            日報
+            日報編集用フォーム
+                idが指定されている場合は日報を取得後、フォームとする
+                idが未指定の場合には、新規日報のインスタンスを作成し、フォームとする
+            日報の作成日または当日(新規作成時)に実施されたタスク(implement_date)
+            日報の作成日または当日(新規作成時)に作成されたタスク(create_date)
+    :param request: ユーザー情報の取得
+    :param daily_id: 編集対象の日報id(未指定の場合新規作成と判断)
+    :return: レンダリング対象のhtmlファイル'cms/daily_edit.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    """
+    lists = services.init_form(request=request, daily_id=daily_id)
+    lists.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
+    lists.update(report_form=services.edit_daily(request=request, daily=lists['daily']))
 
     if daily_id:
-        return render(request, 'cms/daily_edit.html', {
-            'search_form': search_form, 'tasky_form': tasky_form, 'taskt_form': taskt_form,
-            'report_form': report_form, 'daily_id': daily.id})
+        lists.update(implement_task=services.get_task_from_implement(lists['daily'].user, lists['daily'].create_date))
+        lists.update(create_task=services.get_task_from_create(lists['daily'].user, lists['daily'].create_date))
     else:
-        dailys = Daily.objects.all().filter(release=True).order_by('create_date')  # 表示する日報のリストを取得
-        return render(request,
-                  'cms/daily_list.html',  # 使用するテンプレート
-                  {'search_form': search_form, 'tasky_form': tasky_form, 'dailys': dailys})  # テンプレートに渡すデータ・フォーム
+        lists.update(implement_task=services.get_task_from_implement(request.user, timezone.now().date()))
+        lists.update(create_task=services.get_task_from_create(request.user, timezone.now().date()))
+
+    if request.method == 'POST':
+        return redirect('cms:daily_detail', daily_id=lists['report_form'].id)
+
+    return render(request, 'cms/daily_edit.html', lists)
+
+
+def task_edit(request):
+    u"""タスク一覧(CRU)
+        タスク一覧をフォームとして表示します
+        表示対象のタスクはユーザーそれぞれのタスクのみです
+        R属性は仮です
+            タスク単独を詳しく編集するフォームを実装する可能性があります
+        lists:
+        タスクフォーム
+    :param request:ユーザー情報の取得
+    :return:レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用するフォーム
+    """
+    # タスク一覧
+    lists = services.init_form(request=request)
+    services.edit_task(request)
+    lists.update(task_form=services.create_task_form_in_queryset(services.get_all_task(request.user)))
+
+    return render(request, 'cms/task_list.html', lists)
+
+
+# def search_for_task_in_date
+def task_date_search(request):
+    u"""タスク日付絞込み
+        タスクの一覧を日付で絞り込みます
+        表示対象のタスクはtask_editと同じくユーザーそれぞれのタスクのみです
+        DateFormフォームより送られてきた日付情報をもとに、タスクフォームセットに表示する情報を絞り込みます
+            絞り込む対象は実施日(implement_date)です
+            タスクの作成日(create_date)ではありません
+    :param request: dateform(日付をカレンダーによって指定するフォーム)からのリクエスト、及びユーザー情報の取得
+    :return: レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用する日付で絞り込んだフォーム
+    """
+    lists = services.init_form(request=request)
+    if request.method == 'GET':
+        # リクエストを取得しながら検索フォームを生成
+        form = DateForm(request.GET)
+        # フォームの中身が存在する場合=検索キーワードが入力されている場合
+        if form.is_valid():
+            form = TaskFormSet(queryset=Task.objects.filter(
+                user=request.user,
+                implement_date=form.cleaned_data['date']
+            ).order_by('id'))
+        else:
+            form = DateForm()
+
+        lists.update(task_form=form)
+        return render(request, 'cms/task_list.html', lists)
+
+
+# def search_for_daily_in_date
+def daily_date_search(request):
+    u"""日報日付絞込み
+        日報の一覧を日付で絞り込みます
+        絞り込み対象は全日報です
+        以下、基本的な手順はtask_date_search()と同様です
+    :param request: dateform(日付をカレンダーによって指定するフォーム)からのリクエスト、及びユーザー情報の取得に使用
+    :return: レンダリング対象のhtmlファイル'cms/daily_list.html'、およびhtmlファイル中で利用する日付で絞り込んだクエリリスト
+    """
+    lists = services.init_form(request=request)
+    lists.update(task_form=services.create_task_form_in_queryset(
+        services.get_task_from_implement(request.user, timezone.now().date())
+    ))
+    lists.update(task_form_next=services.create_task_form_in_queryset(
+        services.get_next_task(request.user, timezone.now().date())
+    ))
+
+    if request.method == 'GET':
+        # リクエストを取得しながら検索フォームを生成
+        form = DateForm(request.GET)
+        # フォームの中身が存在する場合=検索キーワードが入力されている場合
+        if form.is_valid():
+            dailys = Daily.objects.all().filter(create_date=form.cleaned_data['date'])
+            lists.update(dailys=dailys)
+            return render(request, 'cms/daily_list.html', lists)
+
+    return redirect('cms:daily_list')
 
 
 # 日報の削除
 # アラート表示などは未実装
 def daily_del(request, daily_id):
-    """日報の削除"""
+    u"""日報削除(D)
+        日報の削除を行います
+        日報の投稿ユーザーでないユーザーがアクセスした場合、ログインページにリダイレクトされます
+        正常に削除できた場合は（ユーザーの）日報一覧画面へリダイレクトされます
+    :param request:ユーザー情報の取得
+    :param daily_id:削除対象日報id
+    :return:日報一覧ページへリダイレクト
+    """
     daily = get_object_or_404(Daily, pk=daily_id)
     if daily.user != request.user:  # 投稿者とログインユーザが異なる場合
         return redirect('login')
     daily.delete()  # 日報の削除
-    return redirect('cms:daily_list')   # 一覧画面にリダイレクト
+    return redirect('cms:user_info', user_id=request.user.id)   # 一覧画面にリダイレクト
 
 
 # 日報の検索
+# def search_for_daily_in_keyword
 def daily_search(request):
+    u"""日報検索
+        日報をキーワードによって検索します
+        検索条件
+        ・キーワード数：1(複数キーワードのor/andには非対応)
+        ・検索対象：ユーザー名/日報タイトル/日報本文(y/w/t)
+    :param request: 検索キーワードの取得
+    :return: 絞り込んだ日報の一覧をdaily_list.htmlを利用してレンダリングする
+    """
     # リクエストが送られてきている場合
-    if request.method == 'POST':
+    lists = services.init_form(request=request)
+    lists.update(task_form=services.create_task_form_in_queryset(
+        services.get_task_from_implement(request.user, timezone.now().date())
+    ))
+    lists.update(task_form_next=services.create_task_form_in_queryset(
+        services.get_next_task(request.user, timezone.now().date())
+    ))
+
+    if request.method == 'GET':
         # リクエストを取得しながら検索フォームを生成
-        form = SearchForm(request.POST)
+        form = SearchForm(request.GET)
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
-            tpl = loader.get_template('cms/daily_list.html')
-            # 検索対象中にキーワードが存在するか検索
-            # filterを使用、複数条件検索のためQを使用
             dailys = Daily.objects.all().filter(Q(user__username__contains=form.cleaned_data['keyword']) |
                                                 Q(title__contains=form.cleaned_data['keyword']) |
                                                 Q(report_y__contains=form.cleaned_data['keyword']) |
                                                 Q(report_w__contains=form.cleaned_data['keyword']) |
-                                                Q(report_t__contains=form.cleaned_data['keyword'])).order_by('create_date')
-            return HttpResponse(tpl.render(RequestContext(request, {'search_form': form, 'dailys': dailys})))
-        else:
-            form = SearchForm()
-        tpl = loader.get_template('cms/daily_list.html')
-        return HttpResponse(tpl.render(RequestContext(request, {'search_form': form})))
+                                                Q(report_t__contains=form.cleaned_data['keyword'])
+                                                ).order_by('create_date')
+            lists.update(dailys=dailys)
+            return render(request, 'cms/daily_list.html', lists)
+
+        return redirect('cms:daily_list')
 
 
 def user_info(request, user_id):
-    dailys = Daily.objects.filter(user=user_id).order_by('create_date')  # 表示する日報のリストを取得
-    # 検索フォームを生成
-    form = SearchForm()
-    userinfo = get_object_or_404(auth.get_user_model(), pk=user_id)
-    tasky_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=request.user,
-        implement_date__lte=datetime.date.today()
-    ).order_by('name'))
-    return render(request,
-                  'cms/daily_list.html',  # 使用するテンプレート
-                  {'search_form': form, 'tasky_form': tasky_form,
-                   'dailys': dailys, 'userinfo': userinfo})  # テンプレートに渡すデータ・フォーム
+    u"""ユーザー情報
+        ユーザーごとの投稿情報を表示します
+        表示対象：
+            各ユーザーが投稿した日報
+            (自分のページの場合)非公開状態の日報
+        その他の表示内容は日報一覧と同様です
+    :param request: ユーザー情報の取得
+    :param user_id: 表示対象ユーザーid
+    :return: ユーザーで絞り込んだ日報のリストを日報一覧と同様のhtmlファイルを使用してレンダリングします
+    """
+    lists = services.init_form(request=request)
+    lists.update(task_form=services.create_task_form_in_queryset(
+        services.get_task_from_implement(request.user, timezone.now().date())
+    ))
+    lists.update(task_form_next=services.create_task_form_in_queryset(
+        services.get_next_task(request.user, timezone.now().date())
+    ))
+    lists.update(dailys=services.get_user_daily_list(user=user_id))
+    lists.update(userinfo=get_object_or_404(auth.get_user_model(), pk=user_id))
 
-
-class comment_list(ListView):
-    """コメントの一覧"""
-    context_object_name = 'comments'
-    template_name = 'cms/comment_list.html'
-    # paginate_by = 2  # １ページは最大2件ずつでページングする
-
-    def get(self, request, *args, **kwargs):
-        daily = get_object_or_404(Daily, pk=kwargs['daily_id'])  # 親の日報を読む
-        comments = daily.comment.all().order_by('date')  # 日報の子供の、コメントを読む
-        self.object_list = comments
-
-        context = self.get_context_data(object_list=self.object_list, daily=daily)
-        return self.render_to_response(context)
+    return render(request, 'cms/daily_list.html', lists)
 
 
 # コメントの編集
 def comment_edit(request, daily_id, comment_id=None):
-    """感想の編集"""
-    daily = get_object_or_404(Daily, pk=daily_id)  # 親の日報を読む
-    comments = daily.comment.all().order_by('create_date')  # 日報の子供の、コメントを読む
-    task_y = Task.objects.filter(user=request.user, implement_date=datetime.date.today()).order_by('name')
-    task_t = Task.objects.filter(daily__id=daily_id).order_by('name')
-    search_form = SearchForm()
-    tasky_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=request.user,
-        implement_date__lte=daily.create_date
-    ).order_by('name'))
+    u"""コメント編集
+        コメントの編集/新規作成を行います
+    :param request:
+    :param daily_id:
+    :param comment_id:
+    :return:
+    """
+    lists = services.init_form(request=request)
+    lists.update(task_form=services.create_task_form_in_queryset(
+        services.get_task_from_implement(request.user, timezone.now().date())
+    ))
+    lists.update(task_form_next=services.create_task_form_in_queryset(
+        services.get_next_task(request.user, timezone.now().date())
+    ))
+    lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
+    lists.update(comments=services.get_comments_from_daily(lists['daily']))
+    lists.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
+    lists.update(comment_form=services.edit_comment(request, lists['daily'], lists['comment']))
 
-    taskt_form = forms.TaskFormSet(queryset=Task.objects.filter(
-        user=request.user,
-        daily=daily.id
-    ).order_by('name'))
-    if comment_id:   # comment_id が指定されている (修正時)
-        comment = get_object_or_404(Comment, pk=comment_id)
-    else:               # comment_id が指定されていない (追加時)
-        comment = Comment(user=request.user)
-
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST, instance=comment)  # POST された request データからフォームを作成
-        if comment_form.is_valid():    # フォームのバリデーション
-            comment = comment_form.save(commit=False)
-            comment.daily = daily  # このコメントの、親のコメントをセット
-            comment.save()
-            return redirect('cms:daily_detail', daily_id=daily.id)
-            # return daily_detail(request, daily_id)
-    else:    # GET の時
-        comment_form = CommentForm(instance=comment)  # impression インスタンスからフォームを作成
-
-    return render(request,
-                  'cms/comment_edit.html',
-                  dict(comment_form=comment_form, daily_id=daily_id, comment_id=comment_id))
+    return render(request, 'cms/daily_detail.html', lists)
 
 
 def comment_del(request, daily_id, comment_id):
-    """感想の削除"""
     comment = get_object_or_404(Comment, pk=comment_id)
     comment.delete()
-    return redirect('cms:comment_list', daily_id=daily_id)
+    return redirect('cms:daily_detail', daily_id=daily_id)

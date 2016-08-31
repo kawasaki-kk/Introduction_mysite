@@ -29,7 +29,7 @@ class Daily(models.Model):
 
 class Task(models.Model):
     """タスク"""
-    daily = models.ForeignKey(Daily, verbose_name='登録日報', related_name='task')
+    daily = models.ForeignKey(Daily, verbose_name='登録日報', related_name='task', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='登録者', related_name='task')
     name = models.CharField('タスク名', max_length=255,
                             help_text="This is task name about [Bookモデルに対するCRUD機能の実装]")

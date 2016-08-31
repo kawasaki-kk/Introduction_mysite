@@ -27,7 +27,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     # ユーザーテーブルの要素を定義
     # idは自動生成されるものを使用
     username = models.CharField('ユーザー名', max_length=30, unique=True,
-                                help_texxt="This using user ID and use login or logout")
+                                help_text="This using user ID and use login or logout")
+    screenname = models.CharField('姓', max_length=255,
+                                  help_text="")
     first_name = models.CharField('姓', max_length=255,
                                   help_text="")
     last_name = models.CharField('名', max_length=255,
