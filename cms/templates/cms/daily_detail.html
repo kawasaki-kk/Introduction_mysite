@@ -25,7 +25,9 @@
             予定{{task.time_plan}}
             /実績{{task.time_real}}<br>
         {% endfor %}
-        {{ daily.report_y }}
+        <h4><text>
+            {{ daily.report_y|markdown }}
+        </text></h4>
     </div>
     <div class="panel-body">
         <h3>W:わかったこと</h3>
@@ -42,7 +44,9 @@
             予定{{task.time_plan}}
             /実績{{task.time_real}}<br>
         {% endfor %}
-        {{ daily.report_y }}
+        <h4><text>
+            {{ daily.report_t|markdown }}
+        </text></h4>
     </div>
 </div>
 {% if daily.release %}
@@ -58,7 +62,7 @@
         {% for comment in comments %}
         <tr>
             <td>{{ comment.user }}</td>
-            <td>{{ comment.comment }}</td>
+            <td><h5>{{ comment.comment|markdown }}</h5></td>
             {% if comment.user == user %}
                 <td>
                     <!--<a href="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">修正</a>-->

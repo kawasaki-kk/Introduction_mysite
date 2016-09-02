@@ -52,7 +52,7 @@
     </tbody>
 </table>
 
-<form action="{% url 'cms:task_mod' %}" method="GET">
+<form action="{% url 'cms:task_mod' %}" method="POST">
     <h4>今日のタスク</h4><br>
     {{ task_form.management_form }}
     {% for form in task_form %}
@@ -80,7 +80,7 @@
     <button type="submit" name='edit' class="btn btn-default">修正</button>
     <button type="submit" name='add' class="btn btn-primary">追加</button>
 </form><br>
-<form action="{% url 'cms:task_mod' %}" method="GET">
+<form action="{% url 'cms:task_mod' %}" method="POST">
     <h4>明日のタスク</h4><br>
     {{ task_form_next.management_form }}
     {% for form in task_form_next %}
