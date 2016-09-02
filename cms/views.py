@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.template import RequestContext
 from cms.models import Daily, Comment, Task
 from cms.forms import SearchForm, DateForm, TaskFormSet
 from django.db.models import Q
@@ -48,7 +49,7 @@ def daily_list(request):
         services.get_next_task(request.user, timezone.now().date())
     ))
 
-    return render(request, 'cms/daily_list.html', lists)
+    return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
 
 
 @login_required
@@ -87,7 +88,7 @@ def daily_detail(request, daily_id):
     lists.update(comment_form=services.edit_comment(
         request=request, daily=lists['daily'],  comment=services.get_or_create_comment(request.user)))
 
-    return render(request, 'cms/daily_detail.html', lists)
+    return render_to_response('cms/daily_detail.html', lists, context_instance=RequestContext(request))
 
 
 # 日報の編集
@@ -125,7 +126,7 @@ def daily_edit(request, daily_id=None):
     if request.method == 'POST':
         return redirect('cms:daily_detail', daily_id=lists['report_form'].id)
 
-    return render(request, 'cms/daily_edit.html', lists)
+    return render_to_response('cms/daily_edit.html', lists, context_instance=RequestContext(request))
 
 
 def task_edit(request):
@@ -144,7 +145,7 @@ def task_edit(request):
     services.edit_task(request)
     lists.update(task_form=services.create_task_form_in_queryset(services.get_all_task(request.user)))
 
-    return render(request, 'cms/task_list.html', lists)
+    return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
 
 
 # def search_for_task_in_date
@@ -172,7 +173,7 @@ def task_date_search(request):
             form = DateForm()
 
         lists.update(task_form=form)
-        return render(request, 'cms/task_list.html', lists)
+        return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
 
 
 # def search_for_daily_in_date
@@ -199,7 +200,7 @@ def daily_date_search(request):
         if form.is_valid():
             dailys = Daily.objects.all().filter(create_date=form.cleaned_data['date'])
             lists.update(dailys=dailys)
-            return render(request, 'cms/daily_list.html', lists)
+            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
 
     return redirect('cms:daily_list')
 
@@ -254,7 +255,7 @@ def daily_search(request):
                                                 Q(report_t__contains=form.cleaned_data['keyword'])
                                                 ).order_by('create_date')
             lists.update(dailys=dailys)
-            return render(request, 'cms/daily_list.html', lists)
+            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
 
         return redirect('cms:daily_list')
 
@@ -280,7 +281,7 @@ def user_info(request, user_id):
     lists.update(dailys=services.get_user_daily_list(user=user_id))
     lists.update(userinfo=get_object_or_404(auth.get_user_model(), pk=user_id))
 
-    return render(request, 'cms/daily_list.html', lists)
+    return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
 
 
 # コメントの編集
@@ -304,7 +305,7 @@ def comment_edit(request, daily_id, comment_id=None):
     lists.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
     lists.update(comment_form=services.edit_comment(request, lists['daily'], lists['comment']))
 
-    return render(request, 'cms/daily_detail.html', lists)
+    return render_to_response('cms/daily_detail.html', lists, context_instance=RequestContext(request))
 
 
 def comment_del(request, daily_id, comment_id):
