@@ -2,6 +2,7 @@
 from django.shortcuts import get_object_or_404
 from cms.models import Daily, Comment, Task
 from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm
+import traceback
 
 u"""services.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです
@@ -11,6 +12,19 @@ u"""services.py
 """
 
 
+def exception(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except:
+            #raiseしない
+            print("--------------------------------------------")
+            print(traceback.print_exc())
+            print("--------------------------------------------")
+    return wrapper
+
+
+@exception
 def init_form(request=None, daily_id=None):
     lists = dict(search_form=SearchForm())
     lists.update(request=request)
@@ -20,6 +34,7 @@ def init_form(request=None, daily_id=None):
     return lists
 
 
+@exception
 def create_task_form_in_queryset(queryset):
     u"""タスクフォーム作成
         クエリセットを指定してタスクフォームセットを作成します
@@ -29,6 +44,7 @@ def create_task_form_in_queryset(queryset):
     return TaskFormSet(queryset=queryset)
 
 
+@exception
 def get_task_from_implement(user, date):
     u"""タスク一覧の取得(実施日版)
         実施日からタスクを絞り込み、クエリセットとして返します
@@ -40,6 +56,7 @@ def get_task_from_implement(user, date):
     return Task.objects.filter(user=user, implement_date=date).order_by('id')
 
 
+@exception
 def get_task_from_create(user, date):
     u"""タスク一覧の取得(作成日版)
         作成日からタスクを絞り込み、クエリセットとして返します
@@ -51,6 +68,7 @@ def get_task_from_create(user, date):
     return Task.objects.filter(user=user, create_date=date).order_by('id')
 
 
+@exception
 def get_next_task(user, date):
     u"""タスク一覧の取得(指定日以降実施分)
         実施日からタスクを絞り込み、クエリセットとして返します
@@ -62,6 +80,7 @@ def get_next_task(user, date):
     return Task.objects.filter(user=user, implement_date__gt=date).order_by('id')
 
 
+@exception
 def get_all_task(user):
     u"""タスク一覧の取得(すべてのタスク)
         実施日からタスクを絞り込み、クエリセットとして返します
@@ -72,6 +91,7 @@ def get_all_task(user):
     return Task.objects.filter(user=user).order_by('id')
 
 
+@exception
 def get_all_daily_list(release):
     u"""日報の取得(全ユーザー)
         ユーザーにかかわらず、日報を取得し、クエリセットとして返します
@@ -81,6 +101,7 @@ def get_all_daily_list(release):
     return Daily.objects.filter(release=release).order_by('-create_date')
 
 
+@exception
 def get_user_daily_list(user):
     u"""日報の取得(ユーザー指定)
         ユーザーを指定して、日報を取得し、クエリセットとして返します
@@ -90,6 +111,7 @@ def get_user_daily_list(user):
     return Daily.objects.filter(user=user).order_by('-create_date')
 
 
+@exception
 def get_comments_from_daily(daily):
     u"""コメント一覧の取得
         指定の日報に紐付けられたコメントの一覧を取得します
@@ -99,6 +121,7 @@ def get_comments_from_daily(daily):
     return daily.comment.all().order_by('create_date')
 
 
+@exception
 def get_or_create_daily(user=None, daily_id=None):
     if daily_id:    # edit or detail view
         daily = get_object_or_404(Daily, pk=daily_id)
@@ -107,6 +130,7 @@ def get_or_create_daily(user=None, daily_id=None):
     return daily
 
 
+@exception
 def get_or_create_comment(user=None, comment_id=None):
     if comment_id:  # edit
         comment = get_object_or_404(Comment, pk=comment_id)
@@ -115,6 +139,7 @@ def get_or_create_comment(user=None, comment_id=None):
     return comment
 
 
+@exception
 def edit_comment(request, daily, comment):
     if request.method == 'POST':
         form = CommentForm(request.POST, instance=comment)
@@ -126,6 +151,7 @@ def edit_comment(request, daily, comment):
     return form
 
 
+@exception
 def edit_daily(request, daily):
     if request.method == 'POST':
         form = DailyForm(request.POST, instance=daily)
@@ -140,6 +166,7 @@ def edit_daily(request, daily):
     return form
 
 
+@exception
 def edit_task(request, daily_id=None):
     if daily_id:
         daily = get_object_or_404(Daily, pk=daily_id)
