@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
 from cms.models import Daily, Comment, Task
-from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm
+from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm
 import traceback
 
 u"""services.py
@@ -30,6 +30,7 @@ def init_form(request=None, daily_id=None):
     lists.update(request=request)
     lists.update(daily_id=daily_id)
     lists.update(date_form=DateForm())
+    lists.update(task_search_form=TaskSearchForm())
 
     return lists
 
@@ -65,7 +66,7 @@ def get_task_from_create(user, date):
     :param date: タスクの作成日
     :return: ユーザーと作成日で絞り込んだタスクの一覧
     """
-    return Task.objects.filter(user=user, create_date=date).order_by('id')
+    return Task.objects.filter(user=user, create_date=date, implement_date__gt=date).order_by('id')
 
 
 @exception
@@ -182,12 +183,14 @@ def edit_task(request, daily_id=None):
             elif 'add' in request.POST:
                 if daily_id:
                     task = Task(daily=daily, user=request.user,
+                                complete_task=formset.forms[-1].cleaned_data['complete_task'],
                                 name=formset.forms[-1].cleaned_data['name'],
                                 time_plan=formset.forms[-1].cleaned_data['time_plan'],
                                 time_real=formset.forms[-1].cleaned_data['time_real'],
                                 implement_date=formset.forms[-1].cleaned_data['implement_date'], )
                 else:
                     task = Task(user=request.user,
+                                complete_task=formset.forms[-1].cleaned_data['complete_task'],
                                 name=formset.forms[-1].cleaned_data['name'],
                                 time_plan=formset.forms[-1].cleaned_data['time_plan'],
                                 time_real=formset.forms[-1].cleaned_data['time_real'],
