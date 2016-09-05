@@ -284,12 +284,15 @@ def daily_search(request):
         form = SearchForm(request.GET)
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
-            dailys = Daily.objects.all().filter(Q(user__username__contains=form.cleaned_data['keyword']) |
-                                                Q(title__contains=form.cleaned_data['keyword']) |
-                                                Q(report_y__contains=form.cleaned_data['keyword']) |
-                                                Q(report_w__contains=form.cleaned_data['keyword']) |
-                                                Q(report_t__contains=form.cleaned_data['keyword'])
-                                                ).order_by('create_date')
+            queries = [Q(user__username__contains=word) |
+                       Q(title__contains=word) |
+                       Q(report_y__contains=word) |
+                       Q(report_w__contains=word) |
+                       Q(report_t__contains=word) for word in form.cleaned_data['keyword']]
+            query = queries.pop()
+            for item in queries:
+                query |= item
+            dailys = Daily.objects.all().filter(query).order_by('-create_date')
             lists.update(dailys=dailys)
             return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
 
