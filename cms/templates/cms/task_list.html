@@ -8,7 +8,8 @@
 <a href="{% url 'cms:daily_list' %}" class="btn btn-default">日報一覧へ戻る</a>
 <form action="{% url 'cms:date_assign' %}" method="GET">
     {% csrf_token %}
-    {{ date_form.date }}
+    {{ task_search_form.cond }}
+    {{ task_search_form.date }}
     <button type="submit" class="btn btn-default">絞り込み</button>
     <a href="{% url 'cms:task_mod' %}" class="btn btn-default">すべて表示</a>
 </form>
@@ -37,7 +38,6 @@
             <a style="display:none">{{form.implement_date}}</a>
             <a style="display:none">{{form.name}}</a>
             <a style="display:none">{{form.time_plan}}</a>
-            <a style="display:none">{{form.time_real}}</a>
         {% endif %}
     {% endfor %}
     <button type="submit" name='edit' class="btn btn-default">修正</button>
