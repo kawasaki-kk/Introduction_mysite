@@ -75,6 +75,17 @@ class DateForm(forms.Form):
     """
     date = forms.DateField(widget=AdminDateWidget)
 
+
+class TaskSearchForm(forms.Form):
+    u"""日付絞込み/タスク状態絞り込み用入力フォーム
+        タスクのレコードを絞り込むためのフォームです
+        ウィジェットを登録していますので、カレンダーから日付を選択することもできます
+        また、タスクの完了状態をドロップダウンリストにより、"すべて"、"完了"、"未完了"から選択することができます
+    """
+    date = forms.DateField(widget=AdminDateWidget)
+    cond = forms.ChoiceField(
+        choices=[("0", "すべて表示"), ("1", "完了したタスク"), ("2", "完了していないタスク")])
+
 u"""タスク入力/編集用フォームセット
     タスクモデルのレコード複数を一括で更新/追加するためのフォームです
     タスクレコードの表示数は、表示対象となるクエリセット数(フォーム作成時に指定)と等しく、

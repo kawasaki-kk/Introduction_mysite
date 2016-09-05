@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.template import RequestContext
 from cms.models import Daily, Comment, Task
-from cms.forms import SearchForm, DateForm, TaskFormSet
+from cms.forms import SearchForm, DateForm, TaskFormSet, TaskSearchForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
@@ -115,6 +115,12 @@ def daily_edit(request, daily_id=None):
     lists = services.init_form(request=request, daily_id=daily_id)
     lists.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
     lists.update(report_form=services.edit_daily(request=request, daily=lists['daily']))
+    lists.update(task_form=services.create_task_form_in_queryset(
+        services.get_task_from_implement(request.user, timezone.now().date())
+    ))
+    lists.update(task_form_next=services.create_task_form_in_queryset(
+        services.get_next_task(request.user, timezone.now().date())
+    ))
 
     if daily_id:
         lists.update(implement_task=services.get_task_from_implement(lists['daily'].user, lists['daily'].create_date))
@@ -162,15 +168,44 @@ def task_date_search(request):
     lists = services.init_form(request=request)
     if request.method == 'GET':
         # リクエストを取得しながら検索フォームを生成
-        form = DateForm(request.GET)
+        form = TaskSearchForm(request.GET)
+        lists.update(task_search_form=form)
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
-            form = TaskFormSet(queryset=Task.objects.filter(
-                user=request.user,
-                implement_date=form.cleaned_data['date']
-            ).order_by('id'))
+            if form.cleaned_data['cond'] == '0':
+                form = TaskFormSet(queryset=Task.objects.filter(
+                    user=request.user,
+                    implement_date=form.cleaned_data['date']
+                ).order_by('id'))
+            elif form.cleaned_data['cond'] == '1':
+                form = TaskFormSet(queryset=Task.objects.filter(
+                    user=request.user,
+                    implement_date=form.cleaned_data['date'],
+                    complete_task=True
+                ).order_by('id'))
+            elif form.cleaned_data['cond'] == '2':
+                form = TaskFormSet(queryset=Task.objects.filter(
+                    user=request.user,
+                    implement_date=form.cleaned_data['date'],
+                    complete_task=False
+                ).order_by('id'))
+        elif form.cleaned_data['cond']:
+            if form.cleaned_data['cond'] == '0':
+                form = TaskFormSet(queryset=Task.objects.filter(
+                    user=request.user,
+                ).order_by('id'))
+            elif form.cleaned_data['cond'] == '1':
+                form = TaskFormSet(queryset=Task.objects.filter(
+                    user=request.user,
+                    complete_task=True
+                ).order_by('id'))
+            elif form.cleaned_data['cond'] == '2':
+                form = TaskFormSet(queryset=Task.objects.filter(
+                    user=request.user,
+                    complete_task=False
+                ).order_by('id'))
         else:
-            form = DateForm()
+            form = TaskSearchForm()
 
         lists.update(task_form=form)
         return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
@@ -196,6 +231,7 @@ def daily_date_search(request):
     if request.method == 'GET':
         # リクエストを取得しながら検索フォームを生成
         form = DateForm(request.GET)
+        lists.update(date_form=form)
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
             dailys = Daily.objects.all().filter(create_date=form.cleaned_data['date'])
