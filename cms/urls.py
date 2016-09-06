@@ -11,7 +11,8 @@ urlpatterns = [
     # コメント操作
     url(r'^dailyreport/comment/add/(?P<daily_id>\d+)/$', views.comment_edit, name='comment_add'),  # 登録
     url(r'^dailyreport/task/mod/(?P<daily_id>\d+)/$', views.task_edit, name='task_mod'),  # 修正
-    url(r'^dailyreport/task/mod/$', views.task_edit, name='task_mod'),  # 修正
+    url(r'^dailyreport/task/$', views.task_edit_daily, name='task_mod_daily'),  # 修正
+    url(r'^dailyreport/task/mod/$', views.task_edit, name='task_mod'),
     url(r'^dailyreport/task/mod/date/$', views.task_date_search, name='date_assign'),
     url(r'^dailyreport/daily/date/$', views.daily_date_search, name='date_assign_daily'),
     url(r'^dailyreport/comment/mod/(?P<daily_id>\d+)/(?P<comment_id>\d+)/$', views.comment_edit, name='comment_mod'),  # 修正
