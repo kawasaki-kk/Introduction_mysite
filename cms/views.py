@@ -149,9 +149,26 @@ def task_edit(request):
     # タスク一覧
     lists = services.init_form(request=request)
     services.edit_task(request)
-    lists.update(task_form=services.create_task_form_in_queryset(services.get_all_task(request.user)))
 
+    lists.update(task_form=services.create_task_form_in_queryset(services.get_all_task(request.user)))
     return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
+
+
+def task_edit_daily(request):
+        u"""タスク一覧(CRU)
+            日報表示部分を持つページにおいてタスクを更新するためのメソッドです
+            通常のものと比べ、返るページが異なります
+            表示対象のタスクはユーザーそれぞれのタスクのみです
+            R属性は仮です
+                タスク単独を詳しく編集するフォームを実装する可能性があります
+            lists:
+            タスクフォーム
+        :param request:ユーザー情報の取得
+        :return:レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用するフォーム
+        """
+        services.edit_task(request)
+
+        return redirect('cms:daily_list')
 
 
 # def search_for_task_in_date
