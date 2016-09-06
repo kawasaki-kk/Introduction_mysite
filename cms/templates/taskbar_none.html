@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load bootstrap %}
+{% block task_content %}
+<div class="container col-md-8">
+    {% block content %}
+        {{ content }}
+    {% endblock %}
+</div>
+{% endblock task_content %}
