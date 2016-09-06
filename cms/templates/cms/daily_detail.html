@@ -1,156 +1,90 @@
-{% extends "base.html" %}
+{% extends "taskbar.html" %}
 {% load markdown_deux_tags %}
 {% load bootstrap %}
 {% block title %}日報の詳細{% endblock title %}
 
 {% block content %}
-<div class="container col-md-8">
-    <h3 class="page-header">{{ daily.create_date }} / {{ daily.title }}</h3>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            投稿者：　{{ daily.user }}
-            {% if daily.user == user %}
-                {% if daily.release %}
-                    <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
-                {% else %}
-                    <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-primary">修正して公開する</a>
-                {% endif %}
+<h3 class="page-header">{{ daily.create_date }} / {{ daily.title }}</h3>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        投稿者：　{{ daily.user }}
+        {% if daily.user == user %}
+            {% if daily.release %}
+                <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
+            {% else %}
+                <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-primary">修正して公開する</a>
             {% endif %}
-        </div>
-        <div class="panel-body">
-            <h3>Y:やったこと</h3>
-            {% for task in implement_task %}
-                {{task.complete_task}}
-                {{task.implement_date.label}}{{task.implement_date}}
-                {{task.name}}<br>
-                予定{{task.time_plan}}
-                /実績{{task.time_real}}<br>
-            {% endfor %}
-            <h4><text>
-                {{ daily.report_y|markdown }}
-            </text></h4>
-        </div>
-        <div class="panel-body">
-            <h3>W:わかったこと</h3>
-            <h4><text>
-                {{ daily.report_w|markdown }}
-            </text></h4>
-        </div>
-        <div class="panel-body">
-            <h3>T:つぎにやること</h3>
-            {% for task in create_task %}
-                {{task.complete_task}}
-                {{task.implement_date.label}}{{task.implement_date}}
-                {{task.name}}<br>
-                予定{{task.time_plan}}
-                /実績{{task.time_real}}<br>
-            {% endfor %}
-            <h4><text>
-                {{ daily.report_t|markdown }}
-            </text></h4>
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        <h3>Y:やったこと</h3>
+        {% for task in implement_task %}
+            {% if task.complete_task %}
+                完了
+            {% else %}
+                未了
+            {% endif %}
+            {{task.implement_date.label}}{{task.implement_date}}
+            {{task.name}}<br>
+            予定(h){{task.time_plan}}
+            /実績(h){{task.time_real}}<br>
+        {% endfor %}
+        <h4><text>
+            {{ daily.report_y|markdown }}
+        </text></h4>
+    </div>
+    <div class="panel-body">
+        <h3>W:わかったこと</h3>
+        <h4><text>
+            {{ daily.report_w|markdown }}
+        </text></h4>
+    </div>
+    <div class="panel-body">
+        <h3>T:つぎにやること</h3>
+        {% for task in create_task %}
+            {{task.implement_date.label}}{{task.implement_date}}
+            {{task.name}}<br>
+            予定(h){{task.time_plan}}<br>
+        {% endfor %}
+        <h4><text>
+            {{ daily.report_t|markdown }}
+        </text></h4>
+    </div>
+</div>
+{% if daily.release %}
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>投稿者</th>
+            <th>コメント</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comment in comments %}
+        <tr>
+            <td>{{ comment.user }}</td>
+            <td><h5>{{ comment.comment|markdown }}</h5></td>
+            {% if comment.user == user %}
+                <td>
+                    <!--<a href="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">修正</a>-->
+                    <button class="btn btn-default btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'cms:comment_del' daily_id=daily.id comment_id=comment.id %}">削除</button>
+                </td>
+            {% else %}
+                <td></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<form action="{% url 'cms:comment_add' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
+    <div class="form-group">
+        {% csrf_token %}
+        {{ comment_form.comment }}
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">投稿</button>
         </div>
     </div>
-    {% if daily.release %}
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>投稿者</th>
-                <th>コメント</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for comment in comments %}
-            <tr>
-                <td>{{ comment.user }}</td>
-                <td><h5>{{ comment.comment|markdown }}</h5></td>
-                {% if comment.user == user %}
-                    <td>
-                        <!--<a href="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">修正</a>-->
-                        <button class="btn btn-default btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'cms:comment_del' daily_id=daily.id comment_id=comment.id %}">削除</button>
-                    </td>
-                {% else %}
-                    <td></td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <form action="{% url 'cms:comment_add' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
-        <div class="form-group">
-            {% csrf_token %}
-            {{ comment_form.comment }}
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">投稿</button>
-            </div>
-        </div>
-    </form>
-    {% endif %}
-</div>
-<div class="container col-md-4">
-    <h3 class="page-header">タスク</h3>
-    <form action="{% url 'cms:date_assign' %}" method="GET">
-        {% csrf_token %}
-        {{ task_search_form.cond }}
-        {{ task_search_form.date }}<br>
-        <button type="submit" class="btn btn-default">絞り込み</button>
-        <a href="{% url 'cms:task_mod' %}" class="btn btn-default">すべて表示</a>
-    </form><br>
-    <form action="{% url 'cms:task_mod' %}" method="POST">
-        <h4>今日のタスク</h4><br>
-        {{ task_form.management_form }}
-        {% for form in task_form %}
-            {% csrf_token %}
-            {% if forloop.last %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date}}
-                {{form.name}}<br>
-                予定{{form.time_plan}}
-                /実績{{form.time_real}}<br>
-            {% else %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                {{form.name.value}}<br>
-                予定{{form.time_plan.value}}
-                /実績{{form.time_real}}<br>
-                <a style="display:none">{{form.implement_date}}</a>
-                <a style="display:none">{{form.name}}</a>
-                <a style="display:none">{{form.time_plan}}</a>
-                <a style="display:none">{{form.time_real}}</a>
-            {% endif %}
-        {% endfor %}
-        <button type="submit" name='edit' class="btn btn-default">修正</button>
-        <button type="submit" name='add' class="btn btn-primary">追加</button>
-    </form><br>
-    <form action="{% url 'cms:task_mod' %}" method="POST">
-        <h4>明日のタスク</h4><br>
-        {{ task_form_next.management_form }}
-        {% for form in task_form_next %}
-            {% csrf_token %}
-            {% if forloop.last %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date}}
-                {{form.name}}<br>
-                予定{{form.time_plan}}
-                /実績{{form.time_real}}<br>
-            {% else %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                {{form.name.value}}<br>
-                予定{{form.time_plan.value}}
-                /実績{{form.time_real}}<br>
-                <a style="display:none">{{form.implement_date}}</a>
-                <a style="display:none">{{form.name}}</a>
-                <a style="display:none">{{form.time_plan}}</a>
-                <a style="display:none">{{form.time_real}}</a>
-            {% endif %}
-        {% endfor %}
-        <button type="submit" name='edit' class="btn btn-default">修正</button>
-        <button type="submit" name='add' class="btn btn-primary">追加</button>
-    </form><br>
-</div>
+</form>
+{% endif %}
 {% endblock content %}

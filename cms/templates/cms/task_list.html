@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "taskbar_none.html" %}
 {% load filters %}
 {% load bootstrap %}
 {% block title %}タスクの一覧{% endblock title %}
@@ -26,15 +26,15 @@
             {{form.complete_task}}
             {{form.implement_date.label_tag}}{{form.implement_date}}
             {{form.name}}<br>
-            予定{{form.time_plan}}
-            /実績{{form.time_real}}<br>
+            予定(h){{form.time_plan}}
+            /実績(h){{form.time_real}}<br>
         {% else %}
             {{form.id}}
             {{form.complete_task}}
             {{form.implement_date.label_tag}}{{form.implement_date.value}}
             {{form.name.value}}<br>
-            予定{{form.time_plan.value}}
-            /実績{{form.time_real}}<br>
+            予定(h){{form.time_plan.value}}
+            /実績(h){{form.time_real}}<br>
             <a style="display:none">{{form.implement_date}}</a>
             <a style="display:none">{{form.name}}</a>
             <a style="display:none">{{form.time_plan}}</a>
