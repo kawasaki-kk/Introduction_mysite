@@ -28,7 +28,12 @@ class DailyForm(ModelForm):
     class Meta:
         model = Daily
         fields = ('title', 'create_date', 'report_y', 'report_w', 'report_t', )
-        widgets = {'create_date': AdminDateWidget, }
+        widgets = {
+            'create_date': AdminDateWidget,
+            'report_y': forms.Textarea(attrs={'placeholder': 'タスクの完了状態についてコメントしましょう'}),
+            'report_w': forms.Textarea(attrs={'placeholder': '一日の作業を通してわかったことやできたことを書いてください'}),
+            'report_t': forms.Textarea(attrs={'placeholder': '明日のタスクで気を付けることがあったらコメントしましょう'}),
+        }
 
 
 class TaskForm(ModelForm):
@@ -46,7 +51,12 @@ class TaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ('complete_task', 'implement_date', 'name', 'time_plan', 'time_real', )
-        widgets = {'implement_date': AdminDateWidget, }
+        widgets = {
+            'implement_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}),
+            'name': forms.TextInput(attrs={'placeholder': '作業概要'}),
+            'time_plan': forms.TextInput(attrs={'class': 'time_plan', 'type': 'number'}),
+            'time_real': forms.TextInput(attrs={'class': 'time_real', 'type': 'number'}),
+        }
 
 
 class CommentForm(ModelForm):
