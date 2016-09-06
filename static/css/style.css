@@ -9,3 +9,23 @@ table {
 .panel-body {
     word-break:break-all;
 }
+
+.time_real {
+    width: 50px;
+}
+
+.time_plan {
+    width: 50px;
+}
+
+.disable-form {
+    display:none
+}
+
+.complete {
+    color: blue;
+}
+
+.dis-complete {
+    color: red;
+}
