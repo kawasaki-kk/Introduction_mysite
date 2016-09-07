@@ -178,7 +178,6 @@ def edit_task(request, daily_id=None):
         formset = TaskFormSet(request.POST or None)
         if formset.is_valid():
             if 'edit' in request.POST:
-                print(formset.forms[0].cleaned_data['time_plan'])
                 formset.save()
             elif 'add' in request.POST:
                 if daily_id:
