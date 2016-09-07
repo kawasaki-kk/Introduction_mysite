@@ -29,10 +29,19 @@ class DailyForm(ModelForm):
         model = Daily
         fields = ('title', 'create_date', 'report_y', 'report_w', 'report_t', )
         widgets = {
-            'create_date': AdminDateWidget,
-            'report_y': forms.Textarea(attrs={'placeholder': 'タスクの完了状態についてコメントしましょう'}),
-            'report_w': forms.Textarea(attrs={'placeholder': '一日の作業を通してわかったことやできたことを書いてください'}),
-            'report_t': forms.Textarea(attrs={'placeholder': '明日のタスクで気を付けることがあったらコメントしましょう'}),
+            'create_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}),
+            'title': forms.TextInput(attrs={
+                'class': 'daily_title_form',
+                'placeholder': '日報のタイトル', }),
+            'report_y': forms.Textarea(attrs={
+                'class': 'report_y_form',
+                'placeholder': 'タスクの完了状態についてコメントしましょう'}),
+            'report_w': forms.Textarea(attrs={
+                'class': 'report_w_form',
+                'placeholder': '一日の作業を通してわかったことやできたことを書いてください'}),
+            'report_t': forms.Textarea(attrs={
+                'class': 'report_t_form',
+                'placeholder': '明日のタスクで気を付けることがあったらコメントしましょう'}),
         }
 
 
@@ -54,7 +63,8 @@ class TaskForm(ModelForm):
         widgets = {
             'implement_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}),
             'name': forms.TextInput(attrs={'placeholder': '作業概要'}),
-            'time_plan': forms.TextInput(attrs={'class': 'time_plan', 'type': 'number'}),
+            'time_plan': forms.TextInput(attrs={
+                'class': 'time_plan', 'type': 'number', 'placeholder': '0'}),
             'time_real': forms.TextInput(attrs={'class': 'time_real', 'type': 'number'}),
         }
 
@@ -75,7 +85,13 @@ class SearchForm(forms.Form):
     u"""キーワード検索用入力フォーム
         キーワード検索用のキーワード入力フォームです
     """
-    keyword = forms.CharField(max_length=100, required=False)
+    keyword = forms.CharField(max_length=100, required=False,
+                              widget=forms.TextInput(attrs={
+                                  'class': 'form-control',
+                                  'placeholder': 'キーワード'}))
+
+    class Meta:
+        pass
 
 
 class DateForm(forms.Form):
@@ -83,7 +99,7 @@ class DateForm(forms.Form):
         日付絞込み用の日付入力フォームです
         ウィジェットを登録していますので、カレンダーから日付を選択することもできます
     """
-    date = forms.DateField(widget=AdminDateWidget)
+    date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}))
 
 
 class TaskSearchForm(forms.Form):
@@ -92,9 +108,9 @@ class TaskSearchForm(forms.Form):
         ウィジェットを登録していますので、カレンダーから日付を選択することもできます
         また、タスクの完了状態をドロップダウンリストにより、"すべて"、"完了"、"未完了"から選択することができます
     """
-    date = forms.DateField(widget=AdminDateWidget)
+    date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}))
     cond = forms.ChoiceField(
-        choices=[("0", "すべて表示"), ("1", "完了したタスク"), ("2", "完了していないタスク")])
+        choices=[("0", "すべて表示"), ("1", "完了したタスク"), ("2", "未完了のタスク")])
 
 u"""タスク入力/編集用フォームセット
     タスクモデルのレコード複数を一括で更新/追加するためのフォームです
