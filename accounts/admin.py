@@ -16,7 +16,7 @@ class UserChangeForm(UserChangeForm):
 class UserAdmin(UserAdmin):
     form = UserChangeForm
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'screenname', )}),
+        (None, {'fields': ('username', 'password', 'first_name', 'last_name', )}),
     )
     add_fieldsets = (
         (None, {
@@ -24,11 +24,10 @@ class UserAdmin(UserAdmin):
             'fields': ('username', 'password1', 'password2'),
         }),
     )
-    list_display = ('username', 'screenname', )
+    list_display = ('username', 'first_name', )
     list_filter = ('username', )
     search_fields = ('username', )
     ordering = ('username', )
     filter_horizontal = ()
-
 
 admin.site.register(models.User, UserAdmin)
