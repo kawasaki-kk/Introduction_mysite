@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from . import services
 from django.utils import timezone
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 u"""views.py
     各関数は、辞書型で引数をまとめ、renderにhtmlファイルの指定とともに渡します
@@ -41,7 +42,8 @@ def daily_list(request):
     :return:レンダリング対象のhtmlファイル'cms/daily_list.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
     lists = services.init_form(request=request)
-    lists.update(dailys=services.get_all_daily_list(True))
+
+    lists.update(dailys=services.create_pagination(request, services.get_all_daily_list(True)))
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
@@ -114,7 +116,9 @@ def daily_edit(request, daily_id=None):
     """
     lists = services.init_form(request=request, daily_id=daily_id)
     lists.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
-    lists.update(report_form=services.edit_daily(request=request, daily=lists['daily']))
+    if request.user != lists['daily'].user:
+        return redirect('login')
+    flag, lists['report_form']=services.edit_daily(request=request, daily=lists['daily'])
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
@@ -129,9 +133,10 @@ def daily_edit(request, daily_id=None):
         lists.update(implement_task=services.get_task_from_implement(request.user, timezone.now().date()))
         lists.update(create_task=services.get_task_from_create(request.user, timezone.now().date()))
 
-    if request.method == 'POST':
+    if request.method == 'POST' and flag:
         return redirect('cms:daily_detail', daily_id=lists['report_form'].id)
 
+    lists.update(comment="必須項目が入力されていません")
     return render_to_response('cms/daily_edit.html', lists, context_instance=RequestContext(request))
 
 
@@ -149,8 +154,8 @@ def task_edit(request):
     # タスク一覧
     lists = services.init_form(request=request)
     services.edit_task(request)
-
-    lists.update(task_form=services.create_task_form_in_queryset(services.get_all_task(request.user)))
+    lists.update(tasks=services.create_pagination(request, services.get_all_task(request.user)))
+    lists.update(task_form=services.create_task_form_in_queryset(lists['tasks'].object_list))
     return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
 
 
@@ -193,34 +198,34 @@ def task_date_search(request):
                 form = TaskFormSet(queryset=Task.objects.filter(
                     user=request.user,
                     implement_date=form.cleaned_data['date']
-                ).order_by('id'))
+                ).order_by('-id'))
             elif form.cleaned_data['cond'] == '1':
                 form = TaskFormSet(queryset=Task.objects.filter(
                     user=request.user,
                     implement_date=form.cleaned_data['date'],
                     complete_task=True
-                ).order_by('id'))
+                ).order_by('-id'))
             elif form.cleaned_data['cond'] == '2':
                 form = TaskFormSet(queryset=Task.objects.filter(
                     user=request.user,
                     implement_date=form.cleaned_data['date'],
                     complete_task=False
-                ).order_by('id'))
+                ).order_by('-id'))
         elif form.cleaned_data['cond']:
             if form.cleaned_data['cond'] == '0':
                 form = TaskFormSet(queryset=Task.objects.filter(
                     user=request.user,
-                ).order_by('id'))
+                ).order_by('-id'))
             elif form.cleaned_data['cond'] == '1':
                 form = TaskFormSet(queryset=Task.objects.filter(
                     user=request.user,
                     complete_task=True
-                ).order_by('id'))
+                ).order_by('-id'))
             elif form.cleaned_data['cond'] == '2':
                 form = TaskFormSet(queryset=Task.objects.filter(
                     user=request.user,
                     complete_task=False
-                ).order_by('id'))
+                ).order_by('-id'))
         else:
             form = TaskSearchForm()
 
@@ -251,9 +256,8 @@ def daily_date_search(request):
         lists.update(date_form=form)
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
-            dailys = Daily.objects.all().filter(create_date=form.cleaned_data['date'])
-            lists.update(dailys=dailys)
-            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
+            lists.update(dailys=Daily.objects.all().filter(create_date=form.cleaned_data['date']))
+            return render_to_response('cms/daily_search.html', lists, context_instance=RequestContext(request))
 
     return redirect('cms:daily_list')
 
@@ -309,9 +313,10 @@ def daily_search(request):
             query = queries.pop()
             for item in queries:
                 query |= item
-            dailys = Daily.objects.all().filter(query).order_by('-create_date')
-            lists.update(dailys=dailys)
-            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
+            lists.update(dailys=Daily.objects.all().filter(query).order_by('-create_date'))
+            lists.update(search_form=form)
+            lists.update(keyword=form.cleaned_data['keyword'])
+            return render_to_response('cms/daily_search.html', lists, context_instance=RequestContext(request))
 
         return redirect('cms:daily_list')
 
@@ -328,13 +333,14 @@ def user_info(request, user_id):
     :return: ユーザーで絞り込んだ日報のリストを日報一覧と同様のhtmlファイルを使用してレンダリングします
     """
     lists = services.init_form(request=request)
+    lists.update(dailys=services.create_pagination(
+        request, services.get_user_daily_list(user=user_id)))
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
     lists.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
-    lists.update(dailys=services.get_user_daily_list(user=user_id))
     lists.update(userinfo=get_object_or_404(auth.get_user_model(), pk=user_id))
 
     return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
@@ -359,6 +365,8 @@ def comment_edit(request, daily_id, comment_id=None):
     lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
     lists.update(comments=services.get_comments_from_daily(lists['daily']))
     lists.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
+    if request.user != lists['comment'].user:
+        return redirect('login')
     lists.update(comment_form=services.edit_comment(request, lists['daily'], lists['comment']))
 
     return render_to_response('cms/daily_detail.html', lists, context_instance=RequestContext(request))
