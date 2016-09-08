@@ -163,9 +163,11 @@ def edit_daily(request, daily):
                 new_daily.release = True
             new_daily.save()  # 日報の登録
             return True, new_daily
+        else:
+            return False, DailyForm(instance=daily)
     else:  # GET の時
         form = DailyForm(instance=daily)
-    return False, form
+    return True, form
 
 
 @exception

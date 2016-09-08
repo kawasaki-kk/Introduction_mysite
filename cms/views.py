@@ -135,8 +135,9 @@ def daily_edit(request, daily_id=None):
 
     if request.method == 'POST' and flag:
         return redirect('cms:daily_detail', daily_id=lists['report_form'].id)
+    elif flag is False:
+        lists.update(comment="必須項目が入力されていません")
 
-    lists.update(comment="必須項目が入力されていません")
     return render_to_response('cms/daily_edit.html', lists, context_instance=RequestContext(request))
 
 
