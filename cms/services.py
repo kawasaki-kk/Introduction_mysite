@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from cms.models import Daily, Comment, Task
 from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm
 import traceback
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 u"""services.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです
@@ -89,7 +90,7 @@ def get_all_task(user):
     :param user: タスクの登録ユーザー
     :return: ユーザーで絞り込んだタスクの一覧
     """
-    return Task.objects.filter(user=user).order_by('id')
+    return Task.objects.filter(user=user).order_by('-id')
 
 
 @exception
@@ -161,10 +162,10 @@ def edit_daily(request, daily):
             if 'release' in request.POST:
                 new_daily.release = True
             new_daily.save()  # 日報の登録
-            return new_daily
+            return True, new_daily
     else:  # GET の時
         form = DailyForm(instance=daily)
-    return form
+    return False, form
 
 
 @exception
@@ -199,3 +200,12 @@ def edit_task(request, daily_id=None):
         pass
     return True
 
+
+@exception
+def create_pagination(request, query):
+    try:
+        page = request.GET.get('page', 1)
+    except PageNotAnInteger:
+        page = 1
+    p = Paginator(query, per_page=5, request=request)
+    return p.page(page)
