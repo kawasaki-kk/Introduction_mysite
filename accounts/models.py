@@ -7,13 +7,14 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, username, password, is_superuser, **extra_fields):
+    def _create_user(self, username, first_name, last_name, password, is_superuser, **extra_fields):
         """
         Creates and saves a User with the given username, email and password.
         """
         if not username:
             raise ValueError(u'ユーザー名を入力してください！')
-        user = self.model(username=username, is_superuser=is_superuser, **extra_fields)
+        user = self.model(
+            username=username, first_name=first_name, last_name=last_name, is_superuser=is_superuser, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -26,9 +27,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     # ユーザーテーブルの要素を定義
     # idは自動生成されるものを使用
-    username = models.CharField('ユーザー名', max_length=30, unique=True,
+    username = models.CharField('ユーザーID', max_length=30, unique=True,
                                 help_text="This using user ID and use login or logout")
-    screenname = models.CharField('姓', max_length=255,
+    screenname = models.CharField('表示名', max_length=255,
                                   help_text="")
     first_name = models.CharField('姓', max_length=255,
                                   help_text="")
