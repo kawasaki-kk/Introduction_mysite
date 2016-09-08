@@ -23,7 +23,7 @@ def register(request):
                 new_user.save()
                 return redirect('login')
             else:
-                comment = 'パスワードが一致しません'
+                comment = '* パスワードが一致しません'
                 form = UserResisterFrom(request.POST)
     else:
         form = UserResisterFrom()
