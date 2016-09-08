@@ -79,6 +79,10 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ('comment', )
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'class': 'comment_form', 'placeholder': 'コメントを入力してください'})
+        }
 
 
 class SearchForm(forms.Form):
