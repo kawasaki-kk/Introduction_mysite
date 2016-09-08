@@ -2,7 +2,7 @@
 {% load filters %}
 {% load bootstrap %}
 {% block task_content %}
-<div class="container col-md-8">
+<div class="container col-md-8 padding-left">
     {% block content %}
         {{ content }}
     {% endblock %}
@@ -14,63 +14,81 @@
         {{ task_search_form.cond }}
         {{ task_search_form.date }}<br>
         <button type="submit" class="btn btn-default">絞り込み</button>
-        <a href="{% url 'cms:task_mod' %}" class="btn btn-default">すべて表示</a>
+        <a href="{% url 'cms:task_mod' %}" class="btn btn-default">タスク一覧</a>
     </form><br>
-    <form action="{% url 'cms:task_mod_daily' %}" method="POST">
-        <h4>今日のタスク</h4><br>
-        {{ task_form.management_form }}
-        {% for form in task_form %}
-            {% csrf_token %}
-            {% if forloop.last %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date}}<br>
-                タスク名：{{form.name}}<br>
-                予定:{{form.time_plan}}h
-                /実績:{{form.time_real}}h<br>
-            {% else %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                {{form.name.value}}<br>
-                予定{{form.time_plan.value}}h
-                /実績{{form.time_real}}h<br>
-                <a class="disable-form">{{form.implement_date}}</a>
-                <a class="disable-form">{{form.name}}</a>
-                <a class="disable-form">{{form.time_plan}}</a>
-                <a class="disable-form">{{form.time_real}}</a>
-            {% endif %}
-        {% endfor %}
-        <button type="submit" name='edit' class="btn btn-default">修正</button>
-        <button type="submit" name='add' class="btn btn-primary">追加</button>
+    <form class="panel panel-info" action="{% url 'cms:task_mod_daily' %}" method="POST">
+        <div class="panel-heading">
+            <h4>今日のタスク</h4>
+        </div>
+        <div class="list-group">
+            {{ task_form.management_form }}
+            {% for form in task_form %}
+                {% csrf_token %}
+                <a class="list-group-item">
+                    {% if forloop.last %}
+                        {{form.id}}
+                        {{form.complete_task}}
+                        {{form.implement_date.label_tag}}{{form.implement_date}}<br>
+                        タスク名：{{form.name}}<br>
+                        予定:{{form.time_plan}}h
+                        / 実績:{{form.time_real}}h<br>
+                    {% else %}                                                                                                                                                                                                                                                                                                                                                            {{form.id}}
+                        {{form.complete_task}}
+                        {% if form.complete_task.value %}
+                            <text class="complete">完了</text>
+                        {% else %}
+                            <text class="dis-complete">未了</text>
+                        {% endif %}
+                        {{form.implement_date.label_tag}}{{form.implement_date.value}}
+                        {{form.name.value|truncate:"15"}}<br>
+                        予定：{{form.time_plan.value}}h
+                        / 実績：{{form.time_real}}h<br>
+                        <a class="disable-form">{{form.implement_date}}</a>
+                        <a class="disable-form">{{form.name}}</a>
+                        <a class="disable-form">{{form.time_plan}}</a>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="panel-footer">
+            <button type="submit" name='edit' class="btn btn-default">更新</button>
+            <button type="submit" name='add' class="btn btn-primary">追加</button>
+        </div>
     </form><br>
-    <form action="{% url 'cms:task_mod_daily' %}" method="POST">
-        <h4>明日のタスク</h4><br>
-        {{ task_form_next.management_form }}
-        {% for form in task_form_next %}
-            {% csrf_token %}
-            {% if forloop.last %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date}}<br>
-                タスク名：{{form.name}}<br>
-                予定:{{form.time_plan}}h
-                /実績:{{form.time_real}}h<br>
-            {% else %}
-                {{form.id}}
-                {{form.complete_task}}
-                {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                {{form.name.value}}<br>
-                予定{{form.time_plan.value}}h
-                /実績{{form.time_real}}h<br>
-                <a style="display:none">{{form.implement_date}}</a>
-                <a style="display:none">{{form.name}}</a>
-                <a style="display:none">{{form.time_plan}}</a>
-                <a style="display:none">{{form.time_real}}</a>
-            {% endif %}
-        {% endfor %}
-        <button type="submit" name='edit' class="btn btn-default">修正</button>
-        <button type="submit" name='add' class="btn btn-primary">追加</button>
+    <form class="panel panel-info" action="{% url 'cms:task_mod_daily' %}" method="POST">
+        <div class="panel-heading">
+            <h4>明日のタスク</h4>
+        </div>
+        <div class="list-group">
+            {{ task_form_next.management_form }}
+            {% for form in task_form_next %}
+                {% csrf_token %}
+                <a class="list-group-item">
+                    {% if forloop.last %}
+                        {{form.id}}
+                        {{form.complete_task}}
+                        {{form.implement_date.label_tag}}{{form.implement_date}}<br>
+                        タスク名：{{form.name}}<br>
+                        予定:{{form.time_plan}}h
+                        / 実績:{{form.time_real}}h<br>
+                    {% else %}
+                        {{form.id}}
+                        {{form.complete_task}}
+                        {{form.implement_date.label_tag}}{{form.implement_date.value}}
+                        {{form.name.value|truncate:"15"}}<br>
+                        予定：{{form.time_plan.value}}h
+                        / 実績：{{form.time_real}}h<br>
+                        <a class="disable-form">{{form.implement_date}}</a>
+                        <a class="disable-form">{{form.name}}</a>
+                        <a class="disable-form">{{form.time_plan}}</a>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="panel-footer">
+            <button type="submit" name='edit' class="btn btn-default">更新</button>
+            <button type="submit" name='add' class="btn btn-primary">追加</button>
+        </div>
     </form><br>
 </div>
 {% endblock task_content %}
