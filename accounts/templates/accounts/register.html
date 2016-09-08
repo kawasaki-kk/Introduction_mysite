@@ -1,15 +1,16 @@
-{% extends "base.html" %}
+{% extends "taskbar_none.html" %}
 {% load bootstrap %}
 
 {% block title %}ユーザー登録{% endblock title %}
 
 {% block content %}
-    <h3 class="page-header">register</h3>
+    <h3 class="page-header">ユーザー登録</h3>
     <form action="{% url 'register' %}" method="post" class="form-horizontal" role="form">
         {% csrf_token %}
         {{ form|bootstrap_horizontal }}
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
+                {{ comment }}<br>
                 <button type="submit" class="btn btn-primary">登録</button>
             </div>
         </div>
