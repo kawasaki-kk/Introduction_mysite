@@ -73,10 +73,8 @@
             </div>
         </div>
     </div>
-    <div class="list-group">
-        <a class="list-group-item">
-            {{ comment.comment|markdown }}
-        </a>
+    <div class="panel-body">
+        {{ comment.comment|markdown }}
     </div>
 </div>
 {% endfor %}
