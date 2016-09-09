@@ -8,6 +8,22 @@ table {
     overflow-wrap : break-word;
 }
 
+.default-button:link {
+    color:white;
+}
+
+.default-button:visited {
+    color:white;
+}
+
+.default-button:hover {
+    color:white;
+}
+
+.default-button:active {
+    color:white;
+}
+
 .panel-body {
     word-wrap : break-word;
     overflow-wrap : break-word;
