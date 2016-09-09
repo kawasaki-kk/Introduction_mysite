@@ -1,4 +1,4 @@
-{% extends "taskbar.html" %}
+{% extends "taskbar_none.html" %}
 {% load bootstrap %}
 {% load markdown_deux_tags %}
 {% block title %}日報の編集{% endblock title %}
@@ -19,53 +19,56 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-11">
+                <div class="col-md-12">
                     <h3>{{ report_form.title }}</h3>
                 </div>
             </div>
-            <div class="padding-top">
-                <h4>Y：やったこと</h4><br>
-            </div>
-            <div class="row">
-                <div class="col-md-5">
-                    {% for task in implement_task %}
-                        {% if task.complete_task %}
-                            <text class="complete">完了</text>
-                        {% else %}
-                            <text class="dis-complete">未了</text>
-                        {% endif %}
-                        {{task.implement_date.label_tag}}{{task.implement_date}}
-                         / {{task.name}}<br>
-                        予定：{{task.time_plan}}h
-                        /実績：{{task.time_real}}h<br>
-                    {% endfor %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Y：やったこと</h4>
                 </div>
-                <div class="col-md-6">
-                    {{ report_form.report_y }}<br>
+                <div class="row">
+                    <div class="col-md-5 padding-left-plus padding-top">
+                        {% for task in implement_task %}
+                            {% if task.complete_task %}
+                                <text class="complete">完了</text>
+                            {% else %}
+                                <text class="dis-complete">未了</text>
+                            {% endif %}
+                            {{task.implement_date.label_tag}}{{task.implement_date}}
+                             / {{task.name}}<br>
+                            予定：{{task.time_plan}}h
+                            /実績：{{task.time_real}}h<br>
+                        {% endfor %}<br>
+                    </div>
+                    <div class="col-md-7 padding-left-plus">
+                        {{ report_form.report_y }}<br>
+                    </div>
                 </div>
-            </div>
-            <div class="padding-top">
-                <h4>W：わかったこと</h4><br>
-            </div>
-            <div class="row">
-                <div class="col-md-11">
-                    {{ report_form.report_w }}<br>
+
+                <div class="panel-heading">
+                    <h4>W：わかったこと</h4>
                 </div>
-            </div>
-            <div class="padding-top">
-                <h4>T：つぎにやること</h4><br>
-            </div>
-            <div class="row">
-                <div class="col-md-5">
-                    {% for task in create_task %}
-                        {{task.implement_date.label}}{{task.implement_date}}
-                         / {{task.name}}<br>
-                        予定：{{task.time_plan}}h
-                        /実績：{{task.time_real}}h<br>
-                    {% endfor %}
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ report_form.report_w }}<br>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    {{ report_form.report_t }}<br>
+                <div class="panel-heading">
+                    <h4>T：つぎにやること</h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 padding-left-plus padding-top">
+                        {% for task in create_task %}
+                            {{task.implement_date.label}}{{task.implement_date}}
+                             / {{task.name}}<br>
+                            予定：{{task.time_plan}}h
+                            /実績：{{task.time_real}}h<br>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-7 padding-left-plus">
+                        {{ report_form.report_t }}<br>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,9 +77,9 @@
         {% endif %}
         <div class="form-group">
             <div class="padding-left padding-top col-sm-10">
-                <a href="{% url 'cms:task_mod' %}" class="btn btn-default">タスクの編集</a>
-                <button type="submit" name='preview' class="btn btn-default">プレビュー</button>
-                <button type="submit" name='release' class="btn btn-primary">公開</button>
+                <button type="submit" name='gototask' class="btn btn-default">保存してタスクの編集へ</button>
+                <button type="submit" name='preview' class="btn btn-default">プレビューする</button>
+                <button type="submit" name='release' class="btn btn-primary">公開する</button>
             </div>
         </div>
 </form>

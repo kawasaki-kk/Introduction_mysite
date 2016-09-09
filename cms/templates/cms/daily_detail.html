@@ -7,14 +7,20 @@
 <h3 class="page-header">{{ daily.create_date }} / {{ daily.title }}</h3>
 <div class="panel panel-default">
     <div class="panel-heading font-l">
-        投稿者：　{{ daily.user.get_full_name }}
-        {% if daily.user == user %}
-            {% if daily.release %}
-                <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm col-md-offset-8">編集</a>
-            {% else %}
-                <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-primary">修正して公開する</a>
-            {% endif %}
-        {% endif %}
+        <div class="row">
+            <div class="col-md-9">
+                投稿者： {{ daily.user.get_full_name }}
+            </div>
+            <div class="col-md-2">
+                {% if daily.user == user %}
+                    {% if daily.release %}
+                        <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm col-md-6">編集</a>
+                    {% else %}
+                        <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-sm btn-primary">修正して公開する</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
     </div>
     <div class="panel-body font-m">
         <h3>Y:やったこと</h3>
@@ -55,11 +61,17 @@
 {% for comment in comments %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        {{ comment.user.get_full_name }} さんのコメント
-        {% if user == comment.user %}
-            <a href="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">編集</a>
-            <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'cms:comment_del' daily_id=daily.id comment_id=comment.id %}">削除</button>
-        {% endif %}
+        <div class="row">
+            <div class="col-md-10">
+                {{ comment.user.get_full_name }} さんのコメント
+            </div>
+            <div class="col-md-2">
+                {% if user == comment.user %}
+                    <a href="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">編集</a>
+                    <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'cms:comment_del' daily_id=daily.id comment_id=comment.id %}">削除</button>
+                {% endif %}
+            </div>
+        </div>
     </div>
     <div class="list-group">
         <a class="list-group-item">
