@@ -19,9 +19,9 @@
                 <td>{{ form.password.label_tag }}</td>
                 <td>{{ form.password }}</td>
             </tr>
-        </table>
+        </table><br>
         <button type="submit" class="btn btn-primary">ログイン</button>
-        <a href="{% url 'register' %}" class="btn btn-default btn-sm">ユーザー登録</a>
+        <a href="{% url 'register' %}" class="btn btn-default">ユーザー登録</a>
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
 {% endblock %}
