@@ -89,8 +89,8 @@ def daily_detail(request, daily_id):
         user=lists['daily'].user, date=lists['daily'].create_date))
     lists.update(create_task=services.get_task_from_create(
         user=lists['daily'].user, date=lists['daily'].create_date))
-    lists.update(comment_form=services.edit_comment(
-        request=request, daily=lists['daily'],  comment=services.get_or_create_comment(request.user)))
+    flag, lists['comment_form'] = services.edit_comment(
+        request=request, daily=lists['daily'],  comment=services.get_or_create_comment(request.user))
 
     return render_to_response('cms/daily_detail.html', lists, context_instance=RequestContext(request))
 
@@ -370,13 +370,17 @@ def comment_edit(request, daily_id, comment_id=None):
         services.get_next_task(request.user, timezone.now().date())
     ))
     lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
-    lists.update(comments=services.get_comments_from_daily(lists['daily']))
     lists.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
     if request.user != lists['comment'].user:
         return redirect('login')
-    lists.update(comment_form=services.edit_comment(request, lists['daily'], lists['comment']))
+    flag, lists['comment_form'] = services.edit_comment(request, lists['daily'], lists['comment'])
 
-    return render_to_response('cms/daily_detail.html', lists, context_instance=RequestContext(request))
+    if request.method == 'POST' and flag:
+        return redirect('cms:daily_detail', daily_id=lists['daily'].id)
+    elif flag is False:
+        lists.update(comment="必須項目が入力されていません")
+
+    return render_to_response('cms/comment_edit.html', lists, context_instance=RequestContext(request))
 
 
 def comment_del(request, daily_id, comment_id):

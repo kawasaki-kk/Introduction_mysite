@@ -1,36 +1,20 @@
-{% extends "base.html" %}
+{% extends "taskbar.html" %}
 {% load bootstrap %}
 
 {% block title %}コメントの編集{% endblock title %}
 
 {% block content %}
-    <h3 class="page-header">コメントの編集</h3>
-    {% if comment_id %}
-    <form action="{% url 'cms:comment_mod' daily_id=daily_id comment_id=comment_id %}" method="post" class="form-horizontal" role="form">
-    {% else %}
-    <form action="{% url 'cms:comment_add' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
-    {% endif %}
-    {% if user.is_anonymous %}
-		<dd div class="operation">
-  		<a href="{% url 'login' %}">ログインする</a>
-  		<a href="{% url 'register' %}">ユーザー登録する</a>
-	</dd>
-	<hr />
-	{% else %}
-		<p>username: <b>{{ user.username }}</b> 
-  		<a href="{% url 'logout' %}"> [ログアウト]</a>
-		</p>
-		<dd div class="operation">
-	</dd>
-	<hr />
-	{% endif %}
-      {% csrf_token %}
-      {{ form|bootstrap_horizontal }}
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">送信</button>
+<h3 class="page-header">コメントの編集</h3>
+<form action="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" method="post" class="form-horizontal" role="form">
+      <div class="panel panel-default">
+        <div class="list-group">
+            {% csrf_token %}
+            {{ comment_form.comment }}
         </div>
-      </div>
-    </form>
-    <a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">戻る</a>
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-primary">投稿</button>
+        </div>
+    </div>
+</form>
+<a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">戻る</a>
 {% endblock content %}

@@ -149,8 +149,10 @@ def edit_comment(request, daily, comment):
             comment = form.save(commit=False)
             comment.daily = daily
             comment.save()
-    form = CommentForm()
-    return form
+            return True, CommentForm()
+        else:
+            return False, CommentForm(request.POST, instance=comment)
+    return True, CommentForm(instance=comment)
 
 
 @exception
