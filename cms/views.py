@@ -43,7 +43,9 @@ def daily_list(request):
     """
     lists = services.init_form(request=request)
 
-    lists.update(dailys=services.create_pagination(request, services.get_all_daily_list(True)))
+    lists.update(pages=services.create_pagination(request, services.get_all_daily_list(True)))
+    lists.update(dailys=lists['pages'].object_list)
+    lists.update(is_paginated=True)
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
@@ -118,7 +120,7 @@ def daily_edit(request, daily_id=None):
     lists.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
     if request.user != lists['daily'].user:
         return redirect('login')
-    flag, lists['report_form']=services.edit_daily(request=request, daily=lists['daily'])
+    flag, lists['report_form'] = services.edit_daily(request=request, daily=lists['daily'])
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
@@ -258,7 +260,8 @@ def daily_date_search(request):
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
             lists.update(dailys=Daily.objects.all().filter(create_date=form.cleaned_data['date']))
-            return render_to_response('cms/daily_search.html', lists, context_instance=RequestContext(request))
+            lists.update(is_paginated=False)
+            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
 
     return redirect('cms:daily_list')
 
@@ -287,7 +290,7 @@ def daily_search(request):
     u"""日報検索
         日報をキーワードによって検索します
         検索条件
-        ・キーワード数：1(複数キーワードのor/andには非対応)
+        ・キーワード数：1(複数キーワードのor対応,and未対応)
         ・検索対象：ユーザー名/日報タイトル/日報本文(y/w/t)
     :param request: 検索キーワードの取得
     :return: 絞り込んだ日報の一覧をdaily_list.htmlを利用してレンダリングする
@@ -317,7 +320,8 @@ def daily_search(request):
             lists.update(dailys=Daily.objects.all().filter(query).order_by('-create_date'))
             lists.update(search_form=form)
             lists.update(keyword=form.cleaned_data['keyword'])
-            return render_to_response('cms/daily_search.html', lists, context_instance=RequestContext(request))
+            lists.update(is_paginated=False)
+            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
 
         return redirect('cms:daily_list')
 
@@ -334,8 +338,10 @@ def user_info(request, user_id):
     :return: ユーザーで絞り込んだ日報のリストを日報一覧と同様のhtmlファイルを使用してレンダリングします
     """
     lists = services.init_form(request=request)
-    lists.update(dailys=services.create_pagination(
+    lists.update(pages=services.create_pagination(
         request, services.get_user_daily_list(user=user_id)))
+    lists.update(dailys=lists['pages'].object_list)
+    lists.update(is_paginated=True)
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
