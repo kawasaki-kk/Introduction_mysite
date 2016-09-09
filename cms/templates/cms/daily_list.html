@@ -9,7 +9,7 @@
 {% elif keyword %}
     <h3 class="page-header">"{{keyword}}" の検索結果</h3>
 {% else %}
-    <h3 class="page-header">日報の一覧</h3>
+    <h3 class="page-header">Daily Reports</h3>
 {% endif %}
 <form class="padding-top row" action="{% url 'cms:date_assign_daily' %}" method="GET">
     <div class="col-md-8">
@@ -46,20 +46,18 @@
         </div>
         <div class="panel-footer">
             <div class="row">
-                <text class="col-md-9 font-m">投稿日：{{ daily.create_date }} / 最終更新：{{ daily.update_date }}</text>
-                <div class="col-md-3">
+                <text class="col-md-8 font-m">投稿日：{{ daily.create_date }} / 最終更新：{{ daily.update_date }}</text>
+                <div class="col-md-4">
                     {% if userinfo %}
                         {% if daily.user == user %}
-                            <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary default-button">詳細</a>
-                            <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集</a>
+                            <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary default-button">詳細を見る</a>
+                            <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm">編集する</a>
                             <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ daily.id }}" url="{% url 'cms:daily_del' daily_id=daily.id %}">削除</button>
                         {% else %}
-                            <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary default-button">詳細</a>
-                            <a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
+                            <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary default-button">詳細を見る</a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary default-button">詳細</a>
-                        <a href="{% url 'cms:comment_add' daily_id=daily.id %}" class="btn btn-default btn-sm">コメントの追加</a>
+                        <a href="{% url 'cms:daily_detail' daily_id=daily.id %}" class="btn btn-default btn-sm btn-primary default-button">詳細を見る</a>
                     {% endif %}
                 </div>
             </div>
