@@ -4,15 +4,18 @@ body {
 
 table {
     margin-top: 8px;
-    word-break:break-all;
+    word-wrap : break-word;
+    overflow-wrap : break-word;
 }
 
 .panel-body {
-    word-break:break-all;
+    word-wrap : break-word;
+    overflow-wrap : break-word;
 }
 
 .break-text {
-    word-break : break-all;
+    word-wrap : break-word;
+    overflow-wrap : break-word;
 }
 
 .time_real {
@@ -37,7 +40,7 @@ table {
 
 .report_y_form {
     width: 100%;
-    height: 100px;
+    height: 100%;
 }
 
 .report_w_form {
@@ -46,7 +49,7 @@ table {
 
 .report_t_form {
     width: 100%;
-    height: 100px;
+    height: 100%;
 }
 
 .comment_form {
@@ -72,6 +75,10 @@ table {
 
 .padding-left-plus {
     padding-left: 40px;
+}
+
+.padding-right-plus {
+    padding-right: 40px;
 }
 
 .padding-top {
