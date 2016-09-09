@@ -46,6 +46,7 @@
                         <li class="font-m"><a href="{% url 'cms:user_info' user_id=user.id %}">{{user.get_full_name}}さんのページ</a></li>
                         <li class="font-m"><a href="{% url 'cms:daily_add' %}">新規投稿</a></li>
                         <li class="font-m"><a href="{% url 'cms:task_mod' %}">タスク一覧</a></li>
+                        <li class="font-m"><a href="{% url 'cms:user_list' %}">ユーザー一覧</a></li>
                         <form class="navbar-form navbar-left" method="GET" action="{% url 'cms:daily_search' %}">
                             <div class="input-group">
                                 {% csrf_token %}

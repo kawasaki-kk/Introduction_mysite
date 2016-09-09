@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from . import services
 from django.utils import timezone
-from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from accounts.models import User
+
 
 u"""views.py
     各関数は、辞書型で引数をまとめ、renderにhtmlファイルの指定とともに渡します
@@ -139,6 +140,10 @@ def daily_edit(request, daily_id=None):
         return redirect('cms:daily_detail', daily_id=lists['report_form'].id)
     elif flag is False:
         lists.update(comment="必須項目が入力されていません")
+        return render_to_response('cms/daily_edit.html', lists, context_instance=RequestContext(request))
+
+    if 'gototask' in request.POST:
+        return redirect('cms:task_mod')
 
     return render_to_response('cms/daily_edit.html', lists, context_instance=RequestContext(request))
 
@@ -351,6 +356,45 @@ def user_info(request, user_id):
     lists.update(userinfo=get_object_or_404(auth.get_user_model(), pk=user_id))
 
     return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
+
+
+def user_list(request):
+    u"""
+
+    :param request:
+    :return:
+    """
+    lists = services.init_form(request=request)
+    lists.update(users=User.objects.all().order_by('id'))
+    lists.update(user_search_form=SearchForm())
+
+    return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
+
+
+def user_search(request):
+    u"""
+
+        :param request:
+        :return:
+    """
+    lists = services.init_form(request=request)
+    if request.method == 'GET':
+        # リクエストを取得しながら検索フォームを生成
+        form = SearchForm(request.GET)
+        # フォームの中身が存在する場合=検索キーワードが入力されている場合
+        if form.is_valid():
+            lists.update(users=User.objects.all().filter(
+                Q(username__contains=form.cleaned_data['keyword']) |
+                Q(first_name__contains=form.cleaned_data['keyword']) |
+                Q(last_name__contains=form.cleaned_data['keyword'])).order_by('id'))
+            lists.update(user_search_form=form)
+
+            return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
+    else:
+        lists.update(users=User.objects.all().order_by('id'))
+        lists.update(user_search_form=SearchForm())
+
+    return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
 
 
 # コメントの編集
