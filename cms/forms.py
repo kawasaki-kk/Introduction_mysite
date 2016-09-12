@@ -105,6 +105,16 @@ class DateForm(forms.Form):
     date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}))
 
 
+class DailySearchForm(forms.Form):
+    u"""投稿状態絞り込み用入力フォーム
+        日報のレコードを絞り込むためのフォームです
+        日報の状態をドロップダウンリストにより、"すべて"、"公開"、"未公開"から選択することができます
+    """
+
+    cond = forms.ChoiceField(
+        choices=[("0", "すべて表示"), ("1", "公開"), ("2", "未公開")])
+
+
 class TaskSearchForm(forms.Form):
     u"""日付絞込み/タスク状態絞り込み用入力フォーム
         タスクのレコードを絞り込むためのフォームです
