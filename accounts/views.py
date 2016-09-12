@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from accounts.forms import UserChangeForm, UserForm, UserResisterFrom
 from accounts.models import UserManager, User
 from django import forms
@@ -6,10 +6,16 @@ from django import forms
 # Create your views here.
 
 
-def register(request):
+def register(request, user_id=None):
     comment = ''
+    if user_id:
+        user = get_object_or_404(User, pk=user_id)
+    else:
+        user = User()
+
     if request.POST:
-        form = UserResisterFrom(request.POST)
+        form = UserResisterFrom(request.POST, {
+            'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name})
         if form.is_valid():
             username = request.POST['username']
             last_name = request.POST['last_name']
@@ -24,8 +30,16 @@ def register(request):
                 return redirect('login')
             else:
                 comment = '* パスワードが一致しません'
-                form = UserResisterFrom(request.POST)
+                form = UserResisterFrom(request.POST, {
+            'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name})
     else:
-        form = UserResisterFrom()
+        form = UserResisterFrom({
+            'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name})
 
     return render(request, 'accounts/register.html', {'form': form, 'comment': comment})
+
+
+def user_data(request):
+    user = get_object_or_404(User, pk=request.user.id)
+
+    return render(request, 'accounts/user_data.html', {'user': user})
