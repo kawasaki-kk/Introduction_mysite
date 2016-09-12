@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-from Introduction_mysite import ex_password
+from Introduction_mysite.ex_password import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^#ugn5-vl6%n!^7p)cqsh0c&zaq3y1=(a3#g4)!0b0dlb0a0jf'
+SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,10 +94,10 @@ WSGI_APPLICATION = 'Introduction_mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': ex_password.dbname,
-        'USER': ex_password.username,
+        'NAME': database_name,
+        'USER': database_user,
         #  'PASSWORD': os.environ.get("PASSWORD"),
-        'PASSWORD': ex_password.password,
+        'PASSWORD': database_password,
         'HOST': 'localhost',
         'PORT': '',
     }
