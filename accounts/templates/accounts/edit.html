@@ -1,0 +1,20 @@
+{% extends "taskbar_none.html" %}
+{% load bootstrap %}
+
+{% block title %}ユーザー登録{% endblock title %}
+
+{% block content %}
+<h3 class="page-header">ユーザー情報の編集</h3>
+<form action="{% url 'edit' user_id=user.id %}" method="post" class="form-horizontal" role="form">
+    {% csrf_token %}
+    {{ form|bootstrap_horizontal }}
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10 dis-complete">
+            {{ comment }}<br>
+            <button type="submit" class="btn btn-primary">更新</button>
+        </div>
+    </div>
+</form>
+<a href="{% url 'user_data' %}" class="btn btn-default">ユーザー情報に戻る</a>
+<a href="{% url 'cms:daily_list' %}" class="btn btn-default">日報一覧に戻る</a>
+{% endblock content %}

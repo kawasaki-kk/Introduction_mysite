@@ -25,7 +25,7 @@ urlpatterns = [
     # ユーザー登録
     url(r'^register/$', views.register, name='register'),
     # ユーザー編集
-    url(r'^register/(?P<user_id>\d+)/$', views.register, name='register'),
+    url(r'^register/(?P<user_id>\d+)/$', views.edit, name='edit'),
     # ユーザー情報
     url(r'^user/$', views.user_data, name='user_data'),
     # 管理サイトを使用できるように登録しておく

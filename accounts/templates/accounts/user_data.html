@@ -9,5 +9,5 @@
 <text class="font-l">ユーザーID: <a class="font-l" href="{% url 'cms:user_info' user_id=user.id %}">{{user.username}}</a><br></text>
 <text class="font-l">氏名: {{user.first_name}} {{user.last_name}}<br></text>
 
-<a href="{% url 'register' user_id=user.id %}" class="btn btn-default">ユーザー情報の編集</a>
+<a href="{% url 'edit' user_id=user.id %}" class="btn btn-default">ユーザー情報の編集</a>
 {% endblock content %}

@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
@@ -13,9 +14,25 @@ class UserManager(BaseUserManager):
         """
         if not username:
             raise ValueError(u'ユーザー名を入力してください！')
+        if User.objects.filter(username=username):
+            raise ValueError(u'そのユーザーは登録されています')
         user = self.model(
             username=username, first_name=first_name, last_name=last_name, is_superuser=is_superuser, **extra_fields)
         user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def _edit_user(self, id, username, is_superuser, first_name=None, last_name=None, **extra_fields):
+        """
+        Creates and saves a User with the given username, email and password.
+        """
+        if not username:
+            raise ValueError(u'ユーザー名を入力してください！')
+        user = get_object_or_404(User, pk=id)
+        user.username = username
+        user.first_name = first_name
+        user.last_name = last_name
+        user.is_superuser = is_superuser
         user.save(using=self._db)
         return user
 
