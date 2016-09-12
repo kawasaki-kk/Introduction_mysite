@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.template import RequestContext
-from cms.models import Daily, Comment, Task
-from cms.forms import SearchForm, DateForm, TaskFormSet, TaskSearchForm, DailySearchForm
+from cms.models import Daily
+from cms.forms import SearchForm, DateForm, TaskSearchForm, DailySearchForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
