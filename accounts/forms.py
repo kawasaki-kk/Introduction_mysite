@@ -1,7 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from accounts.models import UserManager, User
-from django.contrib.auth.admin import UserAdmin
+from accounts.models import User
 from django.contrib.auth.forms import UserChangeForm
 from . import models
 

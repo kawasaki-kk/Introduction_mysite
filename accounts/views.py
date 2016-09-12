@@ -1,9 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.forms import UserChangeForm, UserForm, UserResisterFrom, UserEditFrom
-from accounts.models import UserManager, User
-from django import forms
-
-# Create your views here.
+from accounts.forms import UserResisterFrom, UserEditFrom
+from accounts.models import User
 
 
 def register(request, user_id=None):
