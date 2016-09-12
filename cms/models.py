@@ -8,6 +8,7 @@ u"""models.py
     ユーザーモデルに関してはaccountsで管理する
 """
 
+
 class Daily(models.Model):
     u"""日報モデル
     定義
