@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.template import RequestContext
 from cms.models import Daily, Comment, Task
-from cms.forms import SearchForm, DateForm, TaskFormSet, TaskSearchForm
+from cms.forms import SearchForm, DateForm, TaskFormSet, TaskSearchForm, DailySearchForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
@@ -44,9 +44,10 @@ def daily_list(request):
     """
     lists = services.init_form(request=request)
 
-    lists.update(pages=services.create_pagination(request, services.get_all_daily_list(True)))
+    lists.update(pages=services.create_pagination(request, services.get_all_daily_list(request=request, release=True)))
     lists.update(dailys=lists['pages'].object_list)
     lists.update(is_paginated=True)
+    lists.update(date_form=DateForm(request.GET))
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
@@ -162,26 +163,28 @@ def task_edit(request):
     # タスク一覧
     lists = services.init_form(request=request)
     services.edit_task(request)
-    lists.update(tasks=services.create_pagination(request, services.get_all_task(request.user)))
+    lists.update(task_search_form=TaskSearchForm(request.GET))
+
+    lists.update(tasks=services.create_pagination(request, services.get_search_task(request=request)))
     lists.update(task_form=services.create_task_form_in_queryset(lists['tasks'].object_list))
     return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
 
 
 def task_edit_daily(request):
-        u"""タスク一覧(CRU)
-            日報表示部分を持つページにおいてタスクを更新するためのメソッドです
-            通常のものと比べ、返るページが異なります
-            表示対象のタスクはユーザーそれぞれのタスクのみです
-            R属性は仮です
-                タスク単独を詳しく編集するフォームを実装する可能性があります
-            lists:
-            タスクフォーム
-        :param request:ユーザー情報の取得
-        :return:レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用するフォーム
-        """
-        services.edit_task(request)
+    u"""タスク一覧(CRU)
+        日報表示部分を持つページにおいてタスクを更新するためのメソッドです
+        通常のものと比べ、返るページが異なります
+        表示対象のタスクはユーザーそれぞれのタスクのみです
+        R属性は仮です
+            タスク単独を詳しく編集するフォームを実装する可能性があります
+        lists:
+        タスクフォーム
+    :param request:ユーザー情報の取得
+    :return:レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用するフォーム
+    """
+    services.edit_task(request)
 
-        return redirect('cms:daily_list')
+    return redirect('cms:daily_list')
 
 
 # def search_for_task_in_date
@@ -196,79 +199,10 @@ def task_date_search(request):
     :return: レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用する日付で絞り込んだフォーム
     """
     lists = services.init_form(request=request)
-    if request.method == 'GET':
-        # リクエストを取得しながら検索フォームを生成
-        form = TaskSearchForm(request.GET)
-        lists.update(task_search_form=form)
-        # フォームの中身が存在する場合=検索キーワードが入力されている場合
-        if form.is_valid():
-            if form.cleaned_data['cond'] == '0':
-                form = TaskFormSet(queryset=Task.objects.filter(
-                    user=request.user,
-                    implement_date=form.cleaned_data['date']
-                ).order_by('-id'))
-            elif form.cleaned_data['cond'] == '1':
-                form = TaskFormSet(queryset=Task.objects.filter(
-                    user=request.user,
-                    implement_date=form.cleaned_data['date'],
-                    complete_task=True
-                ).order_by('-id'))
-            elif form.cleaned_data['cond'] == '2':
-                form = TaskFormSet(queryset=Task.objects.filter(
-                    user=request.user,
-                    implement_date=form.cleaned_data['date'],
-                    complete_task=False
-                ).order_by('-id'))
-        elif form.cleaned_data['cond']:
-            if form.cleaned_data['cond'] == '0':
-                form = TaskFormSet(queryset=Task.objects.filter(
-                    user=request.user,
-                ).order_by('-id'))
-            elif form.cleaned_data['cond'] == '1':
-                form = TaskFormSet(queryset=Task.objects.filter(
-                    user=request.user,
-                    complete_task=True
-                ).order_by('-id'))
-            elif form.cleaned_data['cond'] == '2':
-                form = TaskFormSet(queryset=Task.objects.filter(
-                    user=request.user,
-                    complete_task=False
-                ).order_by('-id'))
-        else:
-            form = TaskSearchForm()
+    lists.update(task_search_form=TaskSearchForm(request.GET))
 
-        lists.update(task_form=form)
-        return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
-
-
-# def search_for_daily_in_date
-def daily_date_search(request):
-    u"""日報日付絞込み
-        日報の一覧を日付で絞り込みます
-        絞り込み対象は全日報です
-        以下、基本的な手順はtask_date_search()と同様です
-    :param request: dateform(日付をカレンダーによって指定するフォーム)からのリクエスト、及びユーザー情報の取得に使用
-    :return: レンダリング対象のhtmlファイル'cms/daily_list.html'、およびhtmlファイル中で利用する日付で絞り込んだクエリリスト
-    """
-    lists = services.init_form(request=request)
-    lists.update(task_form=services.create_task_form_in_queryset(
-        services.get_task_from_implement(request.user, timezone.now().date())
-    ))
-    lists.update(task_form_next=services.create_task_form_in_queryset(
-        services.get_next_task(request.user, timezone.now().date())
-    ))
-
-    if request.method == 'GET':
-        # リクエストを取得しながら検索フォームを生成
-        form = DateForm(request.GET)
-        lists.update(date_form=form)
-        # フォームの中身が存在する場合=検索キーワードが入力されている場合
-        if form.is_valid():
-            lists.update(dailys=Daily.objects.all().filter(create_date=form.cleaned_data['date']))
-            lists.update(is_paginated=False)
-            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
-
-    return redirect('cms:daily_list')
+    lists.update(task_form=services.task_date_search(request=request))
+    return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
 
 
 # 日報の削除
@@ -343,8 +277,9 @@ def user_info(request, user_id):
     :return: ユーザーで絞り込んだ日報のリストを日報一覧と同様のhtmlファイルを使用してレンダリングします
     """
     lists = services.init_form(request=request)
+    lists.update(daily_release_form=DailySearchForm(request.GET))
     lists.update(pages=services.create_pagination(
-        request, services.get_user_daily_list(user=user_id)))
+        request, services.get_user_daily_list(request=request, user=user_id)))
     lists.update(dailys=lists['pages'].object_list)
     lists.update(is_paginated=True)
     lists.update(task_form=services.create_task_form_in_queryset(
@@ -359,23 +294,25 @@ def user_info(request, user_id):
 
 
 def user_list(request):
-    u"""
-
-    :param request:
-    :return:
+    u"""ユーザー一覧
+        登録しているユーザー全員を表示
+    :param request:初期情報
+    :return:ユーザーの一覧とユーザー検索フォーム
     """
     lists = services.init_form(request=request)
-    lists.update(users=User.objects.all().order_by('id'))
+    lists.update(users=User.objects.all().order_by('first_name'))
     lists.update(user_search_form=SearchForm())
 
     return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
 
 
 def user_search(request):
-    u"""
-
-        :param request:
-        :return:
+    u"""ユーザー検索
+        ユーザーをキーワード検索
+        検索対象：
+            username, first_name, last_name
+        :param request:検索リクエスト
+        :return:検索結果ユーザー一覧とユーザー検索フォーム
     """
     lists = services.init_form(request=request)
     if request.method == 'GET':
@@ -386,7 +323,7 @@ def user_search(request):
             lists.update(users=User.objects.all().filter(
                 Q(username__contains=form.cleaned_data['keyword']) |
                 Q(first_name__contains=form.cleaned_data['keyword']) |
-                Q(last_name__contains=form.cleaned_data['keyword'])).order_by('id'))
+                Q(last_name__contains=form.cleaned_data['keyword'])).order_by('first_name'))
             lists.update(user_search_form=form)
 
             return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
@@ -402,9 +339,9 @@ def comment_edit(request, daily_id, comment_id=None):
     u"""コメント編集
         コメントの編集/新規作成を行います
     :param request:
-    :param daily_id:
-    :param comment_id:
-    :return:
+    :param daily_id:コメントが投稿されている日報のid
+    :param comment_id:(編集の場合)編集対象のコメントのid
+    :return:編集されたコメントの投稿されている日報詳細/コメント編集フォーム(編集失敗の場合)
     """
     lists = services.init_form(request=request)
     lists.update(task_form=services.create_task_form_in_queryset(
@@ -428,6 +365,13 @@ def comment_edit(request, daily_id, comment_id=None):
 
 
 def comment_del(request, daily_id, comment_id):
+    u"""コメントの削除
+        コメントを削除します
+    :param request:
+    :param daily_id:リダイレクト先日報id
+    :param comment_id:削除対象コメントid
+    :return:
+    """
     comment = get_object_or_404(Comment, pk=comment_id)
     comment.delete()
     return redirect('cms:daily_detail', daily_id=daily_id)

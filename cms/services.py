@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
 from cms.models import Daily, Comment, Task
-from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm
+from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm, DailySearchForm
 import traceback
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -30,7 +30,6 @@ def init_form(request=None, daily_id=None):
     lists = dict(search_form=SearchForm())
     lists.update(request=request)
     lists.update(daily_id=daily_id)
-    lists.update(date_form=DateForm())
     lists.update(task_search_form=TaskSearchForm())
 
     return lists
@@ -94,22 +93,52 @@ def get_all_task(user):
 
 
 @exception
-def get_all_daily_list(release):
+def get_all_daily_list(request, release):
     u"""日報の取得(全ユーザー)
         ユーザーにかかわらず、日報を取得し、クエリセットとして返します
+    :param request:表示クエリの取得
     :param release: 日報の公開状態(True:公開/False:非公開)
     :return: 指定したrelease状態の日報の一覧
     """
+    if request.method == 'GET':
+        # リクエストを取得しながら検索フォームを生成
+        form = DateForm(request.GET)
+        # フォームの中身が存在する場合=検索キーワードが入力されている場合
+        if form.is_valid():
+            # リクエストを取得しながら検索フォームを生成
+            form = DateForm(request.GET)
+            # フォームの中身が存在する場合=検索キーワードが入力されている場合
+            if form.is_valid():
+                print('公開')
+                return Daily.objects.filter(
+                    create_date=form.cleaned_data['date'], release=release).order_by('-id')
+            else:
+                return Daily.objects.filter(release=release).order_by('-create_date')
+        else:
+            return Daily.objects.filter(release=release).order_by('-create_date')
+
     return Daily.objects.filter(release=release).order_by('-create_date')
 
 
 @exception
-def get_user_daily_list(user):
+def get_user_daily_list(request, user):
     u"""日報の取得(ユーザー指定)
         ユーザーを指定して、日報を取得し、クエリセットとして返します
+    :param request: 検索のクエリ
     :param user: 取得対象のユーザー
     :return: 指定したユーザーの日報の一覧
     """
+    if request.method == 'GET':
+        # リクエストを取得しながら検索フォームを生成
+        form = DailySearchForm(request.GET)
+        # フォームの中身が存在する場合=検索キーワードが入力されている場合
+        if form.is_valid():
+            if form.cleaned_data['cond'] == '1':
+                return Daily.objects.filter(user=user, release=True).order_by('-create_date')
+            elif form.cleaned_data['cond'] == '2':
+                return Daily.objects.filter(user=user, release=False).order_by('-create_date')
+            else:
+                return Daily.objects.filter(user=user).order_by('-create_date')
     return Daily.objects.filter(user=user).order_by('-create_date')
 
 
@@ -182,9 +211,7 @@ def edit_task(request, daily_id=None):
     if request.method == 'POST':
         formset = TaskFormSet(request.POST or None)
         if formset.is_valid():
-            if 'edit' in request.POST:
-                formset.save()
-            elif 'add' in request.POST:
+            if 'add' in request.POST:
                 if daily_id:
                     task = Task(daily=daily, user=request.user,
                                 complete_task=formset.forms[-1].cleaned_data['complete_task'],
@@ -200,6 +227,8 @@ def edit_task(request, daily_id=None):
                                 time_real=formset.forms[-1].cleaned_data['time_real'],
                                 implement_date=formset.forms[-1].cleaned_data['implement_date'], )
                 task.save()
+            else:
+                formset.save()
     else:
         pass
     return True
@@ -213,3 +242,56 @@ def create_pagination(request, query):
         page = 1
     p = Paginator(query, per_page=5, request=request)
     return p.page(page)
+
+
+@exception
+def get_search_task(request):
+    if request.method == 'GET' and request.path.find('dailyreport/task/') and 'tasks' in request.GET:
+        # リクエストを取得しながら検索フォームを生成
+        form = TaskSearchForm(request.GET)
+        print(request.path)
+        # フォームの中身が存在する場合=検索キーワードが入力されている場合
+        if form.is_valid():
+            if form.cleaned_data['cond'] == '0':
+                task = Task.objects.filter(
+                    user=request.user,
+                    implement_date=form.cleaned_data['date']
+                ).order_by('-id')
+            elif form.cleaned_data['cond'] == '1':
+                task = Task.objects.filter(
+                    user=request.user,
+                    implement_date=form.cleaned_data['date'],
+                    complete_task=True
+                ).order_by('-id')
+            elif form.cleaned_data['cond'] == '2':
+                task = Task.objects.filter(
+                    user=request.user,
+                    implement_date=form.cleaned_data['date'],
+                    complete_task=False
+                ).order_by('-id')
+            else:
+                task = Task.objects.filter(user=request.user).order_by('-id')
+        elif form.cleaned_data['cond']:
+            if form.cleaned_data['cond'] == '0':
+                task = Task.objects.filter(
+                    user=request.user,
+                ).order_by('-id')
+            elif form.cleaned_data['cond'] == '1':
+                task = Task.objects.filter(
+                    user=request.user,
+                    complete_task=True
+                ).order_by('-id')
+            elif form.cleaned_data['cond'] == '2':
+                task = Task.objects.filter(
+                    user=request.user,
+                    complete_task=False
+                ).order_by('-id')
+            else:
+                task = Task.objects.filter(user=request.user).order_by('-id')
+        else:
+            task = Task.objects.filter(user=request.user).order_by('-id')
+    else:
+        task = Task.objects.filter(user=request.user).order_by('-id')
+
+    return task
+

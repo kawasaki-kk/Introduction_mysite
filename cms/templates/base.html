@@ -43,7 +43,22 @@
                     {% if user.is_anonymous %}
 
                     {% else %}
-                        <li class="font-m"><a href="{% url 'cms:user_info' user_id=user.id %}">{{user.get_full_name}}さんのページ</a></li>
+                        <li class="navbar-form">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle font-m" type="button" data-toggle="dropdown">
+                                    {{user.get_full_name}}さんのページ
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="list-none" role="">
+                                        <a class="font-m" href="{% url 'user_data' %}">プロフィール</a>
+                                    </li>
+                                    <li class="list-none" role="">
+                                        <a class="font-m" href="{% url 'cms:user_info' user_id=user.id %}">投稿一覧</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="font-m"><a href="{% url 'cms:daily_add' %}">新規投稿</a></li>
                         <li class="font-m"><a href="{% url 'cms:task_mod' %}">タスク一覧</a></li>
                         <li class="font-m"><a href="{% url 'cms:user_list' %}">ユーザー一覧</a></li>
