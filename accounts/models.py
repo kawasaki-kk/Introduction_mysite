@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, username, first_name, last_name, password, is_superuser, **extra_fields):
+    def _create_user(self, username, password, is_superuser, first_name=None, last_name=None, **extra_fields):
         """
         Creates and saves a User with the given username, email and password.
         """
@@ -31,9 +31,9 @@ class User(AbstractBaseUser, PermissionsMixin):
                                 help_text="This using user ID and use login or logout")
     screenname = models.CharField('表示名', max_length=255,
                                   help_text="")
-    first_name = models.CharField('姓', max_length=255,
+    first_name = models.CharField('姓', max_length=255, blank=True, null=True,
                                   help_text="")
-    last_name = models.CharField('名', max_length=255,
+    last_name = models.CharField('名', max_length=255, blank=True, null=True,
                                  help_text="")
     is_active = models.BooleanField('有効フラグ', default=True)
     is_staff = models.BooleanField('スタッフ', default=True)
@@ -49,7 +49,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # 必須メソッドを定義
     def get_full_name(self):
-        return self.first_name + self.last_name
+        if self.first_name and self.last_name:
+            return self.first_name + self.last_name
+        else:
+            return self.username
 
     def get_short_name(self):
         return self.first_name
