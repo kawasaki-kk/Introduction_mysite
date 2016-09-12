@@ -39,6 +39,9 @@
                     {{form.name}}<br>
                     予定：{{form.time_plan}}h
                     / 実績：{{form.time_real}}h
+                    {% if task_form.can_delete %}
+                         / 削除:{{form.DELETE}}
+                    {% endif %}
                     <button type="submit" class="btn btn-default">更新</button><br>
                 {% endif %}
             </a>
