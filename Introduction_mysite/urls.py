@@ -24,6 +24,10 @@ urlpatterns = [
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'accounts/logout.html'}, name='logout'),
     # ユーザー登録
     url(r'^register/$', views.register, name='register'),
+    # ユーザー編集
+    url(r'^register/(?P<user_id>\d+)/$', views.register, name='register'),
+    # ユーザー情報
+    url(r'^user/$', views.user_data, name='user_data'),
     # 管理サイトを使用できるように登録しておく
     url(r'^admin/', admin.site.urls),
     # 実際に日報管理として動作するアプリケーションの大元のURLを登録
