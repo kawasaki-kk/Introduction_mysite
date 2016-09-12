@@ -1,11 +1,26 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.timezone import now
 from Introduction_mysite import settings
 
+u"""models.py
+    モデルを定義する
+    Daily,Task,Commentモデル
+    ユーザーモデルに関してはaccountsで管理する
+"""
 
 class Daily(models.Model):
-    """日報"""
+    u"""日報モデル
+    定義
+        user:投稿ユーザー(FK)
+        title:日報タイトル(必須)
+        report_y:やったこと
+        report_w:わかったこと
+        report_t:つぎにやること
+        create_date:作成日=投稿日
+        update_date:更新日時
+        release:公開フラグ(True=公開)
+
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='投稿者', related_name='daily',
                              help_text="This is the user who posted the daily report")
     title = models.CharField('タイトル', max_length=255,
@@ -28,7 +43,25 @@ class Daily(models.Model):
 
 
 class Task(models.Model):
-    """タスク"""
+    u"""タスクモデル
+    定義
+        daily:紐付けられた日報(未使用)
+        user:作成ユーザー(FK)
+        name:タスクの名称、作業名(必須)(ex:"モデルのリファクタリング")
+        goal:タスクにおける目標(未使用)(ex:"時間内に終わらせる")
+        time_plan:予定作業時間(登録時に入力、必須)
+        time_real:実作業時間(完了時に登録)
+        create_date:作成日
+        update_date:更新日
+        implement_date:作業予定日
+        complete_task:タスクの完了状態(True:完了)
+        complete_goal:目標の完了状態(未使用、True:完了)
+    メソッド
+        save:
+            通常のsave()メソッドをオーバーロード
+            実作業時間が0である場合、作業を完了(=complete_task=True)とできない
+
+    """
     daily = models.ForeignKey(Daily, verbose_name='登録日報', related_name='task', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='登録者', related_name='task')
     name = models.CharField('タスク名', max_length=255,
@@ -58,7 +91,14 @@ class Task(models.Model):
 
 
 class Comment(models.Model):
-    """コメント"""
+    u"""コメントモデル
+    定義
+        daily:コメント先の日報(FK)
+        user:コメントの投稿ユーザー(FK)
+        comment:コメント本文(ex:"ここはあの人に聞いたほうがいいんじゃない？")
+        create_date:作成日
+
+    """
     daily = models.ForeignKey(Daily, verbose_name='投稿内容', related_name='comment')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='投稿者', related_name='comment')
     comment = models.TextField('コメント', blank=False,
