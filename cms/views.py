@@ -216,11 +216,10 @@ def daily_del(request, daily_id):
     :param daily_id:削除対象日報id
     :return:日報一覧ページへリダイレクト
     """
-    daily = get_object_or_404(Daily, pk=daily_id)
-    if daily.user != request.user:  # 投稿者とログインユーザが異なる場合
+    if services.delete_daily(request, services.get_or_create_daily(request.user, daily_id)):
+        return redirect('cms:user_info', user_id=request.user.id)   # 一覧画面にリダイレクト
+    else:
         return redirect('login')
-    daily.delete()  # 日報の削除
-    return redirect('cms:user_info', user_id=request.user.id)   # 一覧画面にリダイレクト
 
 
 # 日報の検索
@@ -372,6 +371,5 @@ def comment_del(request, daily_id, comment_id):
     :param comment_id:削除対象コメントid
     :return:
     """
-    comment = get_object_or_404(Comment, pk=comment_id)
-    comment.delete()
+    services.delete_comment(request, services.get_or_create_comment(request.user, comment_id))
     return redirect('cms:daily_detail', daily_id=daily_id)

@@ -295,3 +295,16 @@ def get_search_task(request):
 
     return task
 
+
+def delete_daily(request, daily):
+    if daily.user != request.user:  # 投稿者とログインユーザが異なる場合
+        return False
+    daily.delete()  # 日報の削除
+    return True
+
+
+def delete_comment(request, comment):
+    if comment.user != request.user:
+        return False
+    comment.delete()
+    return True
