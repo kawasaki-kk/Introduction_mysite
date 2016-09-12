@@ -255,7 +255,7 @@ def daily_search(request):
             query = queries.pop()
             for item in queries:
                 query |= item
-            lists.update(dailys=Daily.objects.all().filter(query).order_by('-create_date'))
+            lists.update(dailys=Daily.objects.filter(release=True).filter(query).order_by('-create_date'))
             lists.update(search_form=form)
             lists.update(keyword=form.cleaned_data['keyword'])
             lists.update(is_paginated=False)
