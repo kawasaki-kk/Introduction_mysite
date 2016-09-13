@@ -185,7 +185,7 @@ secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 > python manage.py createsuperuser
 ~~~
 　表示されるダイアログにユーザー名とパスワードを設定することで完了です。ここで作成したアカウントで本アプリケーションにログインすることができます。
-　
+
 　以上で初期設定は終了です。
 
 
