@@ -134,9 +134,7 @@
 * django 1.8.13
 * postgreSQL 9.6
 
-また、pythonのモジュールとして、以下を使用しています。requirements.txtから導入してください。
-
-　psycopg2に関しては、windowsの場合インストーラが提供されていますので、そちらをダウンロードの上、pipの対象としてインストールしてください。
+　また、pythonのモジュールとして、以下を使用しています。requirements.txtから導入してください。psycopg2に関しては、windowsの場合インストーラが提供されていますので、そちらをダウンロードの上、pipの対象としてインストールしてください。
 * django-bootstrap-form 3.2.1
 * django-markdown-deux 1.0.5
 * django-pure-pagination 0.3.0
