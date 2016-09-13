@@ -43,7 +43,7 @@
                         {{form.name.value|truncate:"15"}}<br>
                         予定：{{form.time_plan.value}}h
                         / 実績：{{form.time_real}}h
-                        <button type="submit" class="btn btn-default">更新</button><br>
+                        <button type="submit" class="btn btn-sm btn-default">更新</button><br>
                         <a class="disable-form">{{form.implement_date}}</a>
                         <a class="disable-form">{{form.name}}</a>
                         <a class="disable-form">{{form.time_plan}}</a>
@@ -53,8 +53,8 @@
             {% endfor %}
         </div>
         <div class="panel-footer">
-            <button type="submit" name='edit' class="btn btn-default">更新</button>
-            <button type="submit" name='add' class="btn btn-primary">追加</button>
+            <button type="submit" name='edit' class="btn btn-sm btn-default">更新</button>
+            <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button>
         </div>
     </form><br>
     <form class="panel panel-primary" action="{% url 'cms:task_mod_daily' %}" method="POST">
@@ -79,7 +79,8 @@
                         {{form.implement_date.label_tag}}{{form.implement_date.value}}
                         {{form.name.value|truncate:"15"}}<br>
                         予定：{{form.time_plan.value}}h
-                        / 実績：{{form.time_real}}h<br>
+                        / 実績：{{form.time_real}}h
+                        <button type="submit" class="btn btn-sm btn-default">更新</button><br>
                         <a class="disable-form">{{form.implement_date}}</a>
                         <a class="disable-form">{{form.name}}</a>
                         <a class="disable-form">{{form.time_plan}}</a>
@@ -88,8 +89,8 @@
             {% endfor %}
         </div>
         <div class="panel-footer">
-            <button type="submit" name='edit' class="btn btn-default">更新</button>
-            <button type="submit" name='add' class="btn btn-primary">追加</button>
+            <button type="submit" name='edit' class="btn btn-sm btn-default">更新</button>
+            <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button>
         </div>
     </form><br>
 </div>
