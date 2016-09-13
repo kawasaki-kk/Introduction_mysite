@@ -227,4 +227,5 @@ http://127.0.0.1:8000/login
 * requirements.txtの追加、エラー処理追加
 
 ## ライセンス
-
+Copyright (c) 2016 Takaaki Hayashizaki
+This software is released under the MIT License, see LICENSE.
