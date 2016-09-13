@@ -133,7 +133,8 @@
 * python 3.5.1
 * django 1.8.13
 * postgreSQL 9.6
-　また、pythonのモジュールとして、以下を使用しています。requirements.txtから導入してください。
+
+また、pythonのモジュールとして、以下を使用しています。requirements.txtから導入してください。
 
 　psycopg2に関しては、windowsの場合インストーラが提供されていますので、そちらをダウンロードの上、pipの対象としてインストールしてください。
 * django-bootstrap-form 3.2.1
@@ -166,7 +167,7 @@ Introduction_mysite/ex_password.dummy.py
 database_password = 'password'
 database_user = 'django'
 database_name = 'django'
-secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!１1b0dlb0a0jf'
+secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
 　最後に、ファイルの名前から`.dummy`を削除することで、データベースの設定は完了です。
 
