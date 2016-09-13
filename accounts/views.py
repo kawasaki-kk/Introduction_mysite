@@ -15,8 +15,13 @@ def register(request, user_id=None):
             # screenname = request.POST['screenname']
             if request.POST['password1'] == request.POST['password2']:
                 password = request.POST['password1']
-                new_user = User.objects._create_user(
-                    username=username, first_name=first_name, last_name=last_name, password=password, is_superuser=False)
+                try:
+                    new_user = User.objects._create_user(
+                        username=username, first_name=first_name, last_name=last_name, password=password, is_superuser=False)
+                except ValueError:
+                    comment = '* 無効なユーザー名です'
+                    form = UserResisterFrom(request.POST)
+                    return render(request, 'accounts/register.html', {'form': form, 'comment': comment})
                 new_user.is_active = True
                 new_user.save()
                 return redirect('login')
