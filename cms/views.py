@@ -344,12 +344,6 @@ def comment_edit(request, daily_id, comment_id=None):
     :return:編集されたコメントの投稿されている日報詳細/コメント編集フォーム(編集失敗の場合)
     """
     lists = services.init_form(request=request)
-    lists.update(task_form=services.create_task_form_in_queryset(
-        services.get_task_from_implement(request.user, timezone.now().date())
-    ))
-    lists.update(task_form_next=services.create_task_form_in_queryset(
-        services.get_next_task(request.user, timezone.now().date())
-    ))
     lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
     lists.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
     if request.user != lists['comment'].user:

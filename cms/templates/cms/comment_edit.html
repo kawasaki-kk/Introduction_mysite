@@ -1,15 +1,11 @@
-{% extends "taskbar.html" %}
+{% extends "taskbar_none.html" %}
 {% load bootstrap %}
 
 {% block title %}コメントの編集{% endblock title %}
 
 {% block content %}
 <h3 class="page-header">コメントの編集</h3>
-{% if comment_id %}
 <form action="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" method="post" class="form-horizontal" role="form">
-{% else %}
-<form action="{% url 'cms:comment_add' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
-{% endif %}
       <div class="panel panel-default">
         <div class="list-group">
             {% csrf_token %}
@@ -20,5 +16,5 @@
         </div>
     </div>
 </form>
-<a href="{% url 'cms:daily_list' %}" class="btn btn-default btn-sm">戻る</a>
+<a href="{% url 'cms:daily_detail' daily_id=daily.id%}" class="btn btn-default btn-sm">戻る</a>
 {% endblock content %}
