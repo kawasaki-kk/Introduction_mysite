@@ -136,7 +136,7 @@
 
 　「削除」ボタンを押すと、コメントを削除するかどうかというアラートが表示されます。そこで「OK」をクリックすると削除完了です。
 
-![commentpage](https://github.com/hayashizakitakaaki/Introduction_mysite/blob/images/docs/images/11_detail_01.PNG "commentpage")
+![commentpage](https://github.com/hayashizakitakaaki/Introduction_mysite/blob/images/docs/images/11_detail_01.png "commentpage")
 
 ## 開発環境の設定
 
