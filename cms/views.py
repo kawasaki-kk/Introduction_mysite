@@ -11,6 +11,7 @@ from django.utils import timezone
 from accounts.models import User
 
 
+
 u"""views.py
     各関数は、辞書型で引数をまとめ、renderにhtmlファイルの指定とともに渡します
     本ファイル中で、直接モデルにアクセスする処理は書かないようにしています
