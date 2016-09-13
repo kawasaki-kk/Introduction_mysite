@@ -16,7 +16,7 @@
                     {% if daily.release %}
                         <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm col-md-6">編集</a>
                     {% else %}
-                        <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-sm btn-primary">修正して公開する</a>
+                        <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-sm btn-primary default-button">修正して公開する</a>
                     {% endif %}
                 {% endif %}
             </div>
