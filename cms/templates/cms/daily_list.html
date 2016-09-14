@@ -58,7 +58,7 @@
         </div>
         <div class="panel-footer">
             <div class="row">
-                <text class="col-md-8 font-m">投稿日：{{ daily.create_date }} / 最終更新：{{ daily.update_date }}</text>
+                <text class="col-md-8 font-m">投稿日：{{ daily.create_date }} / 最終更新：{{ daily.update_date }} / コメント数：{{daily.comment.count}}</text>
                 <div class="col-md-4">
                     {% if userinfo %}
                         {% if daily.user == user %}
