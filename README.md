@@ -1,5 +1,13 @@
 # 日報アプリ
 
+## 目次
+* [概要](#概要)
+* [機能と特徴](#機能と特徴)
+* [使い方](#使い方)
+* [開発環境](#開発環境)
+* [バージョン情報](#バージョン情報)
+* [ライセンス](#ライセンス)
+
 ## 概要
 
 　このアプリケーションの目的は、"日報をYWT形式で、手軽に作成する"ことです。
@@ -145,7 +153,7 @@
 
 ![commentpage](https://github.com/hayashizakitakaaki/Introduction_mysite/blob/images/docs/images/11_detail_01.png "commentpage")
 
-## 開発環境の設定
+## 開発環境
 
 ### 動作環境
 
