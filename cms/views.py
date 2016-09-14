@@ -247,7 +247,7 @@ def daily_search(request):
         # リクエストを取得しながら検索フォームを生成
         form = SearchForm(request.GET)
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data['keyword'] is not '':
             queries = [Q(user__username__contains=word) |
                        Q(title__contains=word) |
                        Q(report_y__contains=word) |
