@@ -55,7 +55,7 @@ class DailyPostRequestTests(TestCase):
         request = self.post_request(title=title)
         request.user = self.create_user(username='test_user', password='test_password')
         response = daily_edit(request=request, daily_id=None)
-        self.assertIn(title, response.content.decode())
+        self.assertIn('日報の編集', response.content.decode())
     """
 
 class CommentPostRequestTests(TestCase):
@@ -91,5 +91,5 @@ class CommentPostRequestTests(TestCase):
         request.user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(request.user, 'test_title')
         response = comment_edit(request=request, daily_id=daily.id)
-        self.assertIn(comment, response.content.decode())
+        self.assertIn('コメントの編集', response.content.decode())
     """
