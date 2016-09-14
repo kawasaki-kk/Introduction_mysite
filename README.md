@@ -147,11 +147,11 @@
 
 　環境は以下の通りです。
 * windows7 32bit
-* python 3.5.1
-* django 1.8.13
-* postgreSQL 9.6
+* [python](https://www.python.org/) 3.5.1
+* [django](https://www.djangoproject.com/) 1.8.13
+* [postgreSQL](https://www.postgresql.org/) 9.6
 
-　また、pythonのモジュールとして、以下を使用しています。requirements.txtから導入してください。
+　また、pythonのモジュールとして、djangoの他、以下を使用しています。requirements.txtから導入してください。
 * django-bootstrap-form 3.2.1
 * django-markdown-deux 1.0.5
 * django-pure-pagination 0.3.0
@@ -161,11 +161,11 @@
 
 ### 初期設定
 
-#### データベースの設定
+#### データベースの作成
 
 　データベースの設定を行います。手順としては、postgreSQLのデータベースを作成し、アプリケーションの"settings.py"に設定するというものになります。
 
-　まず、コマンドライン上でpostgreSQLのデータベースに接続してください。以下は、windows環境でpostgreSQLを設定を変更せずにインストールした場合の、データベースに対して全権限を持つユーザー(postgres)で接続するコマンドです。
+　まず、コマンドライン上でpostgreSQLのデータベースに接続します。以下は、windows環境でpostgreSQLを、設定を変更せずにインストールした場合における、データベースに対して全権限を持つユーザー(postgres)で接続するコマンドです。
 ~~~
 > psql postgres postgres
 ~~~
@@ -176,12 +176,14 @@
 > CREATE DATABASE databasename OWNER username;
 ~~~
 　以上で、データベースの作成は終了です。`\q`を入力し、データベースとの接続を終了してください。
+　
+#### データベース情報の設定
 
 　次に、アプリケーションにデータベースを設定します。以下のファイルを開き、各項目を入力します。
 ~~~
 Introduction_mysite/ex_password.dummy.py
 ~~~
-　上から順に、データベースオーナーユーザーのパスワード、ユーザー名、データベース名、そしてdjangoのシークレットキーです。以下に例を示します。[データベースの設定](#データベースの設定)で設定した内容を入力してください。djangoのシークレットキーは、一意に識別することが目的ですので、基本的には適度な長さの文字列で構いません。
+　上から順に、データベースオーナーユーザーのパスワード、ユーザー名、データベース名、そしてdjangoのシークレットキーです。以下に例を示します。[データベースの作成](#データベースの作成)で設定した内容を入力してください。djangoのシークレットキーは、一意に識別することが目的ですので、基本的には適度な長さの文字列で構いません。
 ~~~
 database_password = 'password'
 database_user = 'django'
@@ -190,7 +192,7 @@ secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
 　最後に、ファイルの名前の`ex_password.dummy.py`から、`.dummy`部分を削除することで、データベースの設定は完了です。
 
-#### django初期設定
+#### djangoモデルの初期設定
 
 　次に、データベースをマイグレートします。マイグレーションファイルを作成する必要があるアプリはaccountsとcmsの二つです。コマンドライン上でmanage.pyのある階層に移動し、それぞれ以下のコマンドでマイグレーションファイルを生成してください。
 ~~~
@@ -220,7 +222,7 @@ secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
 http://127.0.0.1:8000/login/
 ~~~
-　初期設定の際に登録した管理ユーザーでもログインすることができます。また、ユーザー登録、およびその後の使い方については、上記[使い方](#使い方)を参照してください。
+　[初期設定](djangoモデルの初期設定)の際に登録した管理ユーザーでもログインすることができます。また、ユーザー登録、およびその後の使い方については、上記[使い方](#使い方)を参照してください。
 
 ## バージョン情報
 
@@ -236,6 +238,7 @@ http://127.0.0.1:8000/login/
 ※本readme中の各画像はv1.1のものです。最新のものとは異なる場合があります。
 
 ## ライセンス
+
 Copyright (c) 2016 Takaaki Hayashizaki
 
 This software is released under the MIT License, see LICENSE.
