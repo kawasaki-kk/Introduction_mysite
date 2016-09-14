@@ -110,13 +110,13 @@ def get_all_daily_list(request, release):
             # フォームの中身が存在する場合=検索キーワードが入力されている場合
             if form.is_valid():
                 return Daily.objects.filter(
-                    create_date=form.cleaned_data['date'], release=release).order_by('-id')
+                    create_date=form.cleaned_data['date'], release=release).order_by('-update_date')
             else:
-                return Daily.objects.filter(release=release).order_by('-create_date')
+                return Daily.objects.filter(release=release).order_by('-update_date')
         else:
-            return Daily.objects.filter(release=release).order_by('-create_date')
+            return Daily.objects.filter(release=release).order_by('-update_date')
 
-    return Daily.objects.filter(release=release).order_by('-create_date')
+    return Daily.objects.filter(release=release).order_by('-update_date')
 
 
 @exception
