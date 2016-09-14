@@ -109,7 +109,6 @@ def get_all_daily_list(request, release):
             form = DateForm(request.GET)
             # フォームの中身が存在する場合=検索キーワードが入力されている場合
             if form.is_valid():
-                print('公開')
                 return Daily.objects.filter(
                     create_date=form.cleaned_data['date'], release=release).order_by('-id')
             else:
@@ -156,8 +155,10 @@ def get_comments_from_daily(daily):
 def get_or_create_daily(user=None, daily_id=None):
     if daily_id:    # edit or detail view
         daily = get_object_or_404(Daily, pk=daily_id)
-    else:           # new create
+    elif user:           # new create
         daily = Daily(user=user)
+    else:
+        return False
     return daily
 
 
@@ -165,8 +166,10 @@ def get_or_create_daily(user=None, daily_id=None):
 def get_or_create_comment(user=None, comment_id=None):
     if comment_id:  # edit
         comment = get_object_or_404(Comment, pk=comment_id)
-    else:  # new create
+    elif user:  # new create
         comment = Comment(user=user)
+    else:
+        return False
     return comment
 
 
