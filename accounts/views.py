@@ -13,11 +13,12 @@ def register(request, user_id=None):
             last_name = request.POST['last_name']
             first_name = request.POST['first_name']
             # screenname = request.POST['screenname']
-            if request.POST['password1'] == request.POST['password2']:
+            if request.POST['password1'] == request.POST['password2'] and request.POST['password1']:
                 password = request.POST['password1']
                 try:
                     new_user = User.objects._create_user(
-                        username=username, first_name=first_name, last_name=last_name, password=password, is_superuser=False)
+                        username=username, first_name=first_name, last_name=last_name,
+                        password=password, is_superuser=False)
                 except ValueError:
                     comment = '* 無効なユーザー名です'
                     form = UserResisterFrom(request.POST)
