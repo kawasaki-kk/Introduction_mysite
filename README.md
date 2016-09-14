@@ -75,13 +75,13 @@
   * 日報一覧画面上でコメント数を表示
   * 画面左側にタスク管理ウィンドウを表示(画面が小さい場合には非表示)
 
-　このアプリケーションは、実装予定の機能として以下を検討しています。
+　このアプリケーションは、実装予定の機能として以下を検討しています。詳細はissueをご覧ください。
 
-* タスク単位の目標管理
-* ユーザー情報項目の追加
-* ユーザーパスワードの修正機能
-* 「コメントを書く」ボタンの配置
-* 未読/既読記事区別の表示
+* [タスク単位の目標管理](https://github.com/hayashizakitakaaki/Introduction_mysite/issues/11)
+* [ユーザー情報項目の追加](https://github.com/hayashizakitakaaki/Introduction_mysite/issues/9)
+* [ユーザーパスワードの修正機能](https://github.com/hayashizakitakaaki/Introduction_mysite/issues/15)
+* [「コメントを書く」ボタンの配置](https://github.com/hayashizakitakaaki/Introduction_mysite/issues/12)
+* [未読/既読記事区別の表示](https://github.com/hayashizakitakaaki/Introduction_mysite/issues/13)
 
 ## 使い方
 
@@ -161,6 +161,8 @@
 
 ### 初期設定
 
+　以降は[動作環境](#動作環境)の各ソフトウェア、各モジュールが導入済みであるものとして進めます。
+
 #### データベースの作成
 
 　データベースの設定を行います。手順としては、postgreSQLのデータベースを作成し、アプリケーションの"settings.py"に設定するというものになります。
@@ -222,7 +224,7 @@ secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
 http://127.0.0.1:8000/login/
 ~~~
-　[初期設定](djangoモデルの初期設定)の際に登録した管理ユーザーでもログインすることができます。また、ユーザー登録、およびその後の使い方については、上記[使い方](#使い方)を参照してください。
+　[初期設定](#djangoモデルの初期設定)の際に登録した管理ユーザーでもログインすることができます。また、ユーザー登録、およびその後の使い方については、[使い方](#使い方)を参照してください。
 
 ## バージョン情報
 
