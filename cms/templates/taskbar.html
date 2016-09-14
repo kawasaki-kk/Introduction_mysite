@@ -7,9 +7,9 @@
         {{ content }}
     {% endblock %}
 </div>
-<div class="container col-md-4 scrollbar">
+<div class="container col-md-4 scrollbar hidden-sm">
     <h3 class="page-header">タスク</h3>
-    <form action="{% url 'cms:task_mod' %}" method="POST">
+    <form action="{% url 'cms:task_mod' %}" method="GET">
         {% csrf_token %}
         {{ task_search_form.cond }}
         {{ task_search_form.date }}<br>

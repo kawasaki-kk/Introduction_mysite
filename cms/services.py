@@ -109,15 +109,14 @@ def get_all_daily_list(request, release):
             form = DateForm(request.GET)
             # フォームの中身が存在する場合=検索キーワードが入力されている場合
             if form.is_valid():
-                print('公開')
                 return Daily.objects.filter(
-                    create_date=form.cleaned_data['date'], release=release).order_by('-id')
+                    create_date=form.cleaned_data['date'], release=release).order_by('-update_date')
             else:
-                return Daily.objects.filter(release=release).order_by('-create_date')
+                return Daily.objects.filter(release=release).order_by('-update_date')
         else:
-            return Daily.objects.filter(release=release).order_by('-create_date')
+            return Daily.objects.filter(release=release).order_by('-update_date')
 
-    return Daily.objects.filter(release=release).order_by('-create_date')
+    return Daily.objects.filter(release=release).order_by('-update_date')
 
 
 @exception
@@ -134,12 +133,12 @@ def get_user_daily_list(request, user):
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
             if form.cleaned_data['cond'] == '1':
-                return Daily.objects.filter(user=user, release=True).order_by('-create_date')
+                return Daily.objects.filter(user=user, release=True).order_by('-update_date')
             elif form.cleaned_data['cond'] == '2':
-                return Daily.objects.filter(user=user, release=False).order_by('-create_date')
+                return Daily.objects.filter(user=user, release=False).order_by('-update_date')
             else:
-                return Daily.objects.filter(user=user).order_by('-create_date')
-    return Daily.objects.filter(user=user).order_by('-create_date')
+                return Daily.objects.filter(user=user).order_by('-update_date')
+    return Daily.objects.filter(user=user).order_by('-update_date')
 
 
 @exception
@@ -156,8 +155,10 @@ def get_comments_from_daily(daily):
 def get_or_create_daily(user=None, daily_id=None):
     if daily_id:    # edit or detail view
         daily = get_object_or_404(Daily, pk=daily_id)
-    else:           # new create
+    elif user:           # new create
         daily = Daily(user=user)
+    else:
+        return False
     return daily
 
 
@@ -165,8 +166,10 @@ def get_or_create_daily(user=None, daily_id=None):
 def get_or_create_comment(user=None, comment_id=None):
     if comment_id:  # edit
         comment = get_object_or_404(Comment, pk=comment_id)
-    else:  # new create
+    elif user:  # new create
         comment = Comment(user=user)
+    else:
+        return False
     return comment
 
 
@@ -246,7 +249,7 @@ def create_pagination(request, query):
 
 @exception
 def get_search_task(request):
-    if request.method == 'GET' and request.path.find('dailyreport/task/') and 'tasks' in request.GET:
+    if request.method == 'GET' and 'tasks' in request.GET:
         # リクエストを取得しながら検索フォームを生成
         form = TaskSearchForm(request.GET)
         print(request.path)

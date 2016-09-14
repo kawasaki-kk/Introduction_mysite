@@ -121,17 +121,6 @@ table {
     font-size: 20px;
 }
 
-.background-green {
-    background: none;
-    color: #3c763d;
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-    border-top-color: #d6e9c6;
-    border-bottom-color: #d6e9c6;
-    border-left-color: #d6e9c6;
-    border-right-color: #d6e9c6;
-}
-
 .left {
     width: 100%
     margin-left: auto;
@@ -147,4 +136,8 @@ table {
 
 .list-none {
     list-style: none;
+}
+
+textarea {
+    resize: none;
 }

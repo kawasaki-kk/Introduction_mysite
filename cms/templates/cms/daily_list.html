@@ -42,7 +42,7 @@
                     <text class="font-l">投稿者： </text>
                     <a class="font-l" href="{% url 'cms:user_info' user_id=daily.user.id %}">{{ daily.user.get_full_name }}</a>
                     <text class="font-l"> / </text>
-                    <a class="font-l" href="{% url 'cms:daily_detail' daily_id=daily.id %}">{{ daily.title|truncate:"10" }}</a>
+                    <a class="font-l" href="{% url 'cms:daily_detail' daily_id=daily.id %}">{{ daily.title|truncate:"20" }}</a>
                 </div>
                 {% if daily.release == False and daily.user == user %}
                     <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-primary btn-sm col-md-2 default-button">修正して公開する</a>
@@ -58,7 +58,7 @@
         </div>
         <div class="panel-footer">
             <div class="row">
-                <text class="col-md-8 font-m">投稿日：{{ daily.create_date }} / 最終更新：{{ daily.update_date }}</text>
+                <text class="col-md-8 font-m">投稿日：{{ daily.create_date }} / 最終更新：{{ daily.update_date }} / コメント数：{{daily.comment.count}}</text>
                 <div class="col-md-4">
                     {% if userinfo %}
                         {% if daily.user == user %}
@@ -98,7 +98,7 @@
                 {% endif %}
             {% else %}
                 {# 省略された部分の表示内容 #}
-                <li class="disabled"><a class="font-change" href="#">…</a></li>
+                <li class="disabled"><a class="font-m" href="#">…</a></li>
             {% endif %}
         {% endfor %}
 
