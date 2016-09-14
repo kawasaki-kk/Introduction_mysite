@@ -42,7 +42,7 @@
                     <text class="font-l">投稿者： </text>
                     <a class="font-l" href="{% url 'cms:user_info' user_id=daily.user.id %}">{{ daily.user.get_full_name }}</a>
                     <text class="font-l"> / </text>
-                    <a class="font-l" href="{% url 'cms:daily_detail' daily_id=daily.id %}">{{ daily.title|truncate:"10" }}</a>
+                    <a class="font-l" href="{% url 'cms:daily_detail' daily_id=daily.id %}">{{ daily.title|truncate:"20" }}</a>
                 </div>
                 {% if daily.release == False and daily.user == user %}
                     <a href="{% url 'cms:daily_mod' daily_id=daily.id %}" class="btn btn-primary btn-sm col-md-2 default-button">修正して公開する</a>
