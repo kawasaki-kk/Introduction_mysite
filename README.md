@@ -158,17 +158,19 @@
 
 ### 動作環境
 
-　開発環境は以下の通りです。
+　環境は以下の通りです。
 * windows7 32bit
 * python 3.5.1
 * django 1.8.13
 * postgreSQL 9.6
 
-　また、pythonのモジュールとして、以下を使用しています。requirements.txtから導入してください。psycopg2に関しては、windowsの場合インストーラが提供されていますので、そちらをダウンロードの上、インストールしてください。
+　また、pythonのモジュールとして、以下を使用しています。requirements.txtから導入してください。
 * django-bootstrap-form 3.2.1
 * django-markdown-deux 1.0.5
 * django-pure-pagination 0.3.0
 * psycopg2 2.6.1
+
+　psycopg2に関しては、windowsの場合インストーラが提供されていますので、そちらをダウンロードの上、インストールしてください。
 
 ### 初期設定
 
@@ -176,32 +178,34 @@
 
 　データベースの設定を行います。手順としては、postgreSQLのデータベースを作成し、アプリケーションの"settings.py"に設定するというものになります。
 
-　まず、コマンドライン上でpostgreSQLのデータベースに接続してください。以下は、windows環境でpostgreSQLを設定を変更せずにインストールした場合の、データベースに対して全権限を持つユーザー(postgres)で接続する方法です。
+　まず、コマンドライン上でpostgreSQLのデータベースに接続してください。以下は、windows環境でpostgreSQLを設定を変更せずにインストールした場合の、データベースに対して全権限を持つユーザー(postgres)で接続するコマンドです。
 ~~~
 > psql postgres postgres
 ~~~
-　接続後、アプリケーションで使用するユーザーとデータベースの作成を行います。以下のコマンドを順番に入力してください。"user"および"databasename"、"password"には、それぞれ設定したい名称を入力してください。
+　接続に成功しましたら、アプリケーションで使用するユーザーとデータベースの作成を行います。以下のコマンドを順番に入力してください。"user"および"databasename"、"password"には、それぞれ設定したい名称・パスワードを入力してください。
 ~~~
 > CREATE USER user;
 > ALTER ROLE user WITH PASSWORD 'password';
 > CREATE DATABASE databasename OWNER user;
 ~~~
-　以上で、データベースの作成は終了です。次に、アプリケーションにデータベースを設定します。以下のファイルを開き、各項目を入力します。
+　以上で、データベースの作成は終了です。`\q`を入力し、データベースとの接続を終了してください。
+　
+　次に、アプリケーションにデータベースを設定します。以下のファイルを開き、各項目を入力します。
 ~~~
 Introduction_mysite/ex_password.dummy.py
 ~~~
-　上から順に、データベースオーナーユーザーのパスワード、データベースのオーナーユーザー名、データベースの名前、そしてdjangoのシークレットキーです。以下に例を示します。djangoのシークレットキーは一意に識別することが目的ですので、適度な長さの文字列で構いません。
+　上から順に、データベースオーナーユーザーのパスワード、ユーザー名、データベース名、そしてdjangoのシークレットキーです。以下に例を示します。djangoのシークレットキーは、一意に識別することが目的ですので、基本的には適度な長さの文字列で構いません。
 ~~~
 database_password = 'password'
 database_user = 'django'
 database_name = 'django'
 secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
-　最後に、ファイルの名前から`ex_password.dummy.py`から、`.dummy`を削除することで、データベースの設定は完了です。
+　最後に、ファイルの名前の`ex_password.dummy.py`から、`.dummy`部分を削除することで、データベースの設定は完了です。
 
 #### django初期設定
 
-　次に、データベースをマイグレートします。マイグレーションファイルを作成する必要があるアプリはaccountsとcmsの二つです。manage.pyのある階層に移動し、それぞれ以下のコマンドでマイグレーションファイルを生成してください。
+　次に、データベースをマイグレートします。マイグレーションファイルを作成する必要があるアプリはaccountsとcmsの二つです。コマンドライン上でmanage.pyのある階層に移動し、それぞれ以下のコマンドでマイグレーションファイルを生成してください。
 ~~~
 > python manage.py makemigrations accounts
 > python manage.py makemigrations cms
@@ -210,7 +214,7 @@ secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
 > python manage.py migrate
 ~~~
-　これでデータベースにモデルを適用することができました。次に、管理ユーザーの作成を行います。コマンドは以下の通りです。
+　これで先ほどの手順で作成したデータベースに、モデルを適用することができました。次に、管理ユーザーの作成を行います。コマンドは以下の通りです。
 ~~~
 > python manage.py createsuperuser
 ~~~
