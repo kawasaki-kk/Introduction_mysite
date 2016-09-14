@@ -231,6 +231,8 @@ http://127.0.0.1:8000/login
 2016/9/13 v1.1.2 release
 * requirements.txtの追加、エラー処理追加
 
+※readme中の各画像はv1.1時のものです。最新のものとは異なる場合があります。
+
 ## ライセンス
 Copyright (c) 2016 Takaaki Hayashizaki
 
