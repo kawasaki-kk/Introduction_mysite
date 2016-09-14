@@ -148,3 +148,7 @@ table {
 .list-none {
     list-style: none;
 }
+
+textarea {
+    resize: none;
+}
