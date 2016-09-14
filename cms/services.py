@@ -133,12 +133,12 @@ def get_user_daily_list(request, user):
         # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
             if form.cleaned_data['cond'] == '1':
-                return Daily.objects.filter(user=user, release=True).order_by('-create_date')
+                return Daily.objects.filter(user=user, release=True).order_by('-update_date')
             elif form.cleaned_data['cond'] == '2':
-                return Daily.objects.filter(user=user, release=False).order_by('-create_date')
+                return Daily.objects.filter(user=user, release=False).order_by('-update_date')
             else:
-                return Daily.objects.filter(user=user).order_by('-create_date')
-    return Daily.objects.filter(user=user).order_by('-create_date')
+                return Daily.objects.filter(user=user).order_by('-update_date')
+    return Daily.objects.filter(user=user).order_by('-update_date')
 
 
 @exception
