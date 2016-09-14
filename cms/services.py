@@ -249,7 +249,7 @@ def create_pagination(request, query):
 
 @exception
 def get_search_task(request):
-    if request.method == 'GET' and request.path.find('dailyreport/task/') and 'tasks' in request.GET:
+    if request.method == 'GET' and 'tasks' in request.GET:
         # リクエストを取得しながら検索フォームを生成
         form = TaskSearchForm(request.GET)
         print(request.path)
