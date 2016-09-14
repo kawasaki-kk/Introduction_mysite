@@ -175,6 +175,13 @@ def get_or_create_comment(user=None, comment_id=None):
 
 @exception
 def edit_comment(request, daily, comment):
+    u"""コメントの編集
+
+    :param request: リクエスト情報
+    :param daily: 投稿対象の日報
+    :param comment: 編集対象のコメント
+    :return: 成否、及びコメントフォーム
+    """
     if request.method == 'POST':
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
@@ -189,6 +196,12 @@ def edit_comment(request, daily, comment):
 
 @exception
 def edit_daily(request, daily):
+    u"""日報の編集
+
+    :param request: リクエスト情報
+    :param daily: 編集対象の日報
+    :return: 成否、及び成功時は日報レコード、失敗時はフォーム
+    """
     if request.method == 'POST':
         form = DailyForm(request.POST, instance=daily)
         if form.is_valid():
@@ -206,6 +219,14 @@ def edit_daily(request, daily):
 
 @exception
 def edit_task(request, daily_id=None):
+    u"""タスクの一括編集
+        addボタンからリクエストが来た場合にはタスクの新規登録を行う
+        その他のボタンからリクエストが来た場合にはフォームセットの保存を行う
+
+    :param request: リクエスト情報
+    :param daily_id: 日報id(ある場合)
+    :return: 成否
+    """
     if daily_id:
         daily = get_object_or_404(Daily, pk=daily_id)
     else:
@@ -239,6 +260,13 @@ def edit_task(request, daily_id=None):
 
 @exception
 def create_pagination(request, query):
+    u"""ページネーションの作成
+        pure_paginationモジュールを利用して、クエリを分割し、ページ情報を付加する
+
+    :param request: リクエスト情報
+    :param query: ページ分割対象のクエリ
+    :return: ページ情報を付加し、指定ページ向けに分割したクエリ
+    """
     try:
         page = request.GET.get('page', 1)
     except PageNotAnInteger:
@@ -249,6 +277,20 @@ def create_pagination(request, query):
 
 @exception
 def get_search_task(request):
+    u"""タスクの絞り込み
+        リクエスト要素
+            "GET"であり、"tasks"という名称のボタンからリクエストが送られた場合に動作する
+            通常のリンクによるページ移動が"GET"で処理されるため、切り分けるためにボタンに名称を与えている
+        絞り込み要素
+            date:日付
+            cond:完了状態
+        その他
+            フォーム要素がバリデーションを突破していない場合でもフォームの要素を取得しようとするため、上記のような条件で動作する。
+            一応、現状の仕様で、通常使用する分にはエラーはあり得ない。
+
+    :param request: リクエスト
+    :return: 条件に従ってフィルタリングを行ったクエリ
+    """
     if request.method == 'GET' and 'tasks' in request.GET:
         # リクエストを取得しながら検索フォームを生成
         form = TaskSearchForm(request.GET)
@@ -300,6 +342,12 @@ def get_search_task(request):
 
 
 def delete_daily(request, daily):
+    u"""日報の削除
+
+    :param request: リクエスト情報(リクエストユーザー)
+    :param daily: 削除対象日報
+    :return: 成否
+    """
     if daily.user != request.user:  # 投稿者とログインユーザが異なる場合
         return False
     daily.delete()  # 日報の削除
@@ -307,6 +355,12 @@ def delete_daily(request, daily):
 
 
 def delete_comment(request, comment):
+    u"""コメントの削除
+
+    :param request: リクエスト情報(リクエストユーザー)
+    :param comment: 削除対象コメント
+    :return: 成否
+    """
     if comment.user != request.user:
         return False
     comment.delete()
