@@ -9,7 +9,10 @@
     <div class="panel-heading font-l">
         <div class="row">
             <div class="col-md-9">
-                投稿者： {{ daily.user.get_full_name }}
+                投稿者：
+                <a href="{% url 'cms:user_info' user_id=daily.user.id %}">
+                    {{ daily.user.get_full_name }}
+                </a>
             </div>
             <div class="col-md-2">
                 {% if daily.user == user %}
