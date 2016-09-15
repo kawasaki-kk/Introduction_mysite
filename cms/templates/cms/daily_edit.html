@@ -37,7 +37,7 @@
                                 <text class="dis-complete">未了</text>
                             {% endif %}
                             {{task.implement_date.label_tag}}{{task.implement_date}}
-                             / {{task.name|truncate:"15"}}<br>
+                             / {{task.name|truncate:"10"}}<br>
                             予定：{{task.time_plan}}h
                             /実績：{{task.time_real}}h<br>
                         {% endfor %}<br>
@@ -62,7 +62,7 @@
                     <div class="col-md-5 padding-left-plus padding-top">
                         {% for task in create_task %}
                             {{task.implement_date.label}}{{task.implement_date}}
-                             / {{task.name|truncate:"15"}}<br>
+                             / {{task.name|truncate:"10"}}<br>
                             予定：{{task.time_plan}}h
                             /実績：{{task.time_real}}h<br>
                         {% endfor %}

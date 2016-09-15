@@ -40,7 +40,7 @@
                             <text class="dis-complete">未了</text>
                         {% endif %}
                         {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                        {{form.name.value|truncate:"15"}}<br>
+                        {{form.name.value|truncate:"10"}}<br>
                         予定：{{form.time_plan.value}}h
                         / 実績：{{form.time_real}}h
                         <button type="submit" class="btn btn-sm btn-default">更新</button><br>
@@ -77,7 +77,7 @@
                         {{form.id}}
                         {{form.complete_task}}
                         {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                        {{form.name.value|truncate:"15"}}<br>
+                        {{form.name.value|truncate:"10"}}<br>
                         予定：{{form.time_plan.value}}h
                         / 実績：{{form.time_real}}h
                         <button type="submit" class="btn btn-sm btn-default">更新</button><br>
