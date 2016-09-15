@@ -354,6 +354,7 @@ def comment_edit(request, daily_id, comment_id=None):
         return redirect('cms:daily_detail', daily_id=lists['daily'].id)
     elif flag is False:
         lists.update(comment="必須項目が入力されていません")
+        return redirect('cms:daily_detail', daily_id=lists['daily'].id)
 
     return render_to_response('cms/comment_edit.html', lists, context_instance=RequestContext(request))
 
