@@ -50,8 +50,13 @@ def edit(request, user_id=None):
             last_name = request.POST['last_name']
             first_name = request.POST['first_name']
             # screenname = request.POST['screenname']
-            new_user = User.objects._edit_user(
-                id=user_id, username=username, first_name=first_name, last_name=last_name, is_superuser=False)
+            try:
+                new_user = User.objects._edit_user(
+                    id=user_id, username=username, first_name=first_name, last_name=last_name, is_superuser=False)
+            except ValueError:
+                comment = '* 無効なユーザー名です'
+                form = UserEditFrom(request.POST)
+                return render(request, 'accounts/edit.html', {'form': form, 'comment': comment})
             new_user.is_active = True
             new_user.save()
             return redirect('user_data')

@@ -26,6 +26,8 @@ class UserManager(BaseUserManager):
         """
         if not username:
             raise ValueError(u'ユーザー名を入力してください！')
+        if User.objects.filter(username=username):
+            raise ValueError(u'そのユーザーは登録されています')
         user = get_object_or_404(User, pk=id)
         user.username = username
         user.first_name = first_name
