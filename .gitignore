@@ -54,7 +54,7 @@ __pycache__/
 migrations/
 
 # Introduction_mysite/dailyreport/qiita
-Introduction_mysite/dailyreport/qiita/data
-Introduction_mysite/dailyreport/qiita/qiita1.py
-Introduction_mysite/dailyreport/qiita/qiita2.py
+dailyreport/qiita/data
+dailyreport/qiita/qiita1.py
+dailyreport/qiita/qiita2.py
 
