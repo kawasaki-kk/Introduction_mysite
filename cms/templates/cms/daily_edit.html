@@ -22,6 +22,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3>{{ report_form.title }}</h3>
+                    {{report_form.title.errors}}
                 </div>
             </div>
             <div class="panel panel-default">
@@ -73,9 +74,6 @@
                 </div>
             </div>
         </div>
-        {% if comment %}
-            <br><text class="dis-complete">* {{comment}}</text>
-        {% endif %}
         <div class="form-group">
             <div class="padding-left padding-top col-sm-10">
                 <button type="submit" name='gototask' class="btn btn-default">保存してタスクの編集へ</button>
