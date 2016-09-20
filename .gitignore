@@ -52,3 +52,9 @@ Temporary Items
 .idea/
 __pycache__/
 migrations/
+
+# Introduction_mysite/dailyreport/qiita
+Introduction_mysite/dailyreport/qiita/data
+Introduction_mysite/dailyreport/qiita/qiita1.py
+Introduction_mysite/dailyreport/qiita/qiita2.py
+
