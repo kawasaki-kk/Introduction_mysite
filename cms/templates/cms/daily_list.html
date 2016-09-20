@@ -5,7 +5,8 @@
 
 {% block content %}
 {% if userinfo %}
-    <h3 class="page-header">{{userinfo.get_full_name}}さんの投稿</h3>
+<h3 class="page-header">{{userinfo.get_full_name}}さんの投稿</h3>
+    {% if request.user.id == userinfo.id %}
     <form class="padding-top row" action="{% url 'cms:user_info' user_id=userinfo.id %}" method="GET">
         <div class="col-md-8">
             {% csrf_token %}
@@ -17,21 +18,22 @@
             <a href="{% url 'cms:daily_add' %}" class="btn btn-primary default-button">新規投稿</a>
         </div>
     </form><br>
+    {% endif %}
 {% elif keyword %}
-    <h3 class="page-header">"{{keyword|truncate:"25"}}" の検索結果</h3>
+<h3 class="page-header">"{{keyword|truncate:"25"}}" の検索結果</h3>
 {% else %}
-    <h3 class="page-header">Daily Reports</h3>
-    <form class="padding-top row" action="{% url 'cms:daily_list' %}" method="GET">
-        <div class="col-md-8">
-            {% csrf_token %}
-            {{ date_form.date }}
-            <button type="submit" class="btn btn-default">絞り込み</button>
-            <a href="{% url 'cms:daily_list' %}" class="btn btn-default">すべて表示</a>
-        </div>
-        <div class="col-md-offset-10">
-            <a href="{% url 'cms:daily_add' %}" class="btn btn-primary default-button">新規投稿</a>
-        </div>
-    </form><br>
+<h3 class="page-header">Daily Reports</h3>
+<form class="padding-top row" action="{% url 'cms:daily_list' %}" method="GET">
+    <div class="col-md-8">
+        {% csrf_token %}
+        {{ date_form.date }}
+        <button type="submit" class="btn btn-default">絞り込み</button>
+        <a href="{% url 'cms:daily_list' %}" class="btn btn-default">すべて表示</a>
+    </div>
+    <div class="col-md-offset-10">
+        <a href="{% url 'cms:daily_add' %}" class="btn btn-primary default-button">新規投稿</a>
+    </div>
+</form><br>
 {% endif %}
 
 {% for daily in dailys %}
