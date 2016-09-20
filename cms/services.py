@@ -138,7 +138,7 @@ def get_user_daily_list(request, user):
                 return Daily.objects.filter(user=user, release=False).order_by('-update_date')
             else:
                 return Daily.objects.filter(user=user).order_by('-update_date')
-    return Daily.objects.filter(user=user).order_by('-update_date')
+    return Daily.objects.filter(user=user, release=True).order_by('-update_date')
 
 
 @exception
