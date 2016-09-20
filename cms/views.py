@@ -252,7 +252,7 @@ def daily_search(request):
                        Q(title__contains=word) |
                        Q(report_y__contains=word) |
                        Q(report_w__contains=word) |
-                       Q(report_t__contains=word) for word in form.cleaned_data['keyword']]
+                       Q(report_t__contains=word) for word in form.cleaned_data['keyword'].split(' ')]
             query = queries.pop()
             for item in queries:
                 query |= item
