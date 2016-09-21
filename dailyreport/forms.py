@@ -152,7 +152,7 @@ class DateForm(forms.Form):
         日付絞込み用の日付入力フォームです
         ウィジェットを登録していますので、カレンダーから日付を選択することもできます
     """
-    date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}))
+    date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD', 'required': ''}))
 
 
 class DailySearchForm(forms.Form):
