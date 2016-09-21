@@ -9,9 +9,9 @@ from accounts.models import User
 from dailyreport.models import Daily
 from dailyreport.forms import SearchForm, DateForm, TaskSearchForm, DailySearchForm
 from dailyreport.services.service_comment import \
-    get_comments_from_daily, get_or_create_comment, edit_comment, delete_comment
+    get_comments_from_daily, get_or_create_comment, edit_comment, delete_comment_record
 from dailyreport.services.service_daily import \
-    get_all_daily_list, get_user_daily_list, get_or_create_daily, edit_daily, delete_daily
+    get_all_daily_list, get_user_daily_list, get_or_create_daily, edit_daily, delete_daily_record
 from dailyreport.services.service_task import \
     create_task_form_in_queryset, get_task_from_implement_date, get_task_from_create_date, \
     get_next_task, get_all_task, edit_task, get_narrowing_task
@@ -217,7 +217,7 @@ def delete_daily(request, daily_id):
     :param daily_id:削除対象日報id
     :return:日報一覧ページへリダイレクト
     """
-    if delete_daily(request, get_or_create_daily(request.user, daily_id)):
+    if delete_daily_record(request, get_or_create_daily(request.user, daily_id)):
         return redirect('dailyreport:user_info', user_id=request.user.id)   # 一覧画面にリダイレクト
     else:
         return redirect('login')
@@ -362,5 +362,5 @@ def delete_comment(request, daily_id, comment_id):
     :param comment_id:削除対象コメントid
     :return:
     """
-    delete_comment(request, get_or_create_comment(request.user, comment_id))
+    delete_comment_record(request, get_or_create_comment(request.user, comment_id))
     return redirect('dailyreport:daily_detail', daily_id=daily_id)

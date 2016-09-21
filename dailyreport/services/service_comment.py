@@ -64,7 +64,7 @@ def edit_comment(request, daily, comment):
     return True, CommentForm(instance=comment)
 
 
-def delete_comment(request, comment):
+def delete_comment_record(request, comment):
     u"""コメントの削除
 
     :param request: リクエスト情報(リクエストユーザー)

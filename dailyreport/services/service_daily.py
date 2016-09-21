@@ -100,7 +100,7 @@ def edit_daily(request, daily):
     return True, form
 
 
-def delete_daily(request, daily):
+def delete_daily_record(request, daily):
     u"""日報の削除
 
     :param request: リクエスト情報(リクエストユーザー)
