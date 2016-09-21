@@ -5,7 +5,7 @@
 
 {% block content %}
 <h3 class="page-header">コメントの編集</h3>
-<form action="{% url 'cms:comment_mod' daily_id=daily.id comment_id=comment.id %}" method="post" class="form-horizontal" role="form">
+<form action="{% url 'dailyreport:comment_mod' daily_id=daily.id comment_id=comment.id %}" method="post" class="form-horizontal" role="form">
       <div class="panel panel-default">
         <div class="list-group">
             {% csrf_token %}
@@ -16,5 +16,5 @@
         </div>
     </div>
 </form>
-<a href="{% url 'cms:daily_detail' daily_id=daily.id%}" class="btn btn-default btn-sm">戻る</a>
+<a href="{% url 'dailyreport:daily_detail' daily_id=daily.id%}" class="btn btn-default btn-sm">戻る</a>
 {% endblock content %}

@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'markdown_deux',
     'pure_pagination',
     'bootstrapform',  # django-bootstrap-form
-    'cms',  # 管理システムアプリケーション
+    'dailyreport',  # 管理システムアプリケーション
     'accounts',  # ログイン管理アプリケーション
 )
 MIDDLEWARE_CLASSES = [
@@ -58,7 +58,7 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'Introduction_mysite.urls'
 
-LOGIN_REDIRECT_URL = '/cms/dailyreport/'
+LOGIN_REDIRECT_URL = '/dailyreport/dailyreport/'
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -154,5 +154,5 @@ STATIC_URL = '/static/'
 
 # 静的ファイルを共通で置く
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'cms/static'),
+    os.path.join(BASE_DIR, 'dailyreport/static'),
 )

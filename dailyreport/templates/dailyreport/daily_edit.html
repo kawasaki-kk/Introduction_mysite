@@ -8,9 +8,9 @@
 
 <h3 class="page-header">日報の編集</h3>
 {% if daily_id %}
-    <form action="{% url 'cms:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'dailyreport:daily_mod' daily_id=daily_id %}" method="post" class="form-horizontal" role="form">
 {% else %}
-    <form action="{% url 'cms:daily_add' %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'dailyreport:daily_add' %}" method="post" class="form-horizontal" role="form">
 {% endif %}
         <div>
             {% csrf_token %}

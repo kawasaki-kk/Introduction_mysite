@@ -9,14 +9,14 @@
 </div>
 <div class="container col-md-4 scrollbar hidden-sm">
     <h3 class="page-header">タスク</h3>
-    <form action="{% url 'cms:task_mod' %}" method="GET">
+    <form action="{% url 'dailyreport:task_mod' %}" method="GET">
         {% csrf_token %}
         {{ task_search_form.cond }}
         {{ task_search_form.date }}<br>
         <button type="submit" name="tasks" class="btn btn-default">絞り込み</button>
-        <a href="{% url 'cms:task_mod' %}" class="btn btn-default">タスク一覧</a>
+        <a href="{% url 'dailyreport:task_mod' %}" class="btn btn-default">タスク一覧</a>
     </form><br>
-    <form class="panel panel-primary" action="{% url 'cms:task_mod_daily' %}" method="POST">
+    <form class="panel panel-primary" action="{% url 'dailyreport:task_mod_daily' %}" method="POST">
         <div class="panel-heading">
             <h4>今日のタスク</h4>
         </div>
@@ -57,7 +57,7 @@
             <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button>
         </div>
     </form><br>
-    <form class="panel panel-primary" action="{% url 'cms:task_mod_daily' %}" method="POST">
+    <form class="panel panel-primary" action="{% url 'dailyreport:task_mod_daily' %}" method="POST">
         <div class="panel-heading">
             <h4>明日のタスク</h4>
         </div>

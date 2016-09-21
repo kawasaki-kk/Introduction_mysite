@@ -30,5 +30,5 @@ urlpatterns = [
     url(r'^user/$', views.user_data, name='user_data'),
     # 管理サイト
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('cms.urls', namespace='cms')),
+    url(r'^', include('dailyreport.urls', namespace='dailyreport')),
 ]
