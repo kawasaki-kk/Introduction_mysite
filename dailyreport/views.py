@@ -144,12 +144,12 @@ def daily_edit_view(request, daily_id=None):
         dictionary.update(create_task=get_task_from_create_date(request.user, timezone.now().date()))
 
     if request.method == 'POST' and flag:
-        return redirect('dailyreport:daily_detail', daily_id=dictionary['report_form'].id)
+        return redirect('dailyreport:view_daily_detail', daily_id=dictionary['report_form'].id)
     elif flag is False:
         return render_to_response('dailyreport/daily_edit.html', dictionary, context_instance=RequestContext(request))
 
     if 'gototask' in request.POST:
-        return redirect('dailyreport:task_mod')
+        return redirect('dailyreport:edit_task')
 
     return render_to_response('dailyreport/daily_edit.html', dictionary, context_instance=RequestContext(request))
 
@@ -188,7 +188,7 @@ def edit_task_in_daily_page(request):
     """
     edit_task(request)
 
-    return redirect('dailyreport:daily_list')
+    return redirect('dailyreport:view_daily_list')
 
 
 def narrowing_task_by_date(request):
@@ -218,7 +218,7 @@ def delete_daily(request, daily_id):
     :return:日報一覧ページへリダイレクト
     """
     if delete_daily_record(request, get_or_create_daily(request.user, daily_id)):
-        return redirect('dailyreport:user_info', user_id=request.user.id)   # 一覧画面にリダイレクト
+        return redirect('dailyreport:view_user_daily', user_id=request.user.id)   # 一覧画面にリダイレクト
     else:
         return redirect('login')
 
@@ -259,7 +259,7 @@ def search_daily_by_keyword(request):
             return render_to_response(
                 'dailyreport/daily_list.html', dictionary, context_instance=RequestContext(request))
 
-        return redirect('dailyreport:daily_list')
+        return redirect('dailyreport:view_daily_list')
 
 
 def user_daily_view(request, user_id):
@@ -346,7 +346,7 @@ def comment_edit_view(request, daily_id, comment_id=None):
     flag, dictionary['comment_form'] = edit_comment(request, dictionary['daily'], dictionary['comment'])
 
     if request.method == 'POST' and flag:
-        return redirect('dailyreport:daily_detail', daily_id=dictionary['daily'].id)
+        return redirect('dailyreport:view_daily_detail', daily_id=dictionary['daily'].id)
     elif flag is False:
         return render_to_response('dailyreport/comment_edit.html', dictionary, context_instance=RequestContext(request))
 
@@ -362,4 +362,4 @@ def delete_comment(request, daily_id, comment_id):
     :return:
     """
     delete_comment_record(request, get_or_create_comment(request.user, comment_id))
-    return redirect('dailyreport:daily_detail', daily_id=daily_id)
+    return redirect('dailyreport:view_daily_detail', daily_id=daily_id)
