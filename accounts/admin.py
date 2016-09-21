@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from accounts import models
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
+
+from accounts import models
 
 
 class UserChangeForm(UserChangeForm):

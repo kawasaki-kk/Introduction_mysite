@@ -2,6 +2,7 @@
 from django.contrib.auth.views import login, logout
 from django.core.urlresolvers import resolve, reverse
 from django.test import TestCase
+
 from accounts.forms import UserForm
 from accounts.models import User
 from accounts.views import register
