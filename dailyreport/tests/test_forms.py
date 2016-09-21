@@ -27,8 +27,40 @@ class TaskFormTest(TestCase):
         form = TaskForm(params, instance=task)
         self.assertTrue(form.is_valid())
 
+    def test_valid_include_complete_task(self):
+        params = dict(name='test_name', time_plan=1, time_real=1,
+                      implement_date=timezone.now().date(), complete_task=True)
+        task = Task()
+        form = TaskForm(params, instance=task)
+        self.assertTrue(form.is_valid())
+
     def test_invalid(self):
         params = dict()
+        task = Task()
+        form = TaskForm(params, instance=task)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_minus_plan(self):
+        params = dict(name='test_name', time_plan=-1, time_real=0, implement_date=timezone.now().date())
+        task = Task()
+        form = TaskForm(params, instance=task)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_minus_real(self):
+        params = dict(name='test_name', time_plan=1, time_real=-1, implement_date=timezone.now().date())
+        task = Task()
+        form = TaskForm(params, instance=task)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_zero_time(self):
+        params = dict(name='test_name', time_plan=0, time_real=0, implement_date=timezone.now().date())
+        task = Task()
+        form = TaskForm(params, instance=task)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_complete_task(self):
+        params = dict(name='test_name', time_plan=0, time_real=0,
+                      implement_date=timezone.now().date(), complete_task=True)
         task = Task()
         form = TaskForm(params, instance=task)
         self.assertFalse(form.is_valid())
