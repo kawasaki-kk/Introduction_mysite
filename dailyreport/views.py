@@ -28,7 +28,6 @@ u"""views.py
 """
 
 
-# 日報の一覧
 @login_required
 def daily_list(request):
     u"""日報一覧
@@ -98,7 +97,6 @@ def daily_detail(request, daily_id):
     return render_to_response('dailyreport/daily_detail.html', lists, context_instance=RequestContext(request))
 
 
-# 日報の編集
 def daily_edit(request, daily_id=None):
     u"""日報編集(U)
         日報を編集し、編集後の日報詳細を表示する
@@ -160,7 +158,6 @@ def task_edit(request):
     :param request:ユーザー情報の取得
     :return:レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用するフォーム
     """
-    # タスク一覧
     lists = services.init_form(request=request)
     services.edit_task(request)
     lists.update(task_search_form=TaskSearchForm(request.GET))
@@ -187,7 +184,6 @@ def task_edit_daily(request):
     return redirect('dailyreport:daily_list')
 
 
-# def search_for_task_in_date
 def task_date_search(request):
     u"""タスク日付絞込み
         タスクの一覧を日付で絞り込みます
@@ -205,8 +201,6 @@ def task_date_search(request):
     return render_to_response('dailyreport/task_list.html', lists, context_instance=RequestContext(request))
 
 
-# 日報の削除
-# アラート表示などは未実装
 def daily_del(request, daily_id):
     u"""日報削除(D)
         日報の削除を行います
@@ -222,8 +216,6 @@ def daily_del(request, daily_id):
         return redirect('login')
 
 
-# 日報の検索
-# def search_for_daily_in_keyword
 def daily_search(request):
     u"""日報検索
         日報をキーワードによって検索します
@@ -233,7 +225,6 @@ def daily_search(request):
     :param request: 検索キーワードの取得
     :return: 絞り込んだ日報の一覧をdaily_list.htmlを利用してレンダリングする
     """
-    # リクエストが送られてきている場合
     lists = services.init_form(request=request)
     lists.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
@@ -243,9 +234,7 @@ def daily_search(request):
     ))
 
     if request.method == 'GET':
-        # リクエストを取得しながら検索フォームを生成
         form = SearchForm(request.GET)
-        # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid() and form.cleaned_data['keyword'] is not '':
             queries = [Q(user__first_name__contains=word) |
                        Q(user__last_name__contains=word) |
@@ -316,9 +305,7 @@ def user_search(request):
     """
     lists = services.init_form(request=request)
     if request.method == 'GET':
-        # リクエストを取得しながら検索フォームを生成
         form = SearchForm(request.GET)
-        # フォームの中身が存在する場合=検索キーワードが入力されている場合
         if form.is_valid():
             lists.update(users=User.objects.all().filter(
                 Q(username__contains=form.cleaned_data['keyword']) |
@@ -334,7 +321,6 @@ def user_search(request):
     return render_to_response('dailyreport/user_list.html', lists, context_instance=RequestContext(request))
 
 
-# コメントの編集
 def comment_edit(request, daily_id, comment_id=None):
     u"""コメント編集
         コメントの編集/新規作成を行います

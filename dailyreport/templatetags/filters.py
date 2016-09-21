@@ -10,4 +10,3 @@ def truncate(value, arg):
     if int(len(value)) > int(arg):
         return value[:int(arg)] + ' ...'
     return value[:int(arg)]
-

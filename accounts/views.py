@@ -4,7 +4,7 @@ from accounts.forms import UserResisterFrom, UserEditFrom
 from accounts.models import User
 
 
-def register(request, user_id=None):
+def register(request):
     comment = ''
 
     if request.POST:

@@ -5,9 +5,6 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 
 
-# Register your models here.
-
-
 class UserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = models.User
