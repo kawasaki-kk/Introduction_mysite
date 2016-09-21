@@ -71,10 +71,10 @@ class TaskForm(ModelForm):
         model = Task
         fields = ('complete_task', 'implement_date', 'name', 'time_plan', 'time_real', )
         widgets = {
-            'implement_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD', 'required': ''}),
-            'name': forms.TextInput(attrs={'placeholder': '作業概要', 'required': ''}),
+            'implement_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}),
+            'name': forms.TextInput(attrs={'placeholder': '作業概要'}),
             'time_plan': forms.TextInput(attrs={
-                'class': 'time_plan', 'type': 'number', 'placeholder': '0', 'required': ''}),
+                'class': 'time_plan', 'type': 'number', 'placeholder': '0'}),
             'time_real': forms.TextInput(attrs={'class': 'time_real', 'type': 'number'}),
         }
 
