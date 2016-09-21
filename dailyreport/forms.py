@@ -124,6 +124,14 @@ class TaskSearchForm(forms.Form):
     cond = forms.ChoiceField(
         choices=[("0", "すべて表示"), ("1", "完了したタスク"), ("2", "未完了のタスク")])
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        try:
+            cond = cleaned_data['cond']
+        except KeyError:
+            cleaned_data.update(cond=0)
+        return cleaned_data
+
 u"""タスク入力/編集用フォームセット
     タスクモデルのレコード複数を一括で更新/追加するためのフォームです
     タスクレコードの表示数は、表示対象となるクエリセット数(フォーム作成時に指定)と等しく、

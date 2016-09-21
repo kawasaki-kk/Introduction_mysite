@@ -137,7 +137,7 @@ def get_narrowing_task(request):
     :param request: リクエスト
     :return: 条件に従ってフィルタリングを行ったクエリ
     """
-    if request.method == 'GET' and 'tasks' in request.GET:
+    if request.method == 'GET':
         form = TaskSearchForm(request.GET)
         if form.is_valid():
             if form.cleaned_data['cond'] == '0':
