@@ -47,8 +47,8 @@
                         <a class="disable-form">{{form.implement_date}}</a>
                         <a class="disable-form">{{form.name}}</a>
                         <a class="disable-form">{{form.time_plan}}</a>
-
                     {% endif %}
+                    {{form.non_field_errors}}
                 </a>
             {% endfor %}
         </div>
@@ -85,6 +85,7 @@
                         <a class="disable-form">{{form.name}}</a>
                         <a class="disable-form">{{form.time_plan}}</a>
                     {% endif %}
+                    {{form.non_field_errors}}
                 </a>
             {% endfor %}
         </div>
