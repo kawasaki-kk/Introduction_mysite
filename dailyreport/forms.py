@@ -43,6 +43,16 @@ class DailyForm(ModelForm):
                 'placeholder': '明日のタスクで気を付けることがあったらコメントしましょう'}),
         }
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        try:
+            title = cleaned_data['title']
+        except:
+            raise forms.ValidationError('コメントを入力してください')
+        if len(title.strip()) < 1:
+            raise forms.ValidationError('コメントを入力してください')
+        return cleaned_data
+
 
 class TaskForm(ModelForm):
     u"""Taskモデル編集用フォーム
@@ -66,6 +76,31 @@ class TaskForm(ModelForm):
                 'class': 'time_plan', 'type': 'number', 'placeholder': '0'}),
             'time_real': forms.TextInput(attrs={'class': 'time_real', 'type': 'number'}),
         }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        try:
+            name = cleaned_data['name']
+        except KeyError:
+            raise forms.ValidationError('タスク名を入力してください')
+        try:
+            implement_date = cleaned_data['implement_date']
+        except KeyError:
+            raise forms.ValidationError('作業予定日を入力してください')
+        try:
+            time_plan = cleaned_data['time_plan']
+        except KeyError:
+            raise forms.ValidationError('予定作業時間数を入力してください')
+        try:
+            time_real = cleaned_data['time_real']
+        except KeyError:
+            raise forms.ValidationError('実作業時間数を入力してください')
+        if time_plan < 0 or time_real < 0:
+            raise forms.ValidationError('負の値は時間数として入力できません')
+        if cleaned_data['complete_task'] and time_real is 0:
+            raise forms.ValidationError('実作業時間を入力してください')
+
+        return cleaned_data
 
 
 class CommentForm(ModelForm):

@@ -86,11 +86,6 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, **kwargs):
-        if self.time_real == 0:
-            self.complete_task = False
-        super(Task, self).save(**kwargs)
-
 
 class Comment(models.Model):
     u"""コメントモデル
