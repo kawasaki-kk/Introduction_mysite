@@ -29,11 +29,11 @@ u"""views.py
 
 
 @login_required
-def daily_list(request):
+def daily_list_view(request):
     u"""日報一覧
         日報の一覧を取得し、レンダリングを指示します
 
-        lists:
+        dictionary:
             init:キーワード検索フォーム
             init:日付絞込みフォーム
             公開済みの全日報のクエリセット
@@ -42,31 +42,30 @@ def daily_list(request):
     :param request: 関数が呼ばれたときにhtmlから送られてきた情報。ここでは使用しない。
     :return:レンダリング対象のhtmlファイル'dailyreport/daily_list.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
-    lists = services.init_form(request=request)
-
-    lists.update(pages=services.create_pagination(request, services.get_all_daily_list(request=request, release=True)))
-    lists.update(dailys=lists['pages'].object_list)
-    lists.update(is_paginated=True)
-    lists.update(date_form=DateForm(request.GET))
-    lists.update(task_form=services.create_task_form_in_queryset(
+    dictionary = services.init_form(request=request)
+    dictionary.update(pages=services.create_pagination(request, services.get_all_daily_list(request=request, release=True)))
+    dictionary.update(dailys=dictionary['pages'].object_list)
+    dictionary.update(is_paginated=True)
+    dictionary.update(date_form=DateForm(request.GET))
+    dictionary.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
-    lists.update(task_form_next=services.create_task_form_in_queryset(
+    dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
 
-    return render_to_response('dailyreport/daily_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_list.html', dictionary, context_instance=RequestContext(request))
 
 
 @login_required
-def daily_detail(request, daily_id):
+def daily_detail_view(request, daily_id):
     u"""日報詳細(R)
         日報の詳細を取得し、レンダリングを指示します
         表示対象は以下の通り
             ある日報のレコード
             日報の作成日に実施されたタスク
             日報の作成日に作成されたタスク
-        lists:
+        dictionary:
             日報
             日報の作成日に実施されたタスク(implement_date)
             日報の作成日に作成されたタスク(create_date)
@@ -78,26 +77,26 @@ def daily_detail(request, daily_id):
     :param daily_id: 表示対象の日報取得
     :return: レンダリング対象のhtmlファイル'dailyreport/daily_detail.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
-    lists = services.init_form(request=request, daily_id=daily_id)
-    lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
-    lists.update(comments=services.get_comments_from_daily(lists['daily']))
-    lists.update(task_form=services.create_task_form_in_queryset(
+    dictionary = services.init_form(request=request, daily_id=daily_id)
+    dictionary.update(daily=services.get_or_create_daily(daily_id=daily_id))
+    dictionary.update(comments=services.get_comments_from_daily(dictionary['daily']))
+    dictionary.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
-    lists.update(task_form_next=services.create_task_form_in_queryset(
+    dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
-    lists.update(implement_task=services.get_task_from_implement(
-        user=lists['daily'].user, date=lists['daily'].create_date))
-    lists.update(create_task=services.get_task_from_create(
-        user=lists['daily'].user, date=lists['daily'].create_date))
-    flag, lists['comment_form'] = services.edit_comment(
-        request=request, daily=lists['daily'],  comment=services.get_or_create_comment(request.user))
+    dictionary.update(implement_task=services.get_task_from_implement(
+        user=dictionary['daily'].user, date=dictionary['daily'].create_date))
+    dictionary.update(create_task=services.get_task_from_create(
+        user=dictionary['daily'].user, date=dictionary['daily'].create_date))
+    flag, dictionary['comment_form'] = services.edit_comment(
+        request=request, daily=dictionary['daily'],  comment=services.get_or_create_comment(request.user))
 
-    return render_to_response('dailyreport/daily_detail.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_detail.html', dictionary, context_instance=RequestContext(request))
 
 
-def daily_edit(request, daily_id=None):
+def daily_edit_view(request, daily_id=None):
     u"""日報編集(U)
         日報を編集し、編集後の日報詳細を表示する
         表示対象は以下の通り
@@ -106,7 +105,7 @@ def daily_edit(request, daily_id=None):
             日報の作成日または当日(新規作成時)に作成されたタスク
         なお、日報編集ページではタスクの編集は行わない
             トップページなどの画面中に表示されているタスク編集フォームを利用して逐次更新が行われているものとする
-        lists:
+        dictionary:
             日報
             日報編集用フォーム
                 idが指定されている場合は日報を取得後、フォームとする
@@ -117,57 +116,57 @@ def daily_edit(request, daily_id=None):
     :param daily_id: 編集対象の日報id(未指定の場合新規作成と判断)
     :return: レンダリング対象のhtmlファイル'dailyreport/daily_edit.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
-    lists = services.init_form(request=request, daily_id=daily_id)
-    lists.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
-    if request.user != lists['daily'].user:
+    dictionary = services.init_form(request=request, daily_id=daily_id)
+    dictionary.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
+    if request.user != dictionary['daily'].user:
         return redirect('login')
-    flag, lists['report_form'] = services.edit_daily(request=request, daily=lists['daily'])
-    lists.update(task_form=services.create_task_form_in_queryset(
+    flag, dictionary['report_form'] = services.edit_daily(request=request, daily=dictionary['daily'])
+    dictionary.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
-    lists.update(task_form_next=services.create_task_form_in_queryset(
+    dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
 
     if daily_id:
-        lists.update(implement_task=services.get_task_from_implement(lists['daily'].user, lists['daily'].create_date))
-        lists.update(create_task=services.get_task_from_create(lists['daily'].user, lists['daily'].create_date))
+        dictionary.update(implement_task=services.get_task_from_implement(dictionary['daily'].user, dictionary['daily'].create_date))
+        dictionary.update(create_task=services.get_task_from_create(dictionary['daily'].user, dictionary['daily'].create_date))
     else:
-        lists.update(implement_task=services.get_task_from_implement(request.user, timezone.now().date()))
-        lists.update(create_task=services.get_task_from_create(request.user, timezone.now().date()))
+        dictionary.update(implement_task=services.get_task_from_implement(request.user, timezone.now().date()))
+        dictionary.update(create_task=services.get_task_from_create(request.user, timezone.now().date()))
 
     if request.method == 'POST' and flag:
-        return redirect('dailyreport:daily_detail', daily_id=lists['report_form'].id)
+        return redirect('dailyreport:daily_detail', daily_id=dictionary['report_form'].id)
     elif flag is False:
-        return render_to_response('dailyreport/daily_edit.html', lists, context_instance=RequestContext(request))
+        return render_to_response('dailyreport/daily_edit.html', dictionary, context_instance=RequestContext(request))
 
     if 'gototask' in request.POST:
         return redirect('dailyreport:task_mod')
 
-    return render_to_response('dailyreport/daily_edit.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_edit.html', dictionary, context_instance=RequestContext(request))
 
 
-def task_edit(request):
+def task_edit_in_task_page(request):
     u"""タスク一覧(CRU)
         タスク一覧をフォームとして表示します
         表示対象のタスクはユーザーそれぞれのタスクのみです
         R属性は仮です
             タスク単独を詳しく編集するフォームを実装する可能性があります
-        lists:
+        dictionary:
         タスクフォーム
     :param request:ユーザー情報の取得
     :return:レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用するフォーム
     """
-    lists = services.init_form(request=request)
+    dictionary = services.init_form(request=request)
     services.edit_task(request)
-    lists.update(task_search_form=TaskSearchForm(request.GET))
+    dictionary.update(task_search_form=TaskSearchForm(request.GET))
 
-    lists.update(tasks=services.create_pagination(request, services.get_search_task(request=request)))
-    lists.update(task_form=services.create_task_form_in_queryset(lists['tasks'].object_list))
-    return render_to_response('dailyreport/task_list.html', lists, context_instance=RequestContext(request))
+    dictionary.update(tasks=services.create_pagination(request, services.get_search_task(request=request)))
+    dictionary.update(task_form=services.create_task_form_in_queryset(dictionary['tasks'].object_list))
+    return render_to_response('dailyreport/task_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def task_edit_daily(request):
+def task_edit_in_daily_page(request):
     u"""タスク一覧(CRU)
         日報表示部分を持つページにおいてタスクを更新するためのメソッドです
         通常のものと比べ、返るページが異なります
@@ -184,7 +183,7 @@ def task_edit_daily(request):
     return redirect('dailyreport:daily_list')
 
 
-def task_date_search(request):
+def narrowing_task_by_date(request):
     u"""タスク日付絞込み
         タスクの一覧を日付で絞り込みます
         表示対象のタスクはtask_editと同じくユーザーそれぞれのタスクのみです
@@ -194,14 +193,14 @@ def task_date_search(request):
     :param request: dateform(日付をカレンダーによって指定するフォーム)からのリクエスト、及びユーザー情報の取得
     :return: レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用する日付で絞り込んだフォーム
     """
-    lists = services.init_form(request=request)
-    lists.update(task_search_form=TaskSearchForm(request.GET))
+    dictionary = services.init_form(request=request)
+    dictionary.update(task_search_form=TaskSearchForm(request.GET))
 
-    lists.update(task_form=services.task_date_search(request=request))
-    return render_to_response('dailyreport/task_list.html', lists, context_instance=RequestContext(request))
+    dictionary.update(task_form=services.task_date_search(request=request))
+    return render_to_response('dailyreport/task_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def daily_del(request, daily_id):
+def delete_daily(request, daily_id):
     u"""日報削除(D)
         日報の削除を行います
         日報の投稿ユーザーでないユーザーがアクセスした場合、ログインページにリダイレクトされます
@@ -216,7 +215,7 @@ def daily_del(request, daily_id):
         return redirect('login')
 
 
-def daily_search(request):
+def search_daily_by_keyword(request):
     u"""日報検索
         日報をキーワードによって検索します
         検索条件
@@ -225,11 +224,11 @@ def daily_search(request):
     :param request: 検索キーワードの取得
     :return: 絞り込んだ日報の一覧をdaily_list.htmlを利用してレンダリングする
     """
-    lists = services.init_form(request=request)
-    lists.update(task_form=services.create_task_form_in_queryset(
+    dictionary = services.init_form(request=request)
+    dictionary.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
-    lists.update(task_form_next=services.create_task_form_in_queryset(
+    dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
 
@@ -245,16 +244,16 @@ def daily_search(request):
             query = queries.pop()
             for item in queries:
                 query |= item
-            lists.update(dailys=Daily.objects.filter(release=True).filter(query).order_by('-create_date'))
-            lists.update(search_form=form)
-            lists.update(keyword=form.cleaned_data['keyword'])
-            lists.update(is_paginated=False)
-            return render_to_response('dailyreport/daily_list.html', lists, context_instance=RequestContext(request))
+            dictionary.update(dailys=Daily.objects.filter(release=True).filter(query).order_by('-create_date'))
+            dictionary.update(search_form=form)
+            dictionary.update(keyword=form.cleaned_data['keyword'])
+            dictionary.update(is_paginated=False)
+            return render_to_response('dailyreport/daily_list.html', dictionary, context_instance=RequestContext(request))
 
         return redirect('dailyreport:daily_list')
 
 
-def user_info(request, user_id):
+def user_daily_view(request, user_id):
     u"""ユーザー情報
         ユーザーごとの投稿情報を表示します
         表示対象：
@@ -265,37 +264,37 @@ def user_info(request, user_id):
     :param user_id: 表示対象ユーザーid
     :return: ユーザーで絞り込んだ日報のリストを日報一覧と同様のhtmlファイルを使用してレンダリングします
     """
-    lists = services.init_form(request=request)
-    lists.update(daily_release_form=DailySearchForm(request.GET))
-    lists.update(pages=services.create_pagination(
+    dictionary = services.init_form(request=request)
+    dictionary.update(daily_release_form=DailySearchForm(request.GET))
+    dictionary.update(pages=services.create_pagination(
         request, services.get_user_daily_list(request=request, user=user_id)))
-    lists.update(dailys=lists['pages'].object_list)
-    lists.update(is_paginated=True)
-    lists.update(task_form=services.create_task_form_in_queryset(
+    dictionary.update(dailys=dictionary['pages'].object_list)
+    dictionary.update(is_paginated=True)
+    dictionary.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement(request.user, timezone.now().date())
     ))
-    lists.update(task_form_next=services.create_task_form_in_queryset(
+    dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
-    lists.update(userinfo=get_object_or_404(auth.get_user_model(), pk=user_id))
+    dictionary.update(userinfo=get_object_or_404(auth.get_user_model(), pk=user_id))
 
-    return render_to_response('dailyreport/daily_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def user_list(request):
+def user_list_view(request):
     u"""ユーザー一覧
         登録しているユーザー全員を表示
     :param request:初期情報
     :return:ユーザーの一覧とユーザー検索フォーム
     """
-    lists = services.init_form(request=request)
-    lists.update(users=User.objects.all().order_by('first_name'))
-    lists.update(user_search_form=SearchForm())
+    dictionary = services.init_form(request=request)
+    dictionary.update(users=User.objects.all().order_by('first_name'))
+    dictionary.update(user_search_form=SearchForm())
 
-    return render_to_response('dailyreport/user_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/user_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def user_search(request):
+def search_user_by_keyword(request):
     u"""ユーザー検索
         ユーザーをキーワード検索
         検索対象：
@@ -303,25 +302,25 @@ def user_search(request):
         :param request:検索リクエスト
         :return:検索結果ユーザー一覧とユーザー検索フォーム
     """
-    lists = services.init_form(request=request)
+    dictionary = services.init_form(request=request)
     if request.method == 'GET':
         form = SearchForm(request.GET)
         if form.is_valid():
-            lists.update(users=User.objects.all().filter(
+            dictionary.update(users=User.objects.all().filter(
                 Q(username__contains=form.cleaned_data['keyword']) |
                 Q(first_name__contains=form.cleaned_data['keyword']) |
                 Q(last_name__contains=form.cleaned_data['keyword'])).order_by('first_name'))
-            lists.update(user_search_form=form)
+            dictionary.update(user_search_form=form)
 
-            return render_to_response('dailyreport/user_list.html', lists, context_instance=RequestContext(request))
+            return render_to_response('dailyreport/user_list.html', dictionary, context_instance=RequestContext(request))
     else:
-        lists.update(users=User.objects.all().order_by('id'))
-        lists.update(user_search_form=SearchForm())
+        dictionary.update(users=User.objects.all().order_by('id'))
+        dictionary.update(user_search_form=SearchForm())
 
-    return render_to_response('dailyreport/user_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/user_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def comment_edit(request, daily_id, comment_id=None):
+def comment_edit_view(request, daily_id, comment_id=None):
     u"""コメント編集
         コメントの編集/新規作成を行います
     :param request:
@@ -329,23 +328,23 @@ def comment_edit(request, daily_id, comment_id=None):
     :param comment_id:(編集の場合)編集対象のコメントのid
     :return:編集されたコメントの投稿されている日報詳細/コメント編集フォーム(編集失敗の場合)
     """
-    lists = services.init_form(request=request)
-    lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
-    lists.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
-    if request.user != lists['comment'].user:
+    dictionary = services.init_form(request=request)
+    dictionary.update(daily=services.get_or_create_daily(daily_id=daily_id))
+    dictionary.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
+    if request.user != dictionary['comment'].user:
         return redirect('login')
-    flag, lists['comment_form'] = services.edit_comment(request, lists['daily'], lists['comment'])
+    flag, dictionary['comment_form'] = services.edit_comment(request, dictionary['daily'], dictionary['comment'])
 
     if request.method == 'POST' and flag:
-        return redirect('dailyreport:daily_detail', daily_id=lists['daily'].id)
+        return redirect('dailyreport:daily_detail', daily_id=dictionary['daily'].id)
     elif flag is False:
-        lists.update(comment="必須項目が入力されていません")
-        return redirect('dailyreport:daily_detail', daily_id=lists['daily'].id)
+        dictionary.update(comment="必須項目が入力されていません")
+        return redirect('dailyreport:daily_detail', daily_id=dictionary['daily'].id)
 
-    return render_to_response('dailyreport/comment_edit.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/comment_edit.html', dictionary, context_instance=RequestContext(request))
 
 
-def comment_del(request, daily_id, comment_id):
+def delete_comment(request, daily_id, comment_id):
     u"""コメントの削除
         コメントを削除します
     :param request:

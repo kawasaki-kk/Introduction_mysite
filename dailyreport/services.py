@@ -26,12 +26,12 @@ def exception(func):
 
 @exception
 def init_form(request=None, daily_id=None):
-    lists = dict(search_form=SearchForm())
-    lists.update(request=request)
-    lists.update(daily_id=daily_id)
-    lists.update(task_search_form=TaskSearchForm())
+    dictionary = dict(search_form=SearchForm())
+    dictionary.update(request=request)
+    dictionary.update(daily_id=daily_id)
+    dictionary.update(task_search_form=TaskSearchForm())
 
-    return lists
+    return dictionary
 
 
 @exception
