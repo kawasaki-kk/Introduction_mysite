@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from dailyreport.models import Daily
 from dailyreport.forms import DailyForm, DateForm, DailySearchForm
 
-u"""services.py
+u"""services_daily.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです
     Dailyモデルへのアクセスを行います
 

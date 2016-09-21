@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from dailyreport.models import Daily, Task
 from dailyreport.forms import TaskFormSet, TaskSearchForm
 
-u"""task_services.py
+u"""services_task.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです
     Taskモデルへのアクセスを行います
 

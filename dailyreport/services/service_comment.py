@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from dailyreport.models import Comment
 from dailyreport.forms import CommentForm
 
-u"""comment_services.py
+u"""services_comment.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです
     Commentモデルへのアクセスを行います
 

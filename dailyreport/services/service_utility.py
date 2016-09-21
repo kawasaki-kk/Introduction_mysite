@@ -3,7 +3,7 @@ import traceback
 from pure_pagination import Paginator, PageNotAnInteger
 from dailyreport.forms import SearchForm, TaskSearchForm
 
-u"""services.py
+u"""services_utility.py
     views.pyから切り離した、繰り返し行われる処理をメソッド化したファイルです
 
 """
