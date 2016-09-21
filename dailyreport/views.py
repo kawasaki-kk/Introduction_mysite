@@ -348,8 +348,7 @@ def comment_edit_view(request, daily_id, comment_id=None):
     if request.method == 'POST' and flag:
         return redirect('dailyreport:daily_detail', daily_id=dictionary['daily'].id)
     elif flag is False:
-        dictionary.update(comment="必須項目が入力されていません")
-        return redirect('dailyreport:daily_detail', daily_id=dictionary['daily'].id)
+        return render_to_response('dailyreport/comment_edit.html', dictionary, context_instance=RequestContext(request))
 
     return render_to_response('dailyreport/comment_edit.html', dictionary, context_instance=RequestContext(request))
 
