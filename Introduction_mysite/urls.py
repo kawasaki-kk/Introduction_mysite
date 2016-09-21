@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Introduction_mysite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,12 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include   # ←, includeを追加
+from django.conf.urls import url, include
 from django.contrib import admin
 from accounts import views
 
 urlpatterns = [
-    # url(r'^admin/', include(admin.site.urls)),
     # ユーザー認証
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'accounts/logout.html'}, name='logout'),
@@ -28,8 +28,7 @@ urlpatterns = [
     url(r'^register/(?P<user_id>\d+)/$', views.edit, name='edit'),
     # ユーザー情報
     url(r'^user/$', views.user_data, name='user_data'),
-    # 管理サイトを使用できるように登録しておく
+    # 管理サイト
     url(r'^admin/', admin.site.urls),
-    # 実際に日報管理として動作するアプリケーションの大元のURLを登録
-    url(r'^cms/', include('cms.urls', namespace='cms')),
+    url(r'^/', include('cms.urls', namespace='cms')),
 ]

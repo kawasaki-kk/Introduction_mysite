@@ -1,9 +1,8 @@
-from django.forms import ModelForm
-from cms.models import Daily, Comment, Task
+# -*- coding: utf-8 -*-
 from django import forms
-from django.forms import models
-from django.forms import formsets
+from django.forms import ModelForm, models, formsets
 from django.contrib.admin.widgets import AdminDateWidget
+from cms.models import Daily, Comment, Task
 
 
 class DailyForm(ModelForm):

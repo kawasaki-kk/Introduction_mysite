@@ -1,9 +1,11 @@
-from django.test import TestCase
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import resolve, reverse
 from django.http import HttpRequest
+from django.test import TestCase
 from django.utils import timezone
 from accounts.models import User
-from cms.views import *
+from cms.models import Daily
+from cms.views import daily_edit, comment_edit
 
 
 class DailyViewTests(TestCase):

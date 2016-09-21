@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 from django.test import TestCase
-from cms.models import Daily, Task
-from accounts.models import User
 from django.utils import timezone
+from accounts.models import User
+from cms.models import Task
 
 
 # 3 tests

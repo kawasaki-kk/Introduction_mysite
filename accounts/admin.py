@@ -1,6 +1,6 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
-import accounts
-from . import models
+from accounts import models
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 

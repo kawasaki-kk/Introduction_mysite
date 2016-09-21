@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
+from django.contrib.auth.views import login, logout
 from django.core.urlresolvers import resolve, reverse
 from django.test import TestCase
-from accounts.views import register
-from accounts.models import User
 from accounts.forms import UserForm
-from django.contrib.auth.views import login, logout
+from accounts.models import User
+from accounts.views import register
 
 
 class UrlResolveTestsUser(TestCase):

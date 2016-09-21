@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.test import TestCase
-from cms.models import Daily, Comment
 from accounts.models import User
+from cms.models import Daily, Comment
 
 
 # 6 tests

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
 from accounts.forms import UserResisterFrom, UserEditFrom
 from accounts.models import User
@@ -12,7 +13,6 @@ def register(request, user_id=None):
             username = request.POST['username']
             last_name = request.POST['last_name']
             first_name = request.POST['first_name']
-            # screenname = request.POST['screenname']
             if request.POST['password1'] == request.POST['password2'] and request.POST['password1']:
                 password = request.POST['password1']
                 try:
@@ -49,7 +49,6 @@ def edit(request, user_id=None):
             username = request.POST['username']
             last_name = request.POST['last_name']
             first_name = request.POST['first_name']
-            # screenname = request.POST['screenname']
             try:
                 new_user = User.objects._edit_user(
                     id=user_id, username=username, first_name=first_name, last_name=last_name, is_superuser=False)

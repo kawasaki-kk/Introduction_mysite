@@ -1,15 +1,13 @@
-from django.shortcuts import get_object_or_404
-from django.db import models
+# -*- coding: utf-8 -*-
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
+from django.shortcuts import get_object_or_404
 
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, username, password, is_superuser, first_name=None, last_name=None, **extra_fields):
-        """
-        Creates and saves a User with the given username, email and password.
-        """
         if not username:
             raise ValueError(u'ユーザー名を入力してください！')
         if User.objects.filter(username=username):
@@ -21,9 +19,6 @@ class UserManager(BaseUserManager):
         return user
 
     def _edit_user(self, id, username, is_superuser, first_name=None, last_name=None, **extra_fields):
-        """
-        Creates and saves a User with the given username, email and password.
-        """
         if not username:
             raise ValueError(u'ユーザー名を入力してください！')
         if User.objects.filter(username=username):
@@ -40,10 +35,7 @@ class UserManager(BaseUserManager):
         return self._create_user(username, password, True, **extra_fields)
 
 
-# django既定のユーザーテーブルをもとに、自作できるようAbstractBaseUserとPermissionsMixinを継承
 class User(AbstractBaseUser, PermissionsMixin):
-    # ユーザーテーブルの要素を定義
-    # idは自動生成されるものを使用
     username = models.CharField('ユーザーID', max_length=30, unique=True,
                                 help_text="This using user ID and use login or logout")
     screenname = models.CharField('表示名', max_length=255,
@@ -64,7 +56,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'ユーザー'
         verbose_name_plural = verbose_name
 
-    # 必須メソッドを定義
     def get_full_name(self):
         if self.first_name and self.last_name:
             return self.first_name + self.last_name

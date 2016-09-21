@@ -1,17 +1,16 @@
-from django.forms import ModelForm
+# -*- coding: utf-8 -*-
 from django import forms
-from accounts.models import User
 from django.contrib.auth.forms import UserChangeForm
-from . import models
+from django.forms import ModelForm
+from accounts.models import User
 
 
 class UserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
-        model = models.User
+        model = User
 
 
 class UserForm(ModelForm):
-    """ユーザーのフォーム"""
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'password', )

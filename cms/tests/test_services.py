@@ -1,9 +1,10 @@
-from django.test import TestCase
-from django.core.urlresolvers import resolve, reverse
+# -*- coding: utf-8 -*-
 from django.http import HttpRequest
+from django.test import TestCase
 from django.utils import timezone
 from accounts.models import User
-from cms.services import *
+from cms import services
+from cms.models import Daily, Comment
 
 
 class DailyModelServicesTests(TestCase):
@@ -38,9 +39,9 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = get_all_daily_list(self.get_request(), True)
+        dailys = services.get_all_daily_list(self.get_request(), True)
         self.assertEqual(dailys.count(), 0)
-        dailys = get_all_daily_list(self.get_request(), False)
+        dailys = services.get_all_daily_list(self.get_request(), False)
         self.assertEqual(dailys.count(), 1)
         self.assertEqual(title, dailys[0].title)
 
@@ -48,7 +49,7 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = get_all_daily_list(self.get_request(date=timezone.now().date()), False)
+        dailys = services.get_all_daily_list(self.get_request(date=timezone.now().date()), False)
         self.assertEqual(dailys.count(), 1)
         self.assertEqual(title, dailys[0].title)
 
@@ -56,7 +57,7 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = get_user_daily_list(self.get_request(), user)
+        dailys = services.get_user_daily_list(self.get_request(), user)
         self.assertEqual(dailys.count(), 1)
         self.assertEqual(title, dailys[0].title)
 
@@ -64,14 +65,14 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = get_user_daily_list(self.get_request(cond=2), user)
+        dailys = services.get_user_daily_list(self.get_request(cond=2), user)
         self.assertEqual(dailys.count(), 1)
 
     def test_get_user_daily_list_release(self):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = get_user_daily_list(self.get_request(cond=1), user)
+        dailys = services.get_user_daily_list(self.get_request(cond=1), user)
         self.assertEqual(dailys.count(), 0)
 
 
@@ -113,7 +114,7 @@ class CommentModelServicesTests(TestCase):
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
         comment = self.create_comment(user, daily, comment_text)
-        comments = get_comments_from_daily(daily)
+        comments = services.get_comments_from_daily(daily)
         self.assertEqual(comments.count(), 1)
         self.assertEqual(comment_text, comments[0].comment)
 

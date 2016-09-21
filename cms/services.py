@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import traceback
 from django.shortcuts import get_object_or_404
+from pure_pagination import Paginator, PageNotAnInteger
 from cms.models import Daily, Comment, Task
 from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm, DailySearchForm
-import traceback
-from pure_pagination import Paginator, PageNotAnInteger
 
 u"""services.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです
