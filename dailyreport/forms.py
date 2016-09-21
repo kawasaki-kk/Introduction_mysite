@@ -82,6 +82,17 @@ class CommentForm(ModelForm):
             'comment': forms.Textarea(attrs={'class': 'comment_form'})
         }
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        try:
+            comment = cleaned_data['comment']
+        except:
+            raise forms.ValidationError('コメントを入力してください')
+        if len(comment.strip()) < 1:
+            raise forms.ValidationError('コメントを入力してください')
+        return cleaned_data
+
+
 
 class SearchForm(forms.Form):
     u"""キーワード検索用入力フォーム
@@ -112,6 +123,14 @@ class DailySearchForm(forms.Form):
 
     cond = forms.ChoiceField(
         choices=[("0", "すべて表示"), ("1", "公開"), ("2", "未公開")])
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        try:
+            cond = cleaned_data['cond']
+        except KeyError:
+            cleaned_data.update(cond=0)
+        return cleaned_data
 
 
 class TaskSearchForm(forms.Form):
