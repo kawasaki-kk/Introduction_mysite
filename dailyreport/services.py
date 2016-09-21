@@ -2,8 +2,8 @@
 import traceback
 from django.shortcuts import get_object_or_404
 from pure_pagination import Paginator, PageNotAnInteger
-from cms.models import Daily, Comment, Task
-from cms.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm, DailySearchForm
+from dailyreport.models import Daily, Comment, Task
+from dailyreport.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm, DailySearchForm
 
 u"""services.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです

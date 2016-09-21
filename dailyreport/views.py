@@ -6,9 +6,9 @@ from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.template import RequestContext
 from django.utils import timezone
 from accounts.models import User
-from cms import services
-from cms.models import Daily
-from cms.forms import SearchForm, DateForm, TaskSearchForm, DailySearchForm
+from dailyreport import services
+from dailyreport.models import Daily
+from dailyreport.forms import SearchForm, DateForm, TaskSearchForm, DailySearchForm
 
 
 
@@ -41,7 +41,7 @@ def daily_list(request):
             当日分のタスク一覧(フォーム形式)
             明日以降分のタスク一覧(フォーム形式)
     :param request: 関数が呼ばれたときにhtmlから送られてきた情報。ここでは使用しない。
-    :return:レンダリング対象のhtmlファイル'cms/daily_list.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    :return:レンダリング対象のhtmlファイル'dailyreport/daily_list.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
     lists = services.init_form(request=request)
 
@@ -56,7 +56,7 @@ def daily_list(request):
         services.get_next_task(request.user, timezone.now().date())
     ))
 
-    return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_list.html', lists, context_instance=RequestContext(request))
 
 
 @login_required
@@ -77,7 +77,7 @@ def daily_detail(request, daily_id):
             明日以降分のタスク一覧(フォーム形式)
     :param request: ユーザー情報の取得
     :param daily_id: 表示対象の日報取得
-    :return: レンダリング対象のhtmlファイル'cms/daily_detail.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    :return: レンダリング対象のhtmlファイル'dailyreport/daily_detail.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
     lists = services.init_form(request=request, daily_id=daily_id)
     lists.update(daily=services.get_or_create_daily(daily_id=daily_id))
@@ -95,7 +95,7 @@ def daily_detail(request, daily_id):
     flag, lists['comment_form'] = services.edit_comment(
         request=request, daily=lists['daily'],  comment=services.get_or_create_comment(request.user))
 
-    return render_to_response('cms/daily_detail.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_detail.html', lists, context_instance=RequestContext(request))
 
 
 # 日報の編集
@@ -117,7 +117,7 @@ def daily_edit(request, daily_id=None):
             日報の作成日または当日(新規作成時)に作成されたタスク(create_date)
     :param request: ユーザー情報の取得
     :param daily_id: 編集対象の日報id(未指定の場合新規作成と判断)
-    :return: レンダリング対象のhtmlファイル'cms/daily_edit.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    :return: レンダリング対象のhtmlファイル'dailyreport/daily_edit.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
     lists = services.init_form(request=request, daily_id=daily_id)
     lists.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
@@ -139,14 +139,14 @@ def daily_edit(request, daily_id=None):
         lists.update(create_task=services.get_task_from_create(request.user, timezone.now().date()))
 
     if request.method == 'POST' and flag:
-        return redirect('cms:daily_detail', daily_id=lists['report_form'].id)
+        return redirect('dailyreport:daily_detail', daily_id=lists['report_form'].id)
     elif flag is False:
-        return render_to_response('cms/daily_edit.html', lists, context_instance=RequestContext(request))
+        return render_to_response('dailyreport/daily_edit.html', lists, context_instance=RequestContext(request))
 
     if 'gototask' in request.POST:
-        return redirect('cms:task_mod')
+        return redirect('dailyreport:task_mod')
 
-    return render_to_response('cms/daily_edit.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_edit.html', lists, context_instance=RequestContext(request))
 
 
 def task_edit(request):
@@ -158,7 +158,7 @@ def task_edit(request):
         lists:
         タスクフォーム
     :param request:ユーザー情報の取得
-    :return:レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用するフォーム
+    :return:レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用するフォーム
     """
     # タスク一覧
     lists = services.init_form(request=request)
@@ -167,7 +167,7 @@ def task_edit(request):
 
     lists.update(tasks=services.create_pagination(request, services.get_search_task(request=request)))
     lists.update(task_form=services.create_task_form_in_queryset(lists['tasks'].object_list))
-    return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/task_list.html', lists, context_instance=RequestContext(request))
 
 
 def task_edit_daily(request):
@@ -180,11 +180,11 @@ def task_edit_daily(request):
         lists:
         タスクフォーム
     :param request:ユーザー情報の取得
-    :return:レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用するフォーム
+    :return:レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用するフォーム
     """
     services.edit_task(request)
 
-    return redirect('cms:daily_list')
+    return redirect('dailyreport:daily_list')
 
 
 # def search_for_task_in_date
@@ -196,13 +196,13 @@ def task_date_search(request):
             絞り込む対象は実施日(implement_date)です
             タスクの作成日(create_date)ではありません
     :param request: dateform(日付をカレンダーによって指定するフォーム)からのリクエスト、及びユーザー情報の取得
-    :return: レンダリング対象のhtmlファイル'cms/task_list.html'、およびhtmlファイル中で利用する日付で絞り込んだフォーム
+    :return: レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用する日付で絞り込んだフォーム
     """
     lists = services.init_form(request=request)
     lists.update(task_search_form=TaskSearchForm(request.GET))
 
     lists.update(task_form=services.task_date_search(request=request))
-    return render_to_response('cms/task_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/task_list.html', lists, context_instance=RequestContext(request))
 
 
 # 日報の削除
@@ -217,7 +217,7 @@ def daily_del(request, daily_id):
     :return:日報一覧ページへリダイレクト
     """
     if services.delete_daily(request, services.get_or_create_daily(request.user, daily_id)):
-        return redirect('cms:user_info', user_id=request.user.id)   # 一覧画面にリダイレクト
+        return redirect('dailyreport:user_info', user_id=request.user.id)   # 一覧画面にリダイレクト
     else:
         return redirect('login')
 
@@ -260,9 +260,9 @@ def daily_search(request):
             lists.update(search_form=form)
             lists.update(keyword=form.cleaned_data['keyword'])
             lists.update(is_paginated=False)
-            return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
+            return render_to_response('dailyreport/daily_list.html', lists, context_instance=RequestContext(request))
 
-        return redirect('cms:daily_list')
+        return redirect('dailyreport:daily_list')
 
 
 def user_info(request, user_id):
@@ -290,7 +290,7 @@ def user_info(request, user_id):
     ))
     lists.update(userinfo=get_object_or_404(auth.get_user_model(), pk=user_id))
 
-    return render_to_response('cms/daily_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/daily_list.html', lists, context_instance=RequestContext(request))
 
 
 def user_list(request):
@@ -303,7 +303,7 @@ def user_list(request):
     lists.update(users=User.objects.all().order_by('first_name'))
     lists.update(user_search_form=SearchForm())
 
-    return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/user_list.html', lists, context_instance=RequestContext(request))
 
 
 def user_search(request):
@@ -326,12 +326,12 @@ def user_search(request):
                 Q(last_name__contains=form.cleaned_data['keyword'])).order_by('first_name'))
             lists.update(user_search_form=form)
 
-            return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
+            return render_to_response('dailyreport/user_list.html', lists, context_instance=RequestContext(request))
     else:
         lists.update(users=User.objects.all().order_by('id'))
         lists.update(user_search_form=SearchForm())
 
-    return render_to_response('cms/user_list.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/user_list.html', lists, context_instance=RequestContext(request))
 
 
 # コメントの編集
@@ -351,12 +351,12 @@ def comment_edit(request, daily_id, comment_id=None):
     flag, lists['comment_form'] = services.edit_comment(request, lists['daily'], lists['comment'])
 
     if request.method == 'POST' and flag:
-        return redirect('cms:daily_detail', daily_id=lists['daily'].id)
+        return redirect('dailyreport:daily_detail', daily_id=lists['daily'].id)
     elif flag is False:
         lists.update(comment="必須項目が入力されていません")
-        return redirect('cms:daily_detail', daily_id=lists['daily'].id)
+        return redirect('dailyreport:daily_detail', daily_id=lists['daily'].id)
 
-    return render_to_response('cms/comment_edit.html', lists, context_instance=RequestContext(request))
+    return render_to_response('dailyreport/comment_edit.html', lists, context_instance=RequestContext(request))
 
 
 def comment_del(request, daily_id, comment_id):
@@ -368,4 +368,4 @@ def comment_del(request, daily_id, comment_id):
     :return:
     """
     services.delete_comment(request, services.get_or_create_comment(request.user, comment_id))
-    return redirect('cms:daily_detail', daily_id=daily_id)
+    return redirect('dailyreport:daily_detail', daily_id=daily_id)

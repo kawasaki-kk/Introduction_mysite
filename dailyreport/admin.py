@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from cms.models import Daily, Comment, Task
+from dailyreport.models import Daily, Comment, Task
 
 
 class DailyAdmin(admin.ModelAdmin):

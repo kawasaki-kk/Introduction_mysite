@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
-from cms import views
+from dailyreport import views
 
 urlpatterns = [
     # 一覧

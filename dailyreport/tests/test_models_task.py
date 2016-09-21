@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from accounts.models import User
-from cms.models import Task
+from dailyreport.models import Task
 
 
 # 3 tests

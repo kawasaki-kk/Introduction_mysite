@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 from django.utils import timezone
-from cms.forms import DailyForm, CommentForm, TaskForm, SearchForm, DateForm
-from cms.models import Daily, Task, Comment
+from dailyreport.forms import DailyForm, CommentForm, TaskForm, SearchForm, DateForm
+from dailyreport.models import Daily, Task, Comment
 
 
 # 10 tests

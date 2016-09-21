@@ -3,8 +3,8 @@ from django.http import HttpRequest
 from django.test import TestCase
 from django.utils import timezone
 from accounts.models import User
-from cms import services
-from cms.models import Daily, Comment
+from dailyreport import services
+from dailyreport.models import Daily, Comment
 
 
 class DailyModelServicesTests(TestCase):

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import resolve
 from django.test import TestCase
-from cms.views import daily_list, daily_detail, daily_edit, daily_search, daily_del
-from cms.views import task_edit, user_info, comment_del, comment_edit
+from dailyreport.views import daily_list, daily_detail, daily_edit, daily_search, daily_del
+from dailyreport.views import task_edit, user_info, comment_del, comment_edit
 
 
 # 14 tests
