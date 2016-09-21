@@ -5,8 +5,12 @@
 
 {% block content %}
 <h3 class="page-header">コメントの編集</h3>
+{% if comment %}
 <form action="{% url 'dailyreport:edit_comment' daily_id=daily.id comment_id=comment.id %}" method="post" class="form-horizontal" role="form">
-      <div class="panel panel-default">
+{% else %}
+<form action="{% url 'dailyreport:add_comment' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
+{% endif %}
+    <div class="panel panel-default">
         <div class="list-group">
             {% csrf_token %}
             {{ comment_form.comment }}

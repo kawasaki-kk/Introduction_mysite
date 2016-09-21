@@ -348,6 +348,7 @@ def comment_edit_view(request, daily_id, comment_id=None):
     if request.method == 'POST' and flag:
         return redirect('dailyreport:view_daily_detail', daily_id=dictionary['daily'].id)
     elif flag is False:
+        del dictionary['comment']
         return render_to_response('dailyreport/comment_edit.html', dictionary, context_instance=RequestContext(request))
 
     return render_to_response('dailyreport/comment_edit.html', dictionary, context_instance=RequestContext(request))
