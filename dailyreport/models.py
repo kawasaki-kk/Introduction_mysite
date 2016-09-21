@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.timezone import now
+
 from Introduction_mysite import settings
 
 u"""models.py

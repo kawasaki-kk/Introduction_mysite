@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.decorators import login_required
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.template import RequestContext
 from django.utils import timezone
+
 from accounts.models import User
-from dailyreport.models import Daily
 from dailyreport.forms import SearchForm, DateForm, TaskSearchForm, DailySearchForm
+from dailyreport.models import Daily
 from dailyreport.services.service_comment import \
     get_comments_from_daily, get_or_create_comment, edit_comment, delete_comment_record
 from dailyreport.services.service_daily import \

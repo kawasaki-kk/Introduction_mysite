@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import resolve
 from django.test import TestCase
+
 from dailyreport.views import \
     daily_list_view, daily_detail_view, daily_edit_view, search_daily_by_keyword, delete_daily
 from dailyreport.views import \

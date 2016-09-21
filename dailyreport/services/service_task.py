@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import traceback
+
 from django.shortcuts import get_object_or_404
+
 from dailyreport.models import Daily, Task
 from dailyreport.forms import TaskFormSet, TaskSearchForm
 

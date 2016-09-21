@@ -3,6 +3,7 @@ from django.core.urlresolvers import resolve, reverse
 from django.http import HttpRequest
 from django.test import TestCase
 from django.utils import timezone
+
 from accounts.models import User
 from dailyreport.models import Daily
 from dailyreport.views import daily_edit_view, comment_edit_view

@@ -2,6 +2,7 @@
 from django import forms
 from django.forms import ModelForm, models, formsets
 from django.contrib.admin.widgets import AdminDateWidget
+
 from dailyreport.models import Daily, Comment, Task
 
 

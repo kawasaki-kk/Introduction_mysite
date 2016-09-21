@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import traceback
+
 from pure_pagination import Paginator, PageNotAnInteger
+
 from dailyreport.forms import SearchForm, TaskSearchForm
 
 u"""services_utility.py

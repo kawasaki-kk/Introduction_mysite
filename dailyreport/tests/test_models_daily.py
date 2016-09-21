@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
+
 from accounts.models import User
 from dailyreport.models import Daily
 

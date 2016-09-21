@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 from django.utils import timezone
+
 from accounts.models import User
 from dailyreport.models import Task
 

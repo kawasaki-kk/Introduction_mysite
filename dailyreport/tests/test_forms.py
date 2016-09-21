@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 from django.utils import timezone
+
 from dailyreport.forms import DailyForm, CommentForm, TaskForm, SearchForm, DateForm
 from dailyreport.models import Daily, Task, Comment
 

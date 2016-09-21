@@ -2,9 +2,10 @@
 from django.http import HttpRequest
 from django.test import TestCase
 from django.utils import timezone
+
 from accounts.models import User
-from dailyreport.services import service_daily, service_comment
 from dailyreport.models import Daily, Comment
+from dailyreport.services import service_daily, service_comment
 
 
 class DailyModelServicesTests(TestCase):
