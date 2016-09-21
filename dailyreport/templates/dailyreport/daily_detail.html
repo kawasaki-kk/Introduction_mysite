@@ -10,16 +10,16 @@
         <div class="row">
             <div class="col-md-9">
                 投稿者：
-                <a href="{% url 'dailyreport:user_info' user_id=daily.user.id %}">
+                <a href="{% url 'dailyreport:view_user_information' user_id=daily.user.id %}">
                     {{ daily.user.get_full_name }}
                 </a>
             </div>
             <div class="col-md-2">
                 {% if daily.user == user %}
                     {% if daily.release %}
-                        <a href="{% url 'dailyreport:daily_mod' daily_id=daily.id %}" class="btn btn-default btn-sm col-md-6">編集</a>
+                        <a href="{% url 'dailyreport:edit_daily' daily_id=daily.id %}" class="btn btn-default btn-sm col-md-6">編集</a>
                     {% else %}
-                        <a href="{% url 'dailyreport:daily_mod' daily_id=daily.id %}" class="btn btn-sm btn-primary default-button">修正して公開する</a>
+                        <a href="{% url 'dailyreport:edit_daily' daily_id=daily.id %}" class="btn btn-sm btn-primary default-button">修正して公開する</a>
                     {% endif %}
                 {% endif %}
             </div>
@@ -70,8 +70,8 @@
             </div>
             <div class="col-md-2">
                 {% if user == comment.user %}
-                    <a href="{% url 'dailyreport:comment_mod' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">編集</a>
-                    <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'dailyreport:comment_del' daily_id=daily.id comment_id=comment.id %}">削除</button>
+                    <a href="{% url 'dailyreport:edit_comment' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">編集</a>
+                    <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'dailyreport:delete_comment' daily_id=daily.id comment_id=comment.id %}">削除</button>
                 {% endif %}
             </div>
         </div>
@@ -81,7 +81,7 @@
     </div>
 </div>
 {% endfor %}
-<form action="{% url 'dailyreport:comment_add' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
+<form action="{% url 'dailyreport:add_comment' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
     <div class="panel panel-default">
         <div class="list-group">
             {% csrf_token %}

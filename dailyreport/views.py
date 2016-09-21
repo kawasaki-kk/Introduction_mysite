@@ -154,7 +154,7 @@ def daily_edit_view(request, daily_id=None):
     return render_to_response('dailyreport/daily_edit.html', dictionary, context_instance=RequestContext(request))
 
 
-def task_edit_in_task_page(request):
+def edit_task_in_task_page(request):
     u"""タスク一覧(CRU)
         タスク一覧をフォームとして表示します
         表示対象のタスクはユーザーそれぞれのタスクのみです
@@ -174,7 +174,7 @@ def task_edit_in_task_page(request):
     return render_to_response('dailyreport/task_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def task_edit_in_daily_page(request):
+def edit_task_in_daily_page(request):
     u"""タスク一覧(CRU)
         日報表示部分を持つページにおいてタスクを更新するためのメソッドです
         通常のものと比べ、返るページが異なります

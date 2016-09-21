@@ -5,15 +5,15 @@
 
 {% block content %}
 <h3 class="page-header">タスクの一覧</h3>
-<form class="padding-left" action="{% url 'dailyreport:task_mod' %}" method="GET">
+<form class="padding-left" action="{% url 'dailyreport:edit_task' %}" method="GET">
     {% csrf_token %}
     {{ task_search_form.cond }}
     {{ task_search_form.date }}
     <button type="submit" name="tasks" class="btn btn-default">絞り込み</button>
-    <a href="{% url 'dailyreport:task_mod' %}" class="btn btn-default">すべて表示</a>
-    <a href="{% url 'dailyreport:daily_list' %}" class="btn btn-default">日報一覧へ戻る</a>
+    <a href="{% url 'dailyreport:edit_task' %}" class="btn btn-default">すべて表示</a>
+    <a href="{% url 'dailyreport:view_daily_list' %}" class="btn btn-default">日報一覧へ戻る</a>
 </form><br>
-<form class="panel padding-left" action="{% url 'dailyreport:task_mod' %}" method="post">
+<form class="panel padding-left" action="{% url 'dailyreport:edit_task' %}" method="post">
     <div class="list-group">
         {{ task_form.management_form }}
         {% for form in task_form %}
@@ -50,14 +50,14 @@
 </form>
 <ul class="pagination center">
     {% if tasks.has_previous %}
-        <li><a class="font-m" href="{% url 'dailyreport:task_mod' %}?{{ tasks.previous_page_number.querystring }}">previous</a></li>
+        <li><a class="font-m" href="{% url 'dailyreport:edit_task' %}?{{ tasks.previous_page_number.querystring }}">previous</a></li>
     {% endif %}
     {% for link_page in tasks.pages %}
         {% if link_page %}
             {% if link_page == tasks.number %}
                 <li class="active"><a class="font-m" href="">{{ link_page }}</a></li>
             {% else %}
-                <li><a class="font-m" href="{% url 'dailyreport:task_mod' %}?{{ link_page.querystring  }}">{{ link_page }}</a></li>
+                <li><a class="font-m" href="{% url 'dailyreport:edit_task' %}?{{ link_page.querystring  }}">{{ link_page }}</a></li>
             {% endif %}
         {% else %}
             {# 省略された部分の表示内容 #}
@@ -66,7 +66,7 @@
     {% endfor %}
 
     {% if tasks.has_next %}
-        <li><a class="font-m" href="{% url 'dailyreport:task_mod' %}?{{ tasks.next_page_number.querystring }}">next</a></li>
+        <li><a class="font-m" href="{% url 'dailyreport:edit_task' %}?{{ tasks.next_page_number.querystring }}">next</a></li>
     {% endif %}
 </ul>
 {% endblock content %}

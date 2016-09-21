@@ -2,7 +2,7 @@
 from django.core.urlresolvers import resolve
 from django.test import TestCase
 from dailyreport.views import daily_list_view, daily_detail_view, daily_edit_view, search_daily_by_keyword, delete_daily
-from dailyreport.views import task_edit_in_task_page, user_daily_view, delete_comment, comment_edit_view
+from dailyreport.views import edit_task_in_task_page, user_daily_view, delete_comment, comment_edit_view
 
 
 # 14 tests
@@ -49,11 +49,11 @@ class UrlResolveTestsComment(TestCase):
 class UrlResolveTestsTask(TestCase):
     def test_url_resolves_to_task_mod(self):
         found = resolve('/dailyreport/task/mod/1/')
-        self.assertEqual(found.func, task_edit_in_task_page)
+        self.assertEqual(found.func, edit_task_in_task_page)
 
     def test_url_resolves_to_task_add(self):
         found = resolve('/dailyreport/task/mod/')
-        self.assertEqual(found.func, task_edit_in_task_page)
+        self.assertEqual(found.func, edit_task_in_task_page)
 
 
 class UrlResolveTestsOthers(TestCase):

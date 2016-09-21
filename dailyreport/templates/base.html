@@ -36,7 +36,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'dailyreport:daily_list' %}">Daily Reports</a>
+                <a class="navbar-brand" href="{% url 'dailyreport:view_daily_list' %}">Daily Reports</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
@@ -54,15 +54,15 @@
                                         <a class="font-m" href="{% url 'user_data' %}">プロフィール</a>
                                     </li>
                                     <li class="list-none" role="">
-                                        <a class="font-m" href="{% url 'dailyreport:user_info' user_id=user.id %}">投稿一覧</a>
+                                        <a class="font-m" href="{% url 'dailyreport:view_user_daily' user_id=user.id %}">投稿一覧</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
-                        <li class="font-m"><a href="{% url 'dailyreport:daily_add' %}">新規投稿</a></li>
-                        <li class="font-m"><a href="{% url 'dailyreport:task_mod' %}">タスク一覧</a></li>
-                        <li class="font-m"><a href="{% url 'dailyreport:user_list' %}">ユーザー一覧</a></li>
-                        <form class="navbar-form navbar-left" method="GET" action="{% url 'dailyreport:daily_search' %}">
+                        <li class="font-m"><a href="{% url 'dailyreport:add_daily' %}">新規投稿</a></li>
+                        <li class="font-m"><a href="{% url 'dailyreport:edit_task' %}">タスク一覧</a></li>
+                        <li class="font-m"><a href="{% url 'dailyreport:view_all_user_list' %}">ユーザー一覧</a></li>
+                        <form class="navbar-form navbar-left" method="GET" action="{% url 'dailyreport:search_daily' %}">
                             <div class="input-group">
                                 {% csrf_token %}
                                 {{ search_form.keyword }}

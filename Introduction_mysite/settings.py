@@ -58,7 +58,7 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'Introduction_mysite.urls'
 
-LOGIN_REDIRECT_URL = '/dailyreport/dailyreport/'
+LOGIN_REDIRECT_URL = '/dailyreport/'
 
 AUTH_USER_MODEL = 'accounts.User'
 
