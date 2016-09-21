@@ -97,6 +97,8 @@ class TaskForm(ModelForm):
             raise forms.ValidationError('実作業時間数を入力してください')
         if time_plan < 0 or time_real < 0:
             raise forms.ValidationError('負の値は時間数として入力できません')
+        if time_plan < 1:
+            raise forms.ValidationError('予定作業時間には1以上の時間を指定してください')
         if cleaned_data['complete_task'] and time_real is 0:
             raise forms.ValidationError('実作業時間を入力してください')
 
