@@ -31,7 +31,8 @@ class DailyForm(ModelForm):
             'create_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}),
             'title': forms.TextInput(attrs={
                 'class': 'daily_title_form',
-                'placeholder': '日報のタイトル', }),
+                'placeholder': '日報のタイトル',
+                'required': ''}),
             'report_y': forms.Textarea(attrs={
                 'class': 'report_y_form',
                 'placeholder': 'タスクの完了状態についてコメントしましょう'}),
@@ -70,10 +71,10 @@ class TaskForm(ModelForm):
         model = Task
         fields = ('complete_task', 'implement_date', 'name', 'time_plan', 'time_real', )
         widgets = {
-            'implement_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}),
-            'name': forms.TextInput(attrs={'placeholder': '作業概要'}),
+            'implement_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD', 'required': ''}),
+            'name': forms.TextInput(attrs={'placeholder': '作業概要', 'required': ''}),
             'time_plan': forms.TextInput(attrs={
-                'class': 'time_plan', 'type': 'number', 'placeholder': '0'}),
+                'class': 'time_plan', 'type': 'number', 'placeholder': '0', 'required': ''}),
             'time_real': forms.TextInput(attrs={'class': 'time_real', 'type': 'number'}),
         }
 
@@ -116,7 +117,7 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ('comment', )
         widgets = {
-            'comment': forms.Textarea(attrs={'class': 'comment_form'})
+            'comment': forms.Textarea(attrs={'class': 'comment_form', 'required': ''},)
         }
 
     def clean(self):
@@ -138,7 +139,8 @@ class SearchForm(forms.Form):
     keyword = forms.CharField(max_length=100, required=False,
                               widget=forms.TextInput(attrs={
                                   'class': 'form-control',
-                                  'placeholder': 'キーワード'}))
+                                  'placeholder': 'キーワード',
+                                  'required': ''}))
 
     class Meta:
         pass
