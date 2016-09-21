@@ -32,7 +32,7 @@ def get_all_daily_list(request, release):
     :param release: 日報の公開状態(True:公開/False:非公開)
     :return: 指定したrelease状態の日報の一覧
     """
-    if request.method == 'GET':
+    if request.method is 'GET':
         # リクエストを取得しながら検索フォームを生成
         form = DateForm(request.GET)
         if form.is_valid():
@@ -56,16 +56,19 @@ def get_user_daily_list(request, user):
     :param user: 取得対象のユーザー
     :return: 指定したユーザーの日報の一覧
     """
-    if request.method == 'GET':
+    if request.method is 'GET':
         form = DailySearchForm(request.GET)
         if form.is_valid():
-            if form.cleaned_data['cond'] == '1':
+            if form.cleaned_data['cond'] is '1':
                 return Daily.objects.filter(user=user, release=True).order_by('-update_date')
-            elif form.cleaned_data['cond'] == '2':
+            elif form.cleaned_data['cond'] is '2':
                 return Daily.objects.filter(user=user, release=False).order_by('-update_date')
             else:
                 return Daily.objects.filter(user=user).order_by('-update_date')
-    return Daily.objects.filter(user=user, release=True).order_by('-update_date')
+    if int(request.user.id) is int(user):
+        return Daily.objects.filter(user=user).order_by('-update_date')
+    else:
+        return Daily.objects.filter(user=user, release=True).order_by('-update_date')
 
 
 @exception
@@ -87,7 +90,7 @@ def edit_daily(request, daily):
     :param daily: 編集対象の日報
     :return: 成否、及び成功時は日報レコード、失敗時はフォーム
     """
-    if request.method == 'POST':
+    if request.method is 'POST':
         form = DailyForm(request.POST, instance=daily)
         if form.is_valid():
             new_daily = form.save(commit=False)
@@ -109,7 +112,7 @@ def delete_daily_record(request, daily):
     :param daily: 削除対象日報
     :return: 成否
     """
-    if daily.user != request.user:
+    if daily.user is not request.user:
         return False
     daily.delete()
     return True
