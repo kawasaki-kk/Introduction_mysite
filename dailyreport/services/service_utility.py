@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import traceback
-from django.shortcuts import get_object_or_404
 from pure_pagination import Paginator, PageNotAnInteger
-from dailyreport.models import Daily, Comment, Task
-from dailyreport.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm, DailySearchForm
+from dailyreport.forms import SearchForm, TaskSearchForm
 
 u"""services.py
     views.pyから切り離した、繰り返し行われる処理をメソッド化したファイルです

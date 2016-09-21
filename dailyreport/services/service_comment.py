@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import traceback
 from django.shortcuts import get_object_or_404
-from pure_pagination import Paginator, PageNotAnInteger
-from dailyreport.models import Daily, Comment, Task
-from dailyreport.forms import DailyForm, CommentForm, SearchForm, TaskFormSet, DateForm, TaskSearchForm, DailySearchForm
+from dailyreport.models import Comment
+from dailyreport.forms import CommentForm
 
 u"""comment_services.py
     views.pyから切り離した、モデルへのアクセスを行うメソッドをまとめたファイルです
