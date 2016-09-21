@@ -48,9 +48,9 @@ class DailyForm(ModelForm):
         try:
             title = cleaned_data['title']
         except:
-            raise forms.ValidationError('コメントを入力してください')
+            raise forms.ValidationError('タイトルを入力してください')
         if len(title.strip()) < 1:
-            raise forms.ValidationError('コメントを入力してください')
+            raise forms.ValidationError('タイトルを入力してください')
         return cleaned_data
 
 
