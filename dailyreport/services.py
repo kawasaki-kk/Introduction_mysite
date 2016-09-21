@@ -25,7 +25,7 @@ def exception(func):
 
 
 @exception
-def init_form(request=None, daily_id=None):
+def init_dictionary(request=None, daily_id=None):
     dictionary = dict(search_form=SearchForm())
     dictionary.update(request=request)
     dictionary.update(daily_id=daily_id)

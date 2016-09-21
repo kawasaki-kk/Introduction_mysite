@@ -17,8 +17,8 @@ u"""views.py
     本ファイル中で、直接モデルにアクセスする処理は書かないようにしています
         services.pyで行います
 
-    各関数ではservices.init_form()を呼んでいます
-    init_form()は、検索フォームなど共通の情報を初期情報として登録するためのものです
+    各関数ではservices.init_dictionary()を呼んでいます
+    init_dictionary()は、検索フォームなど共通の情報を初期情報として登録するためのものです
     daily_list()において軽く触れますが、以降の関数では触れませんのでご了承ください
 
     NAME最後の()内は対応するCRUDの属性です
@@ -42,7 +42,7 @@ def daily_list_view(request):
     :param request: 関数が呼ばれたときにhtmlから送られてきた情報。ここでは使用しない。
     :return:レンダリング対象のhtmlファイル'dailyreport/daily_list.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     dictionary.update(pages=services.create_pagination(request, services.get_all_daily_list(request=request, release=True)))
     dictionary.update(dailys=dictionary['pages'].object_list)
     dictionary.update(is_paginated=True)
@@ -77,7 +77,7 @@ def daily_detail_view(request, daily_id):
     :param daily_id: 表示対象の日報取得
     :return: レンダリング対象のhtmlファイル'dailyreport/daily_detail.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
-    dictionary = services.init_form(request=request, daily_id=daily_id)
+    dictionary = services.init_dictionary(request=request, daily_id=daily_id)
     dictionary.update(daily=services.get_or_create_daily(daily_id=daily_id))
     dictionary.update(comments=services.get_comments_from_daily(dictionary['daily']))
     dictionary.update(task_form=services.create_task_form_in_queryset(
@@ -116,7 +116,7 @@ def daily_edit_view(request, daily_id=None):
     :param daily_id: 編集対象の日報id(未指定の場合新規作成と判断)
     :return: レンダリング対象のhtmlファイル'dailyreport/daily_edit.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
     """
-    dictionary = services.init_form(request=request, daily_id=daily_id)
+    dictionary = services.init_dictionary(request=request, daily_id=daily_id)
     dictionary.update(daily=services.get_or_create_daily(user=request.user, daily_id=daily_id))
     if request.user != dictionary['daily'].user:
         return redirect('login')
@@ -157,7 +157,7 @@ def task_edit_in_task_page(request):
     :param request:ユーザー情報の取得
     :return:レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用するフォーム
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     services.edit_task(request)
     dictionary.update(task_search_form=TaskSearchForm(request.GET))
 
@@ -193,7 +193,7 @@ def narrowing_task_by_date(request):
     :param request: dateform(日付をカレンダーによって指定するフォーム)からのリクエスト、及びユーザー情報の取得
     :return: レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用する日付で絞り込んだフォーム
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     dictionary.update(task_search_form=TaskSearchForm(request.GET))
 
     dictionary.update(task_form=services.task_date_search(request=request))
@@ -224,7 +224,7 @@ def search_daily_by_keyword(request):
     :param request: 検索キーワードの取得
     :return: 絞り込んだ日報の一覧をdaily_list.htmlを利用してレンダリングする
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     dictionary.update(task_form=services.create_task_form_in_queryset(
         services.get_task_from_implement_date(request.user, timezone.now().date())
     ))
@@ -264,7 +264,7 @@ def user_daily_view(request, user_id):
     :param user_id: 表示対象ユーザーid
     :return: ユーザーで絞り込んだ日報のリストを日報一覧と同様のhtmlファイルを使用してレンダリングします
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     dictionary.update(daily_release_form=DailySearchForm(request.GET))
     dictionary.update(pages=services.create_pagination(
         request, services.get_user_daily_list(request=request, user=user_id)))
@@ -287,7 +287,7 @@ def user_list_view(request):
     :param request:初期情報
     :return:ユーザーの一覧とユーザー検索フォーム
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     dictionary.update(users=User.objects.all().order_by('first_name'))
     dictionary.update(user_search_form=SearchForm())
 
@@ -302,7 +302,7 @@ def search_user_by_keyword(request):
         :param request:検索リクエスト
         :return:検索結果ユーザー一覧とユーザー検索フォーム
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     if request.method == 'GET':
         form = SearchForm(request.GET)
         if form.is_valid():
@@ -328,7 +328,7 @@ def comment_edit_view(request, daily_id, comment_id=None):
     :param comment_id:(編集の場合)編集対象のコメントのid
     :return:編集されたコメントの投稿されている日報詳細/コメント編集フォーム(編集失敗の場合)
     """
-    dictionary = services.init_form(request=request)
+    dictionary = services.init_dictionary(request=request)
     dictionary.update(daily=services.get_or_create_daily(daily_id=daily_id))
     dictionary.update(comment=services.get_or_create_comment(user=request.user, comment_id=comment_id))
     if request.user != dictionary['comment'].user:
