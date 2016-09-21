@@ -18,7 +18,7 @@
     {% for user in users %}
         {% csrf_token %}
         <a href="{% url 'dailyreport:view_user_daily' user_id=user.id %}" class="list-group-item">
-                {{user.get_full_name}} / 投稿数：{{user.daily.count}}
+                {{ user.get_full_name }} / 投稿数：{{ user.daily.count }}
         </a>
     {% endfor %}
 </div>

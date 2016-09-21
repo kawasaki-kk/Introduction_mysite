@@ -20,31 +20,31 @@
             {% csrf_token %}
             <a class="list-group-item">
                 {% if forloop.last %}
-                    {{form.id}}
-                    {{form.complete_task}}
-                    {{form.implement_date.label_tag}}{{form.implement_date}}
-                    タスク名：{{form.name}}<br>
-                    予定：{{form.time_plan}}h
-                    / 実績：{{form.time_real}}h
+                    {{ form.id }}
+                    {{ form.complete_task }}
+                    {{ form.implement_date.label_tag }}{{ form.implement_date }}
+                    タスク名：{{ form.name }}<br>
+                    予定：{{ form.time_plan }}h
+                    / 実績：{{ form.time_real }}h
                     <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button><br>
                 {% else %}
-                    {{form.id}}
-                    {{form.complete_task}}
+                    {{ form.id }}
+                    {{ form.complete_task }}
                     {% if form.complete_task.value %}
                         <text class="complete">完了</text>
                     {% else %}
                         <text class="dis-complete">未了</text>
                     {% endif %}
-                    {{form.implement_date.label_tag}}{{form.implement_date}}
-                    {{form.name}}<br>
-                    予定：{{form.time_plan}}h
-                    / 実績：{{form.time_real}}h
+                    {{ form.implement_date.label_tag }}{{ form.implement_date }}
+                    {{ form.name }}<br>
+                    予定：{{ form.time_plan }}h
+                    / 実績：{{ form.time_real }}h
                     {% if task_form.can_delete %}
-                         / 削除：{{form.DELETE}}
+                         / 削除：{{ form.DELETE }}
                     {% endif %}
                     <button type="submit" class="btn btn-sm btn-default">更新</button><br>
                 {% endif %}
-                {{form.non_field_errors}}
+                {{ form.non_field_errors }}
             </a>
         {% endfor %}
     </div>

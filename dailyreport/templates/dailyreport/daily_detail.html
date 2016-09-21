@@ -33,10 +33,10 @@
             {% else %}
                 <text class="dis-complete">未了</text>
             {% endif %}
-            {{task.implement_date.label}}{{task.implement_date}}
-            {{task.name}}<br>
-            予定：{{task.time_plan}}h
-            /実績：{{task.time_real}}h<br>
+            {{ task.implement_date.label }}{{ task.implement_date }}
+            {{ task.name }}<br>
+            予定：{{ task.time_plan }}h
+            /実績：{{ task.time_real }}h<br>
         {% endfor %}
         <h4><text>
             {{ daily.report_y|markdown }}
@@ -51,9 +51,9 @@
     <div class="panel-body">
         <h3>T:つぎにやること</h3>
         {% for task in create_task %}
-            {{task.implement_date.label}}{{task.implement_date}}
-            {{task.name}}<br>
-            予定：{{task.time_plan}}h<br>
+            {{ task.implement_date.label }}{{ task.implement_date }}
+            {{ task.name }}<br>
+            予定：{{ task.time_plan }}h<br>
         {% endfor %}
         <h4><text>
             {{ daily.report_t|markdown }}
@@ -61,36 +61,36 @@
     </div>
 </div>
 {% if daily.release %}
-{% for comment in comments %}
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="row">
-            <div class="col-md-10">
-                {{ comment.user.get_full_name }} さんのコメント
+    {% for comment in comments %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-10">
+                        {{ comment.user.get_full_name }} さんのコメント
+                    </div>
+                    <div class="col-md-2">
+                        {% if user == comment.user %}
+                            <a href="{% url 'dailyreport:edit_comment' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">編集</a>
+                            <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'dailyreport:delete_comment' daily_id=daily.id comment_id=comment.id %}">削除</button>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2">
-                {% if user == comment.user %}
-                    <a href="{% url 'dailyreport:edit_comment' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">編集</a>
-                    <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'dailyreport:delete_comment' daily_id=daily.id comment_id=comment.id %}">削除</button>
-                {% endif %}
+            <div class="panel-body">
+                {{ comment.comment|markdown }}
             </div>
         </div>
-    </div>
-    <div class="panel-body">
-        {{ comment.comment|markdown }}
-    </div>
-</div>
-{% endfor %}
-<form action="{% url 'dailyreport:add_comment' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
-    <div class="panel panel-default">
-        <div class="list-group">
-            {% csrf_token %}
-            {{ comment_form.comment }}
+    {% endfor %}
+    <form action="{% url 'dailyreport:add_comment' daily_id=daily.id %}" method="post" class="form-horizontal" role="form">
+        <div class="panel panel-default">
+            <div class="list-group">
+                {% csrf_token %}
+                {{ comment_form.comment }}
+            </div>
+            <div class="panel-footer">
+                <button type="submit" class="btn btn-primary">投稿</button>
+            </div>
         </div>
-        <div class="panel-footer">
-            <button type="submit" class="btn btn-primary">投稿</button>
-        </div>
-    </div>
-</form>
+    </form>
 {% endif %}
 {% endblock content %}

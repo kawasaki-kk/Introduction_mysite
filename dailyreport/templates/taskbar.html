@@ -26,29 +26,29 @@
                 {% csrf_token %}
                 <a class="list-group-item">
                     {% if forloop.last %}
-                        {{form.id}}
-                        {{form.complete_task}}
-                        {{form.implement_date.label_tag}}{{form.implement_date}}<br>
-                        タスク名：{{form.name}}<br>
-                        予定:{{form.time_plan}}h
-                        / 実績:{{form.time_real}}h<br>
+                        {{ form.id }}
+                        {{ form.complete_task }}
+                        {{ form.implement_date.label_tag }}{{ form.implement_date }}<br>
+                        タスク名：{{ form.name }}<br>
+                        予定:{{ form.time_plan }}h
+                        / 実績:{{ form.time_real }}h<br>
                     {% else %}                                                                                                                                                                                                                                                                                                                                                            {{form.id}}
-                        {{form.complete_task}}
+                        {{ form.complete_task }}
                         {% if form.complete_task.value %}
                             <text class="complete">完了</text>
                         {% else %}
                             <text class="dis-complete">未了</text>
                         {% endif %}
-                        {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                        {{form.name.value|truncate:"10"}}<br>
-                        予定：{{form.time_plan.value}}h
-                        / 実績：{{form.time_real}}h
+                        {{ form.implement_date.label_tag }}{{ form.implement_date.value }}
+                        {{ form.name.value|truncate:"10" }}<br>
+                        予定：{{ form.time_plan.value }}h
+                        / 実績：{{ form.time_real }}h
                         <button type="submit" class="btn btn-sm btn-default">更新</button><br>
-                        <a class="disable-form">{{form.implement_date}}</a>
-                        <a class="disable-form">{{form.name}}</a>
-                        <a class="disable-form">{{form.time_plan}}</a>
+                        <a class="disable-form">{{ form.implement_date }}</a>
+                        <a class="disable-form">{{ form.name }}</a>
+                        <a class="disable-form">{{ form.time_plan }}</a>
                     {% endif %}
-                    {{form.non_field_errors}}
+                    {{ form.non_field_errors }}
                 </a>
             {% endfor %}
         </div>
@@ -67,25 +67,25 @@
                 {% csrf_token %}
                 <a class="list-group-item">
                     {% if forloop.last %}
-                        {{form.id}}
-                        {{form.complete_task}}
-                        {{form.implement_date.label_tag}}{{form.implement_date}}<br>
-                        タスク名：{{form.name}}<br>
-                        予定:{{form.time_plan}}h
-                        / 実績:{{form.time_real}}h<br>
+                        {{ form.id }}
+                        {{ form.complete_task }}
+                        {{ form.implement_date.label_tag }}{{ form.implement_date }}<br>
+                        タスク名：{{ form.name }}<br>
+                        予定:{{ form.time_plan }}h
+                        / 実績:{{ form.time_real }}h<br>
                     {% else %}
-                        {{form.id}}
-                        {{form.complete_task}}
-                        {{form.implement_date.label_tag}}{{form.implement_date.value}}
-                        {{form.name.value|truncate:"10"}}<br>
-                        予定：{{form.time_plan.value}}h
-                        / 実績：{{form.time_real}}h
+                        {{ form.id }}
+                        {{ form.complete_task }}
+                        {{ form.implement_date.label_tag }}{{ form.implement_date.value }}
+                        {{ form.name.value|truncate:"10 "}}<br>
+                        予定：{{ form.time_plan.value }}h
+                        / 実績：{{ form.time_real }}h
                         <button type="submit" class="btn btn-sm btn-default">更新</button><br>
-                        <a class="disable-form">{{form.implement_date}}</a>
-                        <a class="disable-form">{{form.name}}</a>
-                        <a class="disable-form">{{form.time_plan}}</a>
+                        <a class="disable-form">{{ form.implement_date }}</a>
+                        <a class="disable-form">{{ form.name }}</a>
+                        <a class="disable-form">{{ form.time_plan }}</a>
                     {% endif %}
-                    {{form.non_field_errors}}
+                    {{ form.non_field_errors }}
                 </a>
             {% endfor %}
         </div>
