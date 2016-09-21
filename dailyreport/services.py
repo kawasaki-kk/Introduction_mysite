@@ -45,7 +45,7 @@ def create_task_form_in_queryset(queryset):
 
 
 @exception
-def get_task_from_implement(user, date):
+def get_task_from_implement_date(user, date):
     u"""タスク一覧の取得(実施日版)
         実施日からタスクを絞り込み、クエリセットとして返します
         基本的には日報のY:やったことに相当する情報の取得を行うことができます
@@ -57,7 +57,7 @@ def get_task_from_implement(user, date):
 
 
 @exception
-def get_task_from_create(user, date):
+def get_task_from_create_date(user, date):
     u"""タスク一覧の取得(作成日版)
         作成日からタスクを絞り込み、クエリセットとして返します
         基本的には日報のT:つぎにやることに相当する情報の取得を行うことができます
@@ -270,7 +270,7 @@ def create_pagination(request, query):
 
 
 @exception
-def get_search_task(request):
+def get_narrowing_task(request):
     u"""タスクの絞り込み
         リクエスト要素
             "GET"であり、"tasks"という名称のボタンからリクエストが送られた場合に動作する

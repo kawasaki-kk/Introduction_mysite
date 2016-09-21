@@ -48,7 +48,7 @@ def daily_list_view(request):
     dictionary.update(is_paginated=True)
     dictionary.update(date_form=DateForm(request.GET))
     dictionary.update(task_form=services.create_task_form_in_queryset(
-        services.get_task_from_implement(request.user, timezone.now().date())
+        services.get_task_from_implement_date(request.user, timezone.now().date())
     ))
     dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
@@ -81,14 +81,14 @@ def daily_detail_view(request, daily_id):
     dictionary.update(daily=services.get_or_create_daily(daily_id=daily_id))
     dictionary.update(comments=services.get_comments_from_daily(dictionary['daily']))
     dictionary.update(task_form=services.create_task_form_in_queryset(
-        services.get_task_from_implement(request.user, timezone.now().date())
+        services.get_task_from_implement_date(request.user, timezone.now().date())
     ))
     dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
-    dictionary.update(implement_task=services.get_task_from_implement(
+    dictionary.update(implement_task=services.get_task_from_implement_date(
         user=dictionary['daily'].user, date=dictionary['daily'].create_date))
-    dictionary.update(create_task=services.get_task_from_create(
+    dictionary.update(create_task=services.get_task_from_create_date(
         user=dictionary['daily'].user, date=dictionary['daily'].create_date))
     flag, dictionary['comment_form'] = services.edit_comment(
         request=request, daily=dictionary['daily'],  comment=services.get_or_create_comment(request.user))
@@ -122,18 +122,18 @@ def daily_edit_view(request, daily_id=None):
         return redirect('login')
     flag, dictionary['report_form'] = services.edit_daily(request=request, daily=dictionary['daily'])
     dictionary.update(task_form=services.create_task_form_in_queryset(
-        services.get_task_from_implement(request.user, timezone.now().date())
+        services.get_task_from_implement_date(request.user, timezone.now().date())
     ))
     dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
     ))
 
     if daily_id:
-        dictionary.update(implement_task=services.get_task_from_implement(dictionary['daily'].user, dictionary['daily'].create_date))
-        dictionary.update(create_task=services.get_task_from_create(dictionary['daily'].user, dictionary['daily'].create_date))
+        dictionary.update(implement_task=services.get_task_from_implement_date(dictionary['daily'].user, dictionary['daily'].create_date))
+        dictionary.update(create_task=services.get_task_from_create_date(dictionary['daily'].user, dictionary['daily'].create_date))
     else:
-        dictionary.update(implement_task=services.get_task_from_implement(request.user, timezone.now().date()))
-        dictionary.update(create_task=services.get_task_from_create(request.user, timezone.now().date()))
+        dictionary.update(implement_task=services.get_task_from_implement_date(request.user, timezone.now().date()))
+        dictionary.update(create_task=services.get_task_from_create_date(request.user, timezone.now().date()))
 
     if request.method == 'POST' and flag:
         return redirect('dailyreport:daily_detail', daily_id=dictionary['report_form'].id)
@@ -161,7 +161,7 @@ def task_edit_in_task_page(request):
     services.edit_task(request)
     dictionary.update(task_search_form=TaskSearchForm(request.GET))
 
-    dictionary.update(tasks=services.create_pagination(request, services.get_search_task(request=request)))
+    dictionary.update(tasks=services.create_pagination(request, services.get_narrowing_task(request=request)))
     dictionary.update(task_form=services.create_task_form_in_queryset(dictionary['tasks'].object_list))
     return render_to_response('dailyreport/task_list.html', dictionary, context_instance=RequestContext(request))
 
@@ -226,7 +226,7 @@ def search_daily_by_keyword(request):
     """
     dictionary = services.init_form(request=request)
     dictionary.update(task_form=services.create_task_form_in_queryset(
-        services.get_task_from_implement(request.user, timezone.now().date())
+        services.get_task_from_implement_date(request.user, timezone.now().date())
     ))
     dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
@@ -271,7 +271,7 @@ def user_daily_view(request, user_id):
     dictionary.update(dailys=dictionary['pages'].object_list)
     dictionary.update(is_paginated=True)
     dictionary.update(task_form=services.create_task_form_in_queryset(
-        services.get_task_from_implement(request.user, timezone.now().date())
+        services.get_task_from_implement_date(request.user, timezone.now().date())
     ))
     dictionary.update(task_form_next=services.create_task_form_in_queryset(
         services.get_next_task(request.user, timezone.now().date())
