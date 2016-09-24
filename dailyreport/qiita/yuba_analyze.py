@@ -30,7 +30,7 @@ def recommend_Qiita(title, content, recommend_num = 4):
 		print("similar:",similar)
 		item = load_json(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/items"), similar.id)
 		#data.append({"id":sr[i].id, "score":sr[i].score, "url":_get_url_or_tags(temp, "url"), "tags":_get_url_or_tags(temp, "tags").split(",")})
-		data.append({"title":item["title"], "score":similar.score, "url":item["url"], "tags":item["tags"]})
+		data.append({"q_title":item["title"], "score":similar.score, "url":item["url"], "tags":item["tags"]})
 	return data
 
 def _get_url_or_tags(data_list, name):
