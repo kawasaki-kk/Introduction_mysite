@@ -92,5 +92,26 @@
             </div>
         </div>
     </form>
+
+
+<h3 class="page-header break-text">おすすめQiita記事</h3>
+<div class="panel panel-default">
+    <div class="panel-heading font-l">
+        <div class="row">
+            <div class="col-md-9">
+                おすすめQiita記事：
+            </div>
+        </div>
+    </div>
+    <div class="panel-body font-m">
+        <h3>
+        {% for re in recommend %}
+            <a href={{ re.url }}>
+            {{ re.q_title}}
+            </a><br>
+        {% endfor %}
+        </h3>
+    </div>
+</div>
 {% endif %}
 {% endblock content %}
