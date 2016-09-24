@@ -5,8 +5,8 @@ import sys
 from jubatus.recommender import client
 from jubatus.recommender import types
 from jubatus.common import Datum
-from .parser import load_json
-from .mecab import get_AllNouns
+from services import load_json
+from mecab import get_AllNouns
 
 NAME = "recommender_qiita";
 
@@ -17,15 +17,18 @@ def recommend_Qiita(title, content, recommend_num = 4):
 
 	d = Datum(get_AllNouns(content))
 	recommender.update_row(title, d)
-	sr = recommender.similar_row_from_id(title , recommend_num)
-	print(sr)
+	similars = recommender.similar_row_from_id(title , recommend_num)
+	print(similars)
 
 	data = []
-	for i in range(1, len(sr)):
-		print("i:",i)
-		temp = recommender.decode_row(sr[i].id).string_values
-		print(temp)
-		data.append({"id":sr[i].id, "score":sr[i].score, "url":_get_url_or_tags(temp, "url"), "tags":_get_url_or_tags(temp, "tags").split(",")})
+	for similar in similars[1:]:
+		print("i:",similar)
+		#temp = recommender.decode_row(sr[i].id).string_values
+		#print(temp)
+		item = load_json("./data/item", similar.id)
+		#data.append({"id":sr[i].id, "score":sr[i].score, "url":_get_url_or_tags(temp, "url"), "tags":_get_url_or_tags(temp, "tags").split(",")})
+		data.append({"id":item["title"], "score":similar[i].score, "url":item["url"], "tags":item["tags"]})
+	print(data)
 	return data
 
 def _get_url_or_tags(data_list, name):

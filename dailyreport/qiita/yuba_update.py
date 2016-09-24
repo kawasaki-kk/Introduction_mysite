@@ -4,7 +4,7 @@ from jubatus.recommender import client
 from jubatus.recommender import types
 from jubatus.common import Datum
 
-from parser import load_json, get_all_files
+from services import load_json, get_all_files
 from mecab import get_AllNouns
 
 SERVER_IP = "127.0.0.1"
