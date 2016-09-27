@@ -363,5 +363,7 @@ def delete_comment(request, daily_id, comment_id):
     :param comment_id:削除対象コメントid
     :return:
     """
-    delete_comment_record(request, get_or_create_comment(request.user, comment_id))
-    return redirect('dailyreport:view_daily_detail', daily_id=daily_id)
+    if delete_comment_record(request, get_or_create_comment(request.user, comment_id)):
+        return redirect('dailyreport:view_daily_detail', daily_id=daily_id)
+    else:
+        return redirect('login')
