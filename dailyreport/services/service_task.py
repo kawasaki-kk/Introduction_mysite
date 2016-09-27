@@ -117,8 +117,10 @@ def edit_task(request, daily_id=None):
                 task.save()
             else:
                 formset.save()
+            return True
+        return False
     else:
-        pass
+        return False
     return True
 
 
