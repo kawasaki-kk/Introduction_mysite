@@ -144,7 +144,7 @@ def daily_edit_view(request, daily_id=None):
         dictionary.update(implement_task=get_task_from_implement_date(request.user, timezone.now().date()))
         dictionary.update(create_task=get_task_from_create_date(request.user, timezone.now().date()))
 
-    if request.method == 'POST' and flag:
+    if request.method == 'POST' and flag and 'gototask' not in request.POST:
         return redirect('dailyreport:view_daily_detail', daily_id=dictionary['report_form'].id)
     elif flag is False:
         return render_to_response('dailyreport/daily_edit.html', dictionary, context_instance=RequestContext(request))
