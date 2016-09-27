@@ -17,7 +17,7 @@
             <div class="col-md-2">
                 {% if daily.user == user %}
                     {% if daily.release %}
-                        <a href="{% url 'dailyreport:edit_daily' daily_id=daily.id %}" class="btn btn-default btn-sm col-md-6">編集</a>
+                        <a href="{% url 'dailyreport:edit_daily' daily_id=daily.id %}" class="btn btn-default btn-sm col-md-6 default-button-black">編集</a>
                     {% else %}
                         <a href="{% url 'dailyreport:edit_daily' daily_id=daily.id %}" class="btn btn-sm btn-primary default-button">修正して公開する</a>
                     {% endif %}
@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-md-2">
                         {% if user == comment.user %}
-                            <a href="{% url 'dailyreport:edit_comment' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm">編集</a>
+                            <a href="{% url 'dailyreport:edit_comment' daily_id=daily.id comment_id=comment.id %}" class="btn btn-default btn-sm default-button-black">編集</a>
                             <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ comment.id }}" url="{% url 'dailyreport:delete_comment' daily_id=daily.id comment_id=comment.id %}">削除</button>
                         {% endif %}
                     </div>
