@@ -24,6 +24,22 @@ table {
     color:white;
 }
 
+.default-button-black:link {
+    color:black;
+}
+
+.default-button-black:visited {
+    color:black;
+}
+
+.default-button-black:hover {
+    color:black;
+}
+
+.default-button-black:active {
+    color:black;
+}
+
 .panel-body {
     word-wrap : break-word;
     overflow-wrap : break-word;
