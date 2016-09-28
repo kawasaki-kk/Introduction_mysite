@@ -85,6 +85,8 @@ class TaskForm(ModelForm):
             name = cleaned_data['name']
         except KeyError:
             raise forms.ValidationError('タスク名を入力してください')
+        if len(name.strip()) < 1:
+            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
         try:
             implement_date = cleaned_data['implement_date']
         except KeyError:
