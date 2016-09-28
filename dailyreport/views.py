@@ -159,6 +159,9 @@ def edit_task_in_task_page(request):
     u"""タスク一覧(CRU)
         タスク一覧をフォームとして表示します
         表示対象のタスクはユーザーそれぞれのタスクのみです
+        また、DateFormフォームより送られてきた日付情報をもとに、タスクフォームセットに表示する情報を絞り込みます
+            絞り込む対象は実施日(implement_date)です
+            タスクの作成日(create_date)ではありません
         R属性は仮です
             タスク単独を詳しく編集するフォームを実装する可能性があります
         dictionary:
@@ -190,23 +193,6 @@ def edit_task_in_daily_page(request):
     edit_task(request)
 
     return redirect('dailyreport:view_daily_list')
-
-
-def narrowing_task_by_date(request):
-    u"""タスク日付絞込み
-        タスクの一覧を日付で絞り込みます
-        表示対象のタスクはtask_editと同じくユーザーそれぞれのタスクのみです
-        DateFormフォームより送られてきた日付情報をもとに、タスクフォームセットに表示する情報を絞り込みます
-            絞り込む対象は実施日(implement_date)です
-            タスクの作成日(create_date)ではありません
-    :param request: dateform(日付をカレンダーによって指定するフォーム)からのリクエスト、及びユーザー情報の取得
-    :return: レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用する日付で絞り込んだフォーム
-    """
-    dictionary = init_dictionary(request=request)
-    dictionary.update(task_search_form=TaskSearchForm(request.GET))
-
-    dictionary.update(task_form=get_narrowing_task(request=request))
-    return render_to_response('dailyreport/task_list.html', dictionary, context_instance=RequestContext(request))
 
 
 def delete_daily(request, daily_id):
