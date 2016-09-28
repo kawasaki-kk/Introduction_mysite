@@ -32,7 +32,7 @@ def get_all_daily_list(request, release):
     :param release: 日報の公開状態(True:公開/False:非公開)
     :return: 指定したrelease状態の日報の一覧
     """
-    if request.method is 'GET':
+    if request.method == 'GET':
         # リクエストを取得しながら検索フォームを生成
         form = DateForm(request.GET)
         if form.is_valid():
