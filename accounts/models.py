@@ -25,13 +25,14 @@ class UserManager(BaseUserManager):
     def _edit_user(self, id, username, is_superuser, first_name=None, last_name=None, **extra_fields):
         if not username or len(username.strip()) < 1:
             raise ValueError(u'ユーザー名を入力してください！')
-        if User.objects.filter(username=username):
-            raise ValueError(u'そのユーザーは登録されています')
         if first_name is not None and len(first_name.strip()) < 1:
             raise ValueError(u'姓を入力してください！')
         if last_name is not None and len(last_name.strip()) < 1:
             raise ValueError(u'名を入力してください！')
-        user = get_object_or_404(User, pk=id)
+        try:
+            user = get_object_or_404(User, pk=id)
+        except:
+            raise ValueError(u'ユーザーが存在しません')
         user.username = username
         user.first_name = first_name
         user.last_name = last_name
