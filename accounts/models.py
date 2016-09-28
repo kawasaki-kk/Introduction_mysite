@@ -8,10 +8,14 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, username, password, is_superuser, first_name=None, last_name=None, **extra_fields):
-        if not username:
+        if not username or len(username.strip()) < 1:
             raise ValueError(u'ユーザー名を入力してください！')
         if User.objects.filter(username=username):
             raise ValueError(u'そのユーザーは登録されています')
+        if first_name is not None and len(first_name.strip()) < 1:
+            raise ValueError(u'姓を入力してください！')
+        if last_name is not None and len(last_name.strip()) < 1:
+            raise ValueError(u'名を入力してください！')
         user = self.model(
             username=username, first_name=first_name, last_name=last_name, is_superuser=is_superuser, **extra_fields)
         user.set_password(password)
@@ -19,10 +23,14 @@ class UserManager(BaseUserManager):
         return user
 
     def _edit_user(self, id, username, is_superuser, first_name=None, last_name=None, **extra_fields):
-        if not username:
+        if not username or len(username.strip()) < 1:
             raise ValueError(u'ユーザー名を入力してください！')
         if User.objects.filter(username=username):
             raise ValueError(u'そのユーザーは登録されています')
+        if first_name is not None and len(first_name.strip()) < 1:
+            raise ValueError(u'姓を入力してください！')
+        if last_name is not None and len(last_name.strip()) < 1:
+            raise ValueError(u'名を入力してください！')
         user = get_object_or_404(User, pk=id)
         user.username = username
         user.first_name = first_name
