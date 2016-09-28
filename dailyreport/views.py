@@ -324,6 +324,8 @@ def search_user_by_keyword(request):
 
             return render_to_response(
                 'dailyreport/user_list.html', dictionary, context_instance=RequestContext(request))
+        else:
+            return redirect('dailyreport:view_all_user_list')
     else:
         dictionary.update(users=User.objects.all().order_by('id'))
         dictionary.update(user_search_form=SearchForm())
