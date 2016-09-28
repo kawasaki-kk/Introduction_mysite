@@ -48,19 +48,19 @@ class UserResisterFrom(forms.Form):
         except:
             raise forms.ValidationError('ユーザー名を入力してください')
         if len(username.strip()) < 1:
-            raise forms.ValidationError('ユーザー名は空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('ユーザー名には、空白や改行を除き、1文字以上入力してください')
         try:
             first_name = cleaned_data['first_name']
         except:
             raise forms.ValidationError('姓を入力してください')
         if len(first_name.strip()) < 1:
-            raise forms.ValidationError('姓は空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('姓には、空白や改行を除き、1文字以上入力してください')
         try:
             last_name = cleaned_data['last_name']
         except:
             raise forms.ValidationError('名を入力してください')
         if len(last_name.strip()) < 1:
-            raise forms.ValidationError('名は空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('名には、空白や改行を除き、1文字以上入力してください')
         try:
             password1 = cleaned_data['password1']
         except:
@@ -95,17 +95,17 @@ class UserEditFrom(forms.Form):
         except:
             raise forms.ValidationError('ユーザー名を入力してください')
         if len(username.strip()) < 1:
-            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('ユーザー名には、空白や改行を除き、1文字以上入力してください')
         try:
             first_name = cleaned_data['first_name']
         except:
             raise forms.ValidationError('姓を入力してください')
         if len(first_name.strip()) < 1:
-            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('姓には、空白や改行を除き、1文字以上入力してください')
         try:
             last_name = cleaned_data['last_name']
         except:
             raise forms.ValidationError('名を入力してください')
         if len(last_name.strip()) < 1:
-            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('名には、空白や改行を除き、1文字以上入力してください')
         return cleaned_data
