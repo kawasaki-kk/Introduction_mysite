@@ -39,7 +39,10 @@ def register(request):
 def edit(request, user_id=None):
     comment = ''
     if user_id:
-        user = get_object_or_404(User, pk=user_id)
+        try:
+            user = get_object_or_404(User, pk=user_id)
+        except:
+            return redirect('login')
     else:
         user = User()
 
