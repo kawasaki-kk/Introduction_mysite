@@ -6,7 +6,7 @@
 {% block content %}
 <h3 class="page-header">ログイン</h3>
     {% if form.errors %}
-        <p>あなたのユーザー名とパスワードが一致しません. もう一度入力してください.</p>
+        <span class="color-red">あなたのユーザー名とパスワードが一致しません. もう一度入力してください.</span>
     {% endif %}
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
     {% csrf_token %}

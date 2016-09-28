@@ -157,3 +157,7 @@ table {
 textarea {
     resize: none;
 }
+
+.color-red {
+    color: red;
+}
