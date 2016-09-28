@@ -10,9 +10,9 @@ from accounts.models import User
 from dailyreport.forms import SearchForm, DateForm, TaskSearchForm, DailySearchForm
 from dailyreport.models import Daily
 from dailyreport.services.service_comment import \
-    get_comments_from_daily, get_or_create_comment, edit_comment, delete_comment_record
+    get_comments_from_daily, get_or_create_comment, edit_comment_record, delete_comment_record
 from dailyreport.services.service_daily import \
-    get_all_daily_list, get_user_daily_list, get_or_create_daily, edit_daily, delete_daily_record
+    get_all_daily_list, get_user_daily_list, get_or_create_daily, edit_daily_record, delete_daily_record
 from dailyreport.services.service_task import \
     create_task_form_in_queryset, get_task_from_implement_date, get_task_from_create_date, \
     get_next_task, get_all_task, edit_task, get_narrowing_task
@@ -36,7 +36,7 @@ u"""views.py
 
 
 @login_required
-def daily_list_view(request):
+def view_daily_list(request):
     u"""日報一覧
         日報の一覧を取得し、レンダリングを指示します
 
@@ -65,7 +65,7 @@ def daily_list_view(request):
 
 
 @login_required
-def daily_detail_view(request, daily_id):
+def view_daily_detail(request, daily_id):
     u"""日報詳細(R)
         日報の詳細を取得し、レンダリングを指示します
         表示対象は以下の通り
@@ -97,13 +97,13 @@ def daily_detail_view(request, daily_id):
         user=dictionary['daily'].user, date=dictionary['daily'].create_date))
     dictionary.update(create_task=get_task_from_create_date(
         user=dictionary['daily'].user, date=dictionary['daily'].create_date))
-    flag, dictionary['comment_form'] = edit_comment(
+    flag, dictionary['comment_form'] = edit_comment_record(
         request=request, daily=dictionary['daily'],  comment=get_or_create_comment(request.user))
 
     return render_to_response('dailyreport/daily_detail.html', dictionary, context_instance=RequestContext(request))
 
 
-def daily_edit_view(request, daily_id=None):
+def edit_daily(request, daily_id=None):
     u"""日報編集(U)
         日報を編集し、編集後の日報詳細を表示する
         表示対象は以下の通り
@@ -127,7 +127,7 @@ def daily_edit_view(request, daily_id=None):
     dictionary.update(daily=get_or_create_daily(user=request.user, daily_id=daily_id))
     if request.user != dictionary['daily'].user:
         return redirect('login')
-    flag, dictionary['report_form'] = edit_daily(request=request, daily=dictionary['daily'])
+    flag, dictionary['report_form'] = edit_daily_record(request=request, daily=dictionary['daily'])
     dictionary.update(task_form=create_task_form_in_queryset(
         get_task_from_implement_date(request.user, timezone.now().date())
     ))
@@ -249,7 +249,7 @@ def search_daily_by_keyword(request):
         return redirect('dailyreport:view_daily_list')
 
 
-def user_daily_view(request, user_id):
+def view_user_of_daily(request, user_id):
     u"""ユーザー情報
         ユーザーごとの投稿情報を表示します
         表示対象：
@@ -277,7 +277,7 @@ def user_daily_view(request, user_id):
     return render_to_response('dailyreport/daily_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def user_list_view(request):
+def view_user_list(request):
     u"""ユーザー一覧
         登録しているユーザー全員を表示
     :param request:初期情報
@@ -319,7 +319,7 @@ def search_user_by_keyword(request):
     return render_to_response('dailyreport/user_list.html', dictionary, context_instance=RequestContext(request))
 
 
-def comment_edit_view(request, daily_id, comment_id=None):
+def edit_comment(request, daily_id, comment_id=None):
     u"""コメント編集
         コメントの編集/新規作成を行います
     :param request:
@@ -332,7 +332,7 @@ def comment_edit_view(request, daily_id, comment_id=None):
     dictionary.update(comment=get_or_create_comment(user=request.user, comment_id=comment_id))
     if request.user != dictionary['comment'].user:
         return redirect('login')
-    flag, dictionary['comment_form'] = edit_comment(request, dictionary['daily'], dictionary['comment'])
+    flag, dictionary['comment_form'] = edit_comment_record(request, dictionary['daily'], dictionary['comment'])
 
     if request.method == 'POST' and flag:
         return redirect('dailyreport:view_daily_detail', daily_id=dictionary['daily'].id)

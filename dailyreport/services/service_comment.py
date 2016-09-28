@@ -46,7 +46,7 @@ def get_or_create_comment(user=None, comment_id=None):
 
 
 @exception
-def edit_comment(request, daily, comment):
+def edit_comment_record(request, daily, comment):
     u"""コメントの編集
 
     :param request: リクエスト情報

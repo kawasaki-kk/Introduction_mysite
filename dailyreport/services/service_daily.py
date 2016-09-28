@@ -83,7 +83,7 @@ def get_or_create_daily(user=None, daily_id=None):
 
 
 @exception
-def edit_daily(request, daily):
+def edit_daily_record(request, daily):
     u"""日報の編集
 
     :param request: リクエスト情報
