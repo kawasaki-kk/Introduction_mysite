@@ -145,8 +145,15 @@ class SearchForm(forms.Form):
                                   'placeholder': 'キーワード',
                                   'required': ''}))
 
-    class Meta:
-        pass
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        try:
+            keyword = cleaned_data['keyword']
+        except:
+            raise forms.ValidationError('キーワードを入力してください')
+        if len(keyword.strip()) < 1:
+            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
+        return cleaned_data
 
 
 class DateForm(forms.Form):
