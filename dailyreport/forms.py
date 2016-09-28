@@ -2,6 +2,7 @@
 from django import forms
 from django.forms import ModelForm, models, formsets
 from django.contrib.admin.widgets import AdminDateWidget
+from django.utils import timezone
 
 from dailyreport.models import Daily, Comment, Task
 
@@ -29,7 +30,7 @@ class DailyForm(ModelForm):
         model = Daily
         fields = ('title', 'create_date', 'report_y', 'report_w', 'report_t', )
         widgets = {
-            'create_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}),
+            'create_date': AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD', 'required': ''}),
             'title': forms.TextInput(attrs={
                 'class': 'daily_title_form',
                 'placeholder': '日報のタイトル',
@@ -51,8 +52,12 @@ class DailyForm(ModelForm):
             title = cleaned_data['title']
         except:
             raise forms.ValidationError('タイトルを入力してください')
+        try:
+            create_date = cleaned_data['create_date']
+        except:
+            raise forms.ValidationError('形式に従って、日付を入力してください')
         if len(title.strip()) < 1:
-            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('タイトルには、空白や改行を除き、1文字以上入力してください')
         return cleaned_data
 
 
@@ -130,7 +135,7 @@ class CommentForm(ModelForm):
         except:
             raise forms.ValidationError('コメントを入力してください')
         if len(comment.strip()) < 1:
-            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('コメントには、空白や改行を除き、1文字以上入力してください')
         return cleaned_data
 
 
@@ -152,7 +157,7 @@ class SearchForm(forms.Form):
         except:
             raise forms.ValidationError('キーワードを入力してください')
         if len(keyword.strip()) < 1:
-            raise forms.ValidationError('空白や改行を除き、1文字以上入力してください')
+            raise forms.ValidationError('キーワードには、空白や改行を除き、1文字以上入力してください')
         return cleaned_data
 
 
