@@ -26,7 +26,6 @@ def register(request):
                 new_user.save()
                 return redirect('login')
             else:
-                comment = '* パスワードが一致しません'
                 form = UserResisterFrom(request.POST)
     else:
         form = UserResisterFrom()
@@ -41,8 +40,11 @@ def edit(request, user_id=None):
             user = get_object_or_404(User, pk=user_id)
         except:
             return redirect('login')
+        if request.user != user:
+            return redirect('login')
     else:
         user = User()
+
 
     if request.POST:
         form = UserEditFrom(request.POST, {
