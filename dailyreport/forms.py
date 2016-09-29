@@ -168,6 +168,14 @@ class DateForm(forms.Form):
     """
     date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD', 'required': ''}))
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        try:
+            date = cleaned_data['date']
+        except KeyError:
+            raise forms.ValidationError('形式に従って、日付を入力してください')
+        return cleaned_data
+
 
 class DailySearchForm(forms.Form):
     u"""投稿状態絞り込み用入力フォーム
