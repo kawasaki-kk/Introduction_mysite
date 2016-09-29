@@ -20,16 +20,14 @@ from django.contrib import admin
 from accounts import views
 
 urlpatterns = [
-    # ユーザー認証
+    # ユーザー関連
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'accounts/logout.html'}, name='logout'),
-    # ユーザー登録
-    url(r'^register/$', views.register, name='register'),
-    # ユーザー編集
-    url(r'^register/(?P<user_id>\d+)/$', views.edit, name='edit'),
-    # ユーザー情報
-    url(r'^user/$', views.user_data, name='user_data'),
+    url(r'^register/$', views.register_user, name='register'),
+    url(r'^register/(?P<user_id>\d+)/$', views.edit_user, name='edit'),
+    url(r'^user/$', views.view_user_data, name='user_data'),
     # 管理サイト
     url(r'^admin/', admin.site.urls),
+    # 日報アプリ
     url(r'^', include('dailyreport.urls', namespace='dailyreport')),
 ]
