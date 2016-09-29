@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from accounts.forms import UserForm
 from accounts.models import User
-from accounts.views import register
+from accounts.views import register_user, edit_user, view_user_data
 
 
 class UrlResolveTestsUser(TestCase):
@@ -19,7 +19,15 @@ class UrlResolveTestsUser(TestCase):
 
     def test_url_resolves_to_register(self):
         found = resolve('/register/')
-        self.assertEqual(found.func, register)
+        self.assertEqual(found.func, register_user)
+
+    def test_url_resolves_to_edit(self):
+        found = resolve('/register/1/')
+        self.assertEqual(found.func, edit_user)
+
+    def test_url_resolves_to_user_data(self):
+        found = resolve('/user/')
+        self.assertEqual(found.func, view_user_data)
 
 
 class UserModelsTest(TestCase):
