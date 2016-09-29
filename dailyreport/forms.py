@@ -214,6 +214,3 @@ u"""タスク入力/編集用フォームセット
 """
 TaskFormSet = formsets.formset_factory(TaskForm, extra=1, formset=models.BaseModelFormSet, can_delete=True)
 TaskFormSet.model = Task
-
-
-
