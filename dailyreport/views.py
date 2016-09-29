@@ -53,7 +53,10 @@ def view_daily_list(request):
     dictionary.update(pages=create_pagination(request, get_all_daily_list(request=request, release=True)))
     dictionary.update(dailys=dictionary['pages'].object_list)
     dictionary.update(is_paginated=True)
-    dictionary.update(date_form=DateForm(request.GET))
+    if request.method == 'GET' and 'narrow' in request.GET:
+        dictionary.update(date_form=DateForm(request.GET))
+    else:
+        dictionary.update(date_form=DateForm())
     dictionary.update(task_form=create_task_form_in_queryset(
         get_task_from_implement_date(request.user, timezone.now().date())
     ))
