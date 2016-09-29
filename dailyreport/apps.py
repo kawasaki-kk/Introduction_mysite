@@ -2,5 +2,5 @@
 from django.apps import AppConfig
 
 
-class CmsConfig(AppConfig):
+class DailyReportConfig(AppConfig):
     name = 'dailyreport'
