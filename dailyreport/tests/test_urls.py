@@ -19,11 +19,11 @@ class UrlResolveTestsDaily(TestCase):
         self.assertEqual(found.func, edit_daily)
 
     def test_url_resolves_to_daily_mod(self):
-        found = resolve('/dailyreport/mod/1/')
+        found = resolve('/dailyreport/edit/1/')
         self.assertEqual(found.func, edit_daily)
 
     def test_url_resolves_to_daily_del(self):
-        found = resolve('/dailyreport/del/1/')
+        found = resolve('/dailyreport/delete/1/')
         self.assertEqual(found.func, delete_daily)
 
     def test_url_resolves_to_daily_detail(self):
@@ -41,7 +41,7 @@ class UrlResolveTestsComment(TestCase):
         self.assertEqual(found.func, edit_comment)
 
     def test_url_resolves_to_comment_mod(self):
-        found = resolve('/dailyreport/comment/mod/1/1/')
+        found = resolve('/dailyreport/comment/edit/1/1/')
         self.assertEqual(found.func, edit_comment)
 
     def test_url_resolves_to_comment_del(self):
@@ -55,7 +55,7 @@ class UrlResolveTestsTask(TestCase):
         self.assertEqual(found.func, edit_task_in_daily_page)
 
     def test_url_resolves_to_task_add(self):
-        found = resolve('/dailyreport/task/mod/')
+        found = resolve('/dailyreport/task/edit/')
         self.assertEqual(found.func, edit_task_in_task_page)
 
 
