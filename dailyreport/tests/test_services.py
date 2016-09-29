@@ -16,13 +16,15 @@ class DailyModelServicesTests(TestCase):
         request.POST['create_date'] = timezone.now().date()
         return request
 
-    def get_request(self, date=None, cond=None):
+    def get_request(self, date=None, cond=None, user=None):
         request = HttpRequest()
         request.method = 'GET'
         if date:
             request.GET['date'] = date
         if cond:
             request.GET['cond'] = cond
+        if user:
+            request.user = user
         return request
 
     def create_user(self, username='', password=''):
@@ -40,9 +42,9 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = service_daily.get_all_daily_list(self.get_request(), True)
+        dailys = service_daily.get_all_daily_list(self.get_request(user=user), True)
         self.assertEqual(dailys.count(), 0)
-        dailys = service_daily.get_all_daily_list(self.get_request(), False)
+        dailys = service_daily.get_all_daily_list(self.get_request(user=user), False)
         self.assertEqual(dailys.count(), 1)
         self.assertEqual(title, dailys[0].title)
 
@@ -50,7 +52,7 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = service_daily.get_all_daily_list(self.get_request(date=timezone.now().date()), False)
+        dailys = service_daily.get_all_daily_list(self.get_request(date=timezone.now().date(), user=user), False)
         self.assertEqual(dailys.count(), 1)
         self.assertEqual(title, dailys[0].title)
 
@@ -58,7 +60,7 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title, release=True)
-        dailys = service_daily.get_user_daily_list(self.get_request(), user)
+        dailys = service_daily.get_user_daily_list(self.get_request(user=user), user)
         self.assertEqual(dailys.count(), 1)
         self.assertEqual(title, dailys[0].title)
 
@@ -66,14 +68,14 @@ class DailyModelServicesTests(TestCase):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = service_daily.get_user_daily_list(self.get_request(cond=2), user)
+        dailys = service_daily.get_user_daily_list(self.get_request(cond=2, user=user), user)
         self.assertEqual(dailys.count(), 1)
 
     def test_get_user_daily_list_release(self):
         title = 'test_title'
         user = self.create_user(username='test_user', password='test_password')
         daily = self.create_daily(user=user, title=title)
-        dailys = service_daily.get_user_daily_list(self.get_request(cond=1), user)
+        dailys = service_daily.get_user_daily_list(self.get_request(cond=1, user=user), user)
         self.assertEqual(dailys.count(), 0)
 
 
@@ -84,13 +86,15 @@ class CommentModelServicesTests(TestCase):
         request.POST['comment'] = title
         return request
 
-    def get_request(self, date=None, cond=None):
+    def get_request(self, date=None, cond=None, user=None):
         request = HttpRequest()
         request.method = 'GET'
         if date:
             request.GET['date'] = date
         if cond:
             request.GET['cond'] = cond
+        if user:
+            request.user = user
         return request
 
     def create_user(self, username='', password=''):

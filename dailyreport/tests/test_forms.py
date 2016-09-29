@@ -87,14 +87,15 @@ class SearchFormTest(TestCase):
         form = SearchForm(param)
         self.assertTrue(form.is_valid())
 
-    def test_valid2(self):
+    def test_invalid(self):
         u"""
             現行では、空文字での検索を許容しています
+            追記：最新ではスペースのみなどの検索キーワードを認めません
         :return:
         """
         param = dict()
         form = SearchForm(param)
-        self.assertTrue(form.is_valid())
+        self.assertFalse(form.is_valid())
 
 
 class DateFormTest(TestCase):
