@@ -20,7 +20,7 @@ class DailyFormTest(TestCase):
         form = DailyForm(params, instance=daily)
         self.assertFalse(form.is_valid())
 
-    def test_invalid_spaces(self):
+    def test_invalid_space(self):
         params = dict(title=' ', create_date=timezone.now().date())
         daily = Daily()
         form = DailyForm(params, instance=daily)
@@ -98,7 +98,7 @@ class CommentFormTest(TestCase):
         form = CommentForm(params, instance=comment)
         self.assertFalse(form.is_valid())
 
-    def test_invalid_spaces(self):
+    def test_invalid_space(self):
         params = dict(comment=' ')
         comment = Comment()
         form = CommentForm(params, instance=comment)
@@ -121,7 +121,7 @@ class SearchFormTest(TestCase):
         form = SearchForm(param)
         self.assertFalse(form.is_valid())
 
-    def test_invalid_spaces(self):
+    def test_invalid_space(self):
         param = dict(keyword=' ')
         form = SearchForm(param)
         self.assertFalse(form.is_valid())
