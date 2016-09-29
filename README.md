@@ -190,11 +190,14 @@
 ~~~
 Introduction_mysite/ex_password.dummy.py
 ~~~
-　上から順に、データベースオーナーユーザーのパスワード、ユーザー名、データベース名、そしてdjangoのシークレットキーです。[データベースの作成](#データベースの作成)で設定した内容を入力してください。djangoのシークレットキーは、一意に識別することが目的ですので、基本的には適度な長さの文字列で構いません。以下に例を示します。
+　上から順に、データベースオーナーユーザーのパスワード、ユーザー名、データベース名、そしてdjangoのデバックモードの有効/無効、シークレットキーです。[データベースの作成](#データベースの作成)で設定した内容を入力してください。
+
+　djangoのデバックモードを無効にする場合には、debug_modeにFalseを入れてください。デフォルト値はTrueです。シークレットキーは、一意に識別することが目的ですので、基本的には適度な長さの文字列で構いません。以下に例を示します。
 ~~~
 database_password = 'password'
 database_user = 'django'
 database_name = 'django'
+debug_mode = True
 secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
 　最後に、ファイルの名前の`ex_password.dummy.py`から、`.dummy`部分を削除することで、データベースの設定は完了です。
@@ -204,7 +207,7 @@ secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 　次に、データベースをマイグレートします。マイグレーションファイルを作成する必要があるアプリはaccountsとcmsの二つです。コマンドライン上でmanage.pyのある階層に移動し、それぞれ以下のコマンドでマイグレーションファイルを生成してください。
 ~~~
 > python manage.py makemigrations accounts
-> python manage.py makemigrations cms
+> python manage.py makemigrations dailyreport
 ~~~
 　それが終わったらデータベースをマイグレートしましょう。コマンドは以下の通りです。
 ~~~
@@ -225,7 +228,7 @@ secret_key = '^#ugn5-vl6%n!^7p)cqsh8c&zag3y1=(a3#g4)!1b0dlb0a0jf'
 ~~~
 > python manage.py runserver
 ~~~
-　実行後、以下のアドレスをWebブラウザに入力し、アプリケーションのログイン画面にアクセスします。
+　実行後、以下のアドレス(初期設定の場合)をWebブラウザに入力し、アプリケーションのログイン画面にアクセスします。
 ~~~
 http://127.0.0.1:8000/login/
 ~~~
@@ -244,6 +247,15 @@ http://127.0.0.1:8000/login/
 
 2016/9/14 v1.1.3 release
 * バグ修正
+
+2016/9/29 v1.2.0 release
+* バグ修正
+* フォームバリデーションの追加・修正
+    * 空白入力、無入力状態への対応を追加
+    * エラーメッセージ・表示の追加
+* アプリケーション名を変更
+    * cms -> dailyreport
+    * makemigrationsの対象が変わりますのでご注意ください
 
 ※本readme中の各画像はv1.1のものです。最新のものとは異なる場合があります。
 
