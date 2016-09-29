@@ -121,7 +121,6 @@ def edit_task(request, daily_id=None):
         return False
     else:
         return False
-    return True
 
 
 @exception

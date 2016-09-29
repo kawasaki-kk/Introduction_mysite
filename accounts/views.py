@@ -5,7 +5,7 @@ from accounts.forms import UserResisterFrom, UserEditFrom
 from accounts.models import User
 
 
-def register(request):
+def register_user(request):
 
     if request.POST:
         form = UserResisterFrom(request.POST)
@@ -33,7 +33,7 @@ def register(request):
     return render(request, 'accounts/register.html', {'form': form})
 
 
-def edit(request, user_id=None):
+def edit_user(request, user_id=None):
 
     if user_id:
         try:
@@ -44,7 +44,6 @@ def edit(request, user_id=None):
             return redirect('login')
     else:
         user = User()
-
 
     if request.POST:
         form = UserEditFrom(request.POST, {
@@ -69,7 +68,7 @@ def edit(request, user_id=None):
     return render(request, 'accounts/edit.html', {'form': form})
 
 
-def user_data(request):
+def view_user_data(request):
     user = get_object_or_404(User, pk=request.user.id)
 
     return render(request, 'accounts/user_data.html', {'user': user})

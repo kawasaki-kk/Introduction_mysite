@@ -13,8 +13,10 @@ urlpatterns = [
     url(r'^dailyreport/search/$', views.search_daily_by_keyword, name='search_daily'),
     # コメント操作
     url(r'^dailyreport/comment/add/(?P<daily_id>\d+)/$', views.edit_comment, name='add_comment'),
-    url(r'^dailyreport/comment/edit/(?P<daily_id>\d+)/(?P<comment_id>\d+)/$', views.edit_comment, name='edit_comment'),
-    url(r'^dailyreport/comment/delete/(?P<daily_id>\d+)/(?P<comment_id>\d+)/$', views.delete_comment, name='delete_comment'),
+    url(r'^dailyreport/comment/edit/(?P<daily_id>\d+)/(?P<comment_id>\d+)/$',
+        views.edit_comment, name='edit_comment'),
+    url(r'^dailyreport/comment/delete/(?P<daily_id>\d+)/(?P<comment_id>\d+)/$',
+        views.delete_comment, name='delete_comment'),
     # タスク操作
     url(r'^dailyreport/task/$', views.edit_task_in_daily_page, name='edit_task_in_daily'),
     url(r'^dailyreport/task/edit/$', views.edit_task_in_task_page, name='edit_task'),

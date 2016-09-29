@@ -42,9 +42,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'markdown_deux',
     'pure_pagination',
-    'bootstrapform',  # django-bootstrap-form
-    'dailyreport',  # 管理システムアプリケーション
-    'accounts',  # ログイン管理アプリケーション
+    'bootstrapform',
+    'dailyreport',
+    'accounts',
 )
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,8 +65,6 @@ AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
-
-# SESSION_SAVE_EVERY_REQUEST = True
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -98,7 +96,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': database_name,
         'USER': database_user,
-        #  'PASSWORD': os.environ.get("PASSWORD"),
         'PASSWORD': database_password,
         'HOST': 'localhost',
         'PORT': '',
@@ -135,10 +132,8 @@ PAGINATION_SETTINGS = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'ja'
 
-# TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
@@ -153,7 +148,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# 静的ファイルを共通で置く
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dailyreport/static'),
 )

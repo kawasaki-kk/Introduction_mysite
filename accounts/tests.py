@@ -3,9 +3,9 @@ from django.contrib.auth.views import login, logout
 from django.core.urlresolvers import resolve, reverse
 from django.test import TestCase
 
-from accounts.forms import UserForm
+from accounts.forms import UserForm, UserEditFrom, UserResisterFrom
 from accounts.models import User
-from accounts.views import register
+from accounts.views import register_user, edit_user, view_user_data
 
 
 class UrlResolveTestsUser(TestCase):
@@ -19,7 +19,15 @@ class UrlResolveTestsUser(TestCase):
 
     def test_url_resolves_to_register(self):
         found = resolve('/register/')
-        self.assertEqual(found.func, register)
+        self.assertEqual(found.func, register_user)
+
+    def test_url_resolves_to_edit(self):
+        found = resolve('/register/1/')
+        self.assertEqual(found.func, edit_user)
+
+    def test_url_resolves_to_user_data(self):
+        found = resolve('/user/')
+        self.assertEqual(found.func, view_user_data)
 
 
 class UserModelsTest(TestCase):
@@ -60,6 +68,37 @@ class UserFormTest(TestCase):
         params = dict()
         user = User()
         form = UserForm(params, instance=user)
+        self.assertFalse(form.is_valid())
+
+
+class UserEditFormTest(TestCase):
+    def test_valid(self):
+        params = dict(username='test_user', first_name='test_first', last_name='test_last')
+        form = UserEditFrom(params)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid(self):
+        params = dict()
+        form = UserEditFrom(params)
+        self.assertFalse(form.is_valid())
+
+
+class UserResisterFromTest(TestCase):
+    def test_valid(self):
+        params = dict(username='test_user', first_name='test_first', last_name='test_last',
+                      password1='test_password', password2='test_password')
+        form = UserResisterFrom(params)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid(self):
+        params = dict()
+        form = UserResisterFrom(params)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_of_password(self):
+        params = dict(username='test_user', first_name='test_first', last_name='test_last',
+                      password1='test_password', password2='test_password_mistakes')
+        form = UserResisterFrom(params)
         self.assertFalse(form.is_valid())
 
 
