@@ -31,7 +31,8 @@
                         {{ form.implement_date.label_tag }}{{ form.implement_date }}<br>
                         タスク名：{{ form.name }}<br>
                         予定:{{ form.time_plan }}h
-                        / 実績:{{ form.time_real }}h<br>
+                        / 実績:{{ form.time_real }}h
+                        <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button><br>
                     {% else %}                                                                                                                                                                                                                                                                                                                                                            {{form.id}}
                         {{ form.complete_task }}
                         {% if form.complete_task.value %}
@@ -52,10 +53,6 @@
                 </a>
             {% endfor %}
         </div>
-        <div class="panel-footer">
-            <button type="submit" name='edit' class="btn btn-sm btn-default">更新</button>
-            <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button>
-        </div>
     </form><br>
     <form class="panel panel-primary" action="{% url 'dailyreport:edit_task_in_daily' %}" method="POST">
         <div class="panel-heading">
@@ -72,7 +69,8 @@
                         {{ form.implement_date.label_tag }}{{ form.implement_date }}<br>
                         タスク名：{{ form.name }}<br>
                         予定:{{ form.time_plan }}h
-                        / 実績:{{ form.time_real }}h<br>
+                        / 実績:{{ form.time_real }}h
+                        <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button><br>
                     {% else %}
                         {{ form.id }}
                         {{ form.complete_task }}
@@ -88,10 +86,6 @@
                     {{ form.non_field_errors }}
                 </a>
             {% endfor %}
-        </div>
-        <div class="panel-footer">
-            <button type="submit" name='edit' class="btn btn-sm btn-default">更新</button>
-            <button type="submit" name='add' class="btn btn-sm btn-primary">追加</button>
         </div>
     </form><br>
 </div>
