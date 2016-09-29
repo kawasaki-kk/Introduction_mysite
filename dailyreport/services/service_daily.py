@@ -36,12 +36,8 @@ def get_all_daily_list(request, release):
         # リクエストを取得しながら検索フォームを生成
         form = DateForm(request.GET)
         if form.is_valid():
-            form = DateForm(request.GET)
-            if form.is_valid():
-                return Daily.objects.filter(
-                    create_date=form.cleaned_data['date'], release=release).order_by('-update_date')
-            else:
-                return Daily.objects.filter(release=release).order_by('-update_date')
+            return Daily.objects.filter(
+                create_date=form.cleaned_data['date'], release=release).order_by('-update_date')
         else:
             return Daily.objects.filter(release=release).order_by('-update_date')
 
