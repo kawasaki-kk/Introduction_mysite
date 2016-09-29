@@ -45,7 +45,7 @@ class UrlResolveTestsComment(TestCase):
         self.assertEqual(found.func, edit_comment)
 
     def test_url_resolves_to_comment_del(self):
-        found = resolve('/dailyreport/comment/del/1/1/')
+        found = resolve('/dailyreport/comment/delete/1/1/')
         self.assertEqual(found.func, delete_comment)
 
 
