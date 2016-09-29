@@ -66,6 +66,7 @@ def edit_comment_record(request, daily, comment):
     return True, CommentForm(instance=comment)
 
 
+@exception
 def delete_comment_record(request, comment):
     u"""コメントの削除
 

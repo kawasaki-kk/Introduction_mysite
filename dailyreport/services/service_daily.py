@@ -105,6 +105,7 @@ def edit_daily_record(request, daily):
     return True, form
 
 
+@exception
 def delete_daily_record(request, daily):
     u"""日報の削除
 
