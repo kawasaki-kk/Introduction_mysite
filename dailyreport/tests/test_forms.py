@@ -20,6 +20,12 @@ class DailyFormTest(TestCase):
         form = DailyForm(params, instance=daily)
         self.assertFalse(form.is_valid())
 
+    def test_invalid_spaces(self):
+        params = dict(title=' ', create_date=timezone.now().date())
+        daily = Daily()
+        form = DailyForm(params, instance=daily)
+        self.assertFalse(form.is_valid())
+
 
 class TaskFormTest(TestCase):
     def test_valid(self):
@@ -66,6 +72,18 @@ class TaskFormTest(TestCase):
         form = TaskForm(params, instance=task)
         self.assertFalse(form.is_valid())
 
+    def test_invalid_name1(self):
+        params = dict(name='', time_plan=1, time_real=0, implement_date=timezone.now().date())
+        task = Task()
+        form = TaskForm(params, instance=task)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_name2(self):
+        params = dict(name=' ', time_plan=1, time_real=0, implement_date=timezone.now().date())
+        task = Task()
+        form = TaskForm(params, instance=task)
+        self.assertFalse(form.is_valid())
+
 
 class CommentFormTest(TestCase):
     def test_valid(self):
@@ -76,6 +94,12 @@ class CommentFormTest(TestCase):
 
     def test_invalid(self):
         params = dict()
+        comment = Comment()
+        form = CommentForm(params, instance=comment)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_spaces(self):
+        params = dict(comment=' ')
         comment = Comment()
         form = CommentForm(params, instance=comment)
         self.assertFalse(form.is_valid())
@@ -94,6 +118,11 @@ class SearchFormTest(TestCase):
         :return:
         """
         param = dict()
+        form = SearchForm(param)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_spaces(self):
+        param = dict(keyword=' ')
         form = SearchForm(param)
         self.assertFalse(form.is_valid())
 
