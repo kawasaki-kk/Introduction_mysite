@@ -49,26 +49,26 @@ def get_all_daily_list(request, release):
 
 
 @exception
-def get_user_daily_list(request, user):
+def get_user_daily_list(request, user_id):
     u"""日報の取得(ユーザー指定)
         ユーザーを指定して、日報を取得し、クエリセットとして返します
     :param request: 検索のクエリ
-    :param user: 取得対象のユーザー
+    :param user_id: 取得対象のユーザー
     :return: 指定したユーザーの日報の一覧
     """
     if request.method == 'GET':
         form = DailySearchForm(request.GET)
         if form.is_valid():
             if form.cleaned_data['cond'] == '1':
-                return Daily.objects.filter(user=user, release=True).order_by('-update_date')
+                return Daily.objects.filter(user=user_id, release=True).order_by('-update_date')
             elif form.cleaned_data['cond'] == '2':
-                return Daily.objects.filter(user=user, release=False).order_by('-update_date')
+                return Daily.objects.filter(user=user_id, release=False).order_by('-update_date')
             else:
-                return Daily.objects.filter(user=user).order_by('-update_date')
-    if int(request.user.id) == int(user):
-        return Daily.objects.filter(user=user).order_by('-update_date')
+                return Daily.objects.filter(user=user_id).order_by('-update_date')
+    if int(request.user.id) == int(user_id):
+        return Daily.objects.filter(user=user_id).order_by('-update_date')
     else:
-        return Daily.objects.filter(user=user, release=True).order_by('-update_date')
+        return Daily.objects.filter(user=user_id, release=True).order_by('-update_date')
 
 
 @exception

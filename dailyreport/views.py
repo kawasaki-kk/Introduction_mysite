@@ -263,7 +263,7 @@ def view_user_of_daily(request, user_id):
     dictionary = init_dictionary(request=request)
     dictionary.update(daily_release_form=DailySearchForm(request.GET))
     dictionary.update(pages=create_pagination(
-        request, get_user_daily_list(request=request, user=user_id)))
+        request, get_user_daily_list(request=request, user_id=user_id)))
     dictionary.update(dailys=dictionary['pages'].object_list)
     dictionary.update(is_paginated=True)
     dictionary.update(task_form=create_task_form_in_queryset(
