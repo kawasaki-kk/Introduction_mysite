@@ -33,7 +33,6 @@ def get_all_daily_list(request, release):
     :return: 指定したrelease状態の日報の一覧
     """
     if request.method == 'GET':
-        # リクエストを取得しながら検索フォームを生成
         form = DateForm(request.GET)
         if form.is_valid():
             return Daily.objects.filter(

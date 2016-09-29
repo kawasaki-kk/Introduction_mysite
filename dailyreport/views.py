@@ -208,7 +208,7 @@ def delete_daily(request, daily_id):
     :return:日報一覧ページへリダイレクト
     """
     if delete_daily_record(request, get_or_create_daily(request.user, daily_id)):
-        return redirect('dailyreport:view_user_daily', user_id=request.user.id)   # 一覧画面にリダイレクト
+        return redirect('dailyreport:view_user_daily', user_id=request.user.id)
     else:
         return redirect('login')
 
