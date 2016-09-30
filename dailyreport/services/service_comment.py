@@ -27,7 +27,7 @@ def exception(func):
 @exception
 def get_comments_from_daily(daily):
     u"""コメント一覧の取得
-        指定の日報に紐付けられたコメントの一覧を取得します
+    指定の日報に紐付けられたコメントの一覧を取得します
     :param daily: Dailyモデル型のレコード
     :return: dailyに紐付くコメントの一覧
     """
