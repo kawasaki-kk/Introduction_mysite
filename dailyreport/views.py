@@ -47,7 +47,7 @@ def view_daily_list(request):
             当日分のタスク一覧(フォーム形式)
             明日以降分のタスク一覧(フォーム形式)
     :param request: 関数が呼ばれたときにhtmlから送られてきた情報。ここでは使用しない。
-    :return:レンダリング対象のhtmlファイル'dailyreport/daily_list.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    :return:日報一覧画面(全ユーザーの公開中日報一覧)
     """
     dictionary = init_dictionary(request=request)
     dictionary.update(pages=create_pagination(request, get_all_daily_list(request=request, release=True)))
@@ -70,22 +70,22 @@ def view_daily_list(request):
 @login_required
 def view_daily_detail(request, daily_id):
     u"""日報詳細(R)
-        日報の詳細を取得し、レンダリングを指示します
-        表示対象は以下の通り
-            ある日報のレコード
-            日報の作成日に実施されたタスク
-            日報の作成日に作成されたタスク
-        dictionary:
-            日報
-            日報の作成日に実施されたタスク(implement_date)
-            日報の作成日に作成されたタスク(create_date)
-            日報に紐付けられたコメント一覧
-            コメント入力フォーム
-            当日分のタスク一覧(フォーム形式)
-            明日以降分のタスク一覧(フォーム形式)
+    日報の詳細を取得し、レンダリングを指示します
+    表示対象は以下の通り
+        ある日報のレコード
+        日報の作成日に実施されたタスク
+        日報の作成日に作成されたタスク
+    dictionary:
+        日報
+        日報の作成日に実施されたタスク(implement_date)
+        日報の作成日に作成されたタスク(create_date)
+        日報に紐付けられたコメント一覧
+        コメント入力フォーム
+        当日分のタスク一覧(フォーム形式)
+        明日以降分のタスク一覧(フォーム形式)
     :param request: ユーザー情報の取得
     :param daily_id: 表示対象の日報取得
-    :return: レンダリング対象のhtmlファイル'dailyreport/daily_detail.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    :return: 日報詳細画面
     """
     dictionary = init_dictionary(request=request, daily_id=daily_id)
     dictionary.update(daily=get_or_create_daily(daily_id=daily_id))
@@ -108,23 +108,21 @@ def view_daily_detail(request, daily_id):
 
 def edit_daily(request, daily_id=None):
     u"""日報編集(U)
-        日報を編集し、編集後の日報詳細を表示する
-        表示対象は以下の通り
-            日報
-            日報の作成日または当日(新規作成時)に実施されたタスク
-            日報の作成日または当日(新規作成時)に作成されたタスク
-        なお、日報編集ページではタスクの編集は行わない
-            トップページなどの画面中に表示されているタスク編集フォームを利用して逐次更新が行われているものとする
-        dictionary:
-            日報
-            日報編集用フォーム
-                idが指定されている場合は日報を取得後、フォームとする
-                idが未指定の場合には、新規日報のインスタンスを作成し、フォームとする
-            日報の作成日または当日(新規作成時)に実施されたタスク(implement_date)
-            日報の作成日または当日(新規作成時)に作成されたタスク(create_date)
+    日報を編集し、編集後の日報詳細を表示する
+    表示対象は以下の通り
+        日報
+        日報の作成日または当日(新規作成時)に実施されたタスク
+        日報の作成日または当日(新規作成時)に作成されたタスク
+    dictionary:
+        日報
+        日報編集用フォーム
+            idが指定されている場合は日報を取得後、フォームとする
+            idが未指定の場合には、新規日報のインスタンスを作成し、フォームとする
+        日報の作成日または当日(新規作成時)に実施されたタスク(implement_date)
+        日報の作成日または当日(新規作成時)に作成されたタスク(create_date)
     :param request: ユーザー情報の取得
     :param daily_id: 編集対象の日報id(未指定の場合新規作成と判断)
-    :return: レンダリング対象のhtmlファイル'dailyreport/daily_edit.html'、およびhtmlファイル中で利用するフォーム・クエリリスト
+    :return: 日報詳細画面(成功時かつプレビュー/公開の場合)、タスク管理画面(成功時かつタスク編集へ移動する場合)
     """
     dictionary = init_dictionary(request=request, daily_id=daily_id)
     dictionary.update(daily=get_or_create_daily(user=request.user, daily_id=daily_id))
@@ -160,17 +158,15 @@ def edit_daily(request, daily_id=None):
 
 def edit_task_in_task_page(request):
     u"""タスク一覧(CRU)
-        タスク一覧をフォームとして表示します
-        表示対象のタスクはユーザーそれぞれのタスクのみです
-        また、DateFormフォームより送られてきた日付情報をもとに、タスクフォームセットに表示する情報を絞り込みます
-            絞り込む対象は実施日(implement_date)です
-            タスクの作成日(create_date)ではありません
-        R属性は仮です
-            タスク単独を詳しく編集するフォームを実装する可能性があります
-        dictionary:
-        タスクフォーム
+    タスク一覧をフォームとして表示します
+    表示対象のタスクはユーザーそれぞれのタスクのみです
+    また、DateFormフォームより送られてきた日付情報をもとに、タスクフォームセットに表示する情報を絞り込みます
+        絞り込む対象は実施日(implement_date)です
+        タスクの作成日(create_date)ではありません
+    R属性は仮です
+        タスク単独を詳しく編集するフォームを実装する可能性があります
     :param request:ユーザー情報の取得
-    :return:レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用するフォーム
+    :return:タスク一覧ページ
     """
     dictionary = init_dictionary(request=request)
     edit_task(request)
@@ -183,15 +179,13 @@ def edit_task_in_task_page(request):
 
 def edit_task_in_daily_page(request):
     u"""タスク一覧(CRU)
-        日報表示部分を持つページにおいてタスクを更新するためのメソッドです
-        通常のものと比べ、返るページが異なります
-        表示対象のタスクはユーザーそれぞれのタスクのみです
-        R属性は仮です
-            タスク単独を詳しく編集するフォームを実装する可能性があります
-        lists:
-        タスクフォーム
+    日報表示部分を持つページにおいてタスクを更新するためのメソッドです
+    通常のものと比べ、返るページが異なります
+    表示対象のタスクはユーザーそれぞれのタスクのみです
+    R属性は仮です
+        タスク単独を詳しく編集するフォームを実装する可能性があります
     :param request:ユーザー情報の取得
-    :return:レンダリング対象のhtmlファイル'dailyreport/task_list.html'、およびhtmlファイル中で利用するフォーム
+    :return:日報一覧ページ
     """
     edit_task(request)
 
@@ -200,12 +194,12 @@ def edit_task_in_daily_page(request):
 
 def delete_daily(request, daily_id):
     u"""日報削除(D)
-        日報の削除を行います
-        日報の投稿ユーザーでないユーザーがアクセスした場合、ログインページにリダイレクトされます
-        正常に削除できた場合は（ユーザーの）日報一覧画面へリダイレクトされます
+    日報の削除を行います
+    日報の投稿ユーザーでないユーザーがアクセスした場合、ログインページにリダイレクトされます
+    正常に削除できた場合は（ユーザーの）日報一覧画面へリダイレクトされます
     :param request:ユーザー情報の取得
     :param daily_id:削除対象日報id
-    :return:日報一覧ページへリダイレクト
+    :return:日報一覧ページ
     """
     if delete_daily_record(request, get_or_create_daily(request.user, daily_id)):
         return redirect('dailyreport:view_user_daily', user_id=request.user.id)
@@ -215,12 +209,12 @@ def delete_daily(request, daily_id):
 
 def search_daily_by_keyword(request):
     u"""日報検索
-        日報をキーワードによって検索します
-        検索条件
-        ・キーワード数：1(複数キーワードのor対応,and未対応)
-        ・検索対象：ユーザー名/日報タイトル/日報本文(y/w/t)
+    日報をキーワードによって検索します
+    検索条件
+    ・キーワード数：1~(複数キーワードのand対応)
+    ・検索対象：ユーザー名/日報タイトル/日報本文(y/w/t)
     :param request: 検索キーワードの取得
-    :return: 絞り込んだ日報の一覧をdaily_list.htmlを利用してレンダリングする
+    :return: キーワードをすべて含む日報の一覧
     """
     dictionary = init_dictionary(request=request)
     dictionary.update(task_form=create_task_form_in_queryset(
@@ -254,14 +248,13 @@ def search_daily_by_keyword(request):
 
 def view_user_of_daily(request, user_id):
     u"""ユーザー情報
-        ユーザーごとの投稿情報を表示します
-        表示対象：
-            各ユーザーが投稿した日報
-            (自分のページの場合)非公開状態の日報
-        その他の表示内容は日報一覧と同様です
+    ユーザーごとの投稿情報を表示します
+    表示対象：
+        各ユーザーが投稿した日報
+        (自分のページの場合)非公開状態の日報
     :param request: ユーザー情報の取得
     :param user_id: 表示対象ユーザーid
-    :return: ユーザーで絞り込んだ日報のリストを日報一覧と同様のhtmlファイルを使用してレンダリングします
+    :return: 指定ユーザーが投稿した日報の一覧
     """
     dictionary = init_dictionary(request=request)
     dictionary.update(daily_release_form=DailySearchForm(request.GET))
@@ -282,9 +275,9 @@ def view_user_of_daily(request, user_id):
 
 def view_user_list(request):
     u"""ユーザー一覧
-        登録しているユーザー全員を表示
+    登録しているユーザー全員を表示
     :param request:初期情報
-    :return:ユーザーの一覧とユーザー検索フォーム
+    :return:全ユーザーの一覧
     """
     dictionary = init_dictionary(request=request)
     dictionary.update(users=User.objects.all().order_by('first_name'))
@@ -295,11 +288,11 @@ def view_user_list(request):
 
 def search_user_by_keyword(request):
     u"""ユーザー検索
-        ユーザーをキーワード検索
-        検索対象：
-            username, first_name, last_name
-        :param request:検索リクエスト
-        :return:検索結果ユーザー一覧とユーザー検索フォーム
+    ユーザーをキーワード検索
+    検索対象：
+        username, first_name, last_name
+    :param request:検索リクエスト
+    :return:キーワードを含むユーザー一覧
     """
     dictionary = init_dictionary(request=request)
     if request.method == 'GET':
@@ -324,7 +317,7 @@ def search_user_by_keyword(request):
 
 def edit_comment(request, daily_id, comment_id=None):
     u"""コメント編集
-        コメントの編集/新規作成を行います
+    コメントの編集/新規作成を行います
     :param request:
     :param daily_id:コメントが投稿されている日報のid
     :param comment_id:(編集の場合)編集対象のコメントのid
@@ -349,11 +342,11 @@ def edit_comment(request, daily_id, comment_id=None):
 
 def delete_comment(request, daily_id, comment_id):
     u"""コメントの削除
-        コメントを削除します
-    :param request:
+    コメントを削除します
+    :param request:ユーザー情報取得用
     :param daily_id:リダイレクト先日報id
     :param comment_id:削除対象コメントid
-    :return:
+    :return:コメントが投稿されていた日報の詳細ページ
     """
     if delete_comment_record(request, get_or_create_comment(request.user, comment_id)):
         return redirect('dailyreport:view_daily_detail', daily_id=daily_id)
