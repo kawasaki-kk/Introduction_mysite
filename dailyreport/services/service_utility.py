@@ -24,6 +24,14 @@ def exception(func):
 
 @exception
 def init_dictionary(request=None, daily_id=None):
+    u"""辞書型初期化メソッド
+    テンプレートに送る情報を初期化します
+    本メソッド中で追加するのはbase.htmlやtaskbar.htmlで使用される共通データ部分です
+
+    :param request: リクエスト情報
+    :param daily_id: 日報情報
+    :return: 初期情報を登録した辞書型
+    """
     dictionary = dict(search_form=SearchForm())
     dictionary.update(request=request)
     dictionary.update(daily_id=daily_id)
@@ -35,7 +43,7 @@ def init_dictionary(request=None, daily_id=None):
 @exception
 def create_pagination(request, query):
     u"""ページネーションの作成
-        pure_paginationモジュールを利用して、クエリを分割し、ページ情報を付加する
+    pure_paginationモジュールを利用して、クエリを分割し、ページ情報を付加する
 
     :param request: リクエスト情報
     :param query: ページ分割対象のクエリ
