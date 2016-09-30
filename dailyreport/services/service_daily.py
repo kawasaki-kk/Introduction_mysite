@@ -27,7 +27,7 @@ def exception(func):
 @exception
 def get_all_daily_list(request, release):
     u"""日報の取得(全ユーザー)
-        ユーザーにかかわらず、日報を取得し、クエリセットとして返します
+    ユーザーにかかわらず、日報を取得し、クエリセットとして返します
     :param request:表示クエリの取得
     :param release: 日報の公開状態(True:公開/False:非公開)
     :return: 指定したrelease状態の日報の一覧
@@ -46,7 +46,7 @@ def get_all_daily_list(request, release):
 @exception
 def get_user_daily_list(request, user_id):
     u"""日報の取得(ユーザー指定)
-        ユーザーを指定して、日報を取得し、クエリセットとして返します
+    ユーザーを指定して、日報を取得し、クエリセットとして返します
     :param request: 検索のクエリ
     :param user_id: 取得対象のユーザー
     :return: 指定したユーザーの日報の一覧
