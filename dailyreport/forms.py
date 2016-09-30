@@ -2,29 +2,28 @@
 from django import forms
 from django.forms import ModelForm, models, formsets
 from django.contrib.admin.widgets import AdminDateWidget
-from django.utils import timezone
 
 from dailyreport.models import Daily, Comment, Task
 
 
 class DailyForm(ModelForm):
     u"""Dailyモデル編集用フォーム
-        Dailyモデルを編集するためのフォームです
-        編集可能な項目
-            title:          タイトル
-            create_date:    投稿日
-            report_y:       やったこと
-            report_w:       わかったこと
-            report_t:       つぎにやること
-        タイトルと作成日について
-            現在の"【日報】0830チーム開発演習デザイン作成"というようなタイトルを例にとります
-                タイトル：「チーム開発演習デザイン作成」
-                投稿日日：0830
-            という風に対応します
-            また、これは日報管理アプリであるので、「日報」であることは自明であるとします
-        投稿日について
-            投稿日(create_date)はカレンダーウィジェットから選択することができます
-            文字列で入力する場合は"YYYY-MM-DD"という形式です
+    Dailyモデルを編集するためのフォームです
+    編集可能な項目
+        title:          タイトル
+        create_date:    投稿日
+        report_y:       やったこと
+        report_w:       わかったこと
+        report_t:       つぎにやること
+    タイトルと作成日について
+        現在の"【日報】0830チーム開発演習デザイン作成"というようなタイトルを例にとります
+            タイトル：「チーム開発演習デザイン作成」
+            投稿日日：0830
+        という風に対応します
+        また、これは日報管理アプリであるので、「日報」であることは自明であるとします
+    投稿日について
+        投稿日(create_date)はカレンダーウィジェットから選択することができます
+        文字列で入力する場合は"YYYY-MM-DD"という形式です
     """
     class Meta:
         model = Daily
@@ -65,15 +64,15 @@ class DailyForm(ModelForm):
 
 class TaskForm(ModelForm):
     u"""Taskモデル編集用フォーム
-        Taskモデルを編集するためのフォームです
-        編集可能な項目
-            complete_task:  タスクの完了状態
-            implement_date: タスクの実施日
-            name:           タスク名
-            time_plan:      予定作業時間
-            time_real:      実際の作業時間
-        実施日はカレンダーウィジェットから選択することができます
-        文字列で入力する場合は"YYYY-MM-DD"という形式です
+    Taskモデルを編集するためのフォームです
+    編集可能な項目
+        complete_task:  タスクの完了状態
+        implement_date: タスクの実施日
+        name:           タスク名
+        time_plan:      予定作業時間
+        time_real:      実際の作業時間
+    実施日はカレンダーウィジェットから選択することができます
+    文字列で入力する場合は"YYYY-MM-DD"という形式です
     """
     class Meta:
         model = Task
@@ -118,9 +117,9 @@ class TaskForm(ModelForm):
 
 class CommentForm(ModelForm):
     u"""Commentモデル編集用フォーム
-        Commentモデルを編集するためのフォームです
-        編集可能な項目
-            comment:    コメント本文
+    Commentモデルを編集するためのフォームです
+    編集可能な項目
+        comment:    コメント本文
 
     """
     class Meta:
@@ -144,7 +143,7 @@ class CommentForm(ModelForm):
 
 class SearchForm(forms.Form):
     u"""キーワード検索用入力フォーム
-        キーワード検索用のキーワード入力フォームです
+    キーワード検索用のキーワード入力フォームです
     """
     keyword = forms.CharField(max_length=100, required=False,
                               widget=forms.TextInput(attrs={
@@ -165,8 +164,8 @@ class SearchForm(forms.Form):
 
 class DateForm(forms.Form):
     u"""日付絞込み用入力フォーム
-        日付絞込み用の日付入力フォームです
-        ウィジェットを登録していますので、カレンダーから日付を選択することもできます
+    日付絞込み用の日付入力フォームです
+    ウィジェットを登録していますので、カレンダーから日付を選択することもできます
     """
     date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD', 'required': ''}))
 
@@ -181,8 +180,8 @@ class DateForm(forms.Form):
 
 class DailySearchForm(forms.Form):
     u"""投稿状態絞り込み用入力フォーム
-        日報のレコードを絞り込むためのフォームです
-        日報の状態をドロップダウンリストにより、"すべて"、"公開"、"未公開"から選択することができます
+    日報のレコードを絞り込むためのフォームです
+    日報の状態をドロップダウンリストにより、"すべて"、"公開"、"未公開"から選択することができます
     """
 
     cond = forms.ChoiceField(
@@ -199,9 +198,9 @@ class DailySearchForm(forms.Form):
 
 class TaskSearchForm(forms.Form):
     u"""日付絞込み/タスク状態絞り込み用入力フォーム
-        タスクのレコードを絞り込むためのフォームです
-        ウィジェットを登録していますので、カレンダーから日付を選択することもできます
-        また、タスクの完了状態をドロップダウンリストにより、"すべて"、"完了"、"未完了"から選択することができます
+    タスクのレコードを絞り込むためのフォームです
+    ウィジェットを登録していますので、カレンダーから日付を選択することもできます
+    また、タスクの完了状態をドロップダウンリストにより、"すべて"、"完了"、"未完了"から選択することができます
     """
     date = forms.DateField(widget=AdminDateWidget(attrs={'placeholder': 'YYYY-MM-DD'}))
     cond = forms.ChoiceField(
