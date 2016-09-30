@@ -106,3 +106,7 @@ class ViewTest(TestCase):
     def test_status_in_register_view(self):
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
+
+    def test_status_in_edit_view(self):
+        response = self.client.get(reverse('edit', kwargs={'user_id': 1}), follow=True)
+        self.assertEqual(response.status_code, 200)
