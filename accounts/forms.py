@@ -64,11 +64,15 @@ class UserResisterFrom(forms.Form):
         try:
             password1 = cleaned_data['password1']
         except:
-            raise forms.ValidationError('パスワードを入力してください')
+            raise forms.ValidationError('パスワード1を入力してください')
+        if len(password1) < 1:
+            raise forms.ValidationError('パスワード1を入力してください')
         try:
             password2 = cleaned_data['password2']
         except:
-            raise forms.ValidationError('パスワードを入力してください')
+            raise forms.ValidationError('パスワード2を入力してください')
+        if len(password2) < 1:
+            raise forms.ValidationError('パスワード2を入力してください')
         if password1 != password2:
             raise forms.ValidationError('パスワードが異なります')
         return cleaned_data
