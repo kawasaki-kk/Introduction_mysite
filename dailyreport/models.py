@@ -59,10 +59,6 @@ class Task(models.Model):
         implement_date:作業予定日
         complete_task:タスクの完了状態(True:完了)
         complete_goal:目標の完了状態(未使用、True:完了)
-    メソッド
-        save:
-            通常のsave()メソッドをオーバーロード
-            実作業時間が0である場合、作業を完了(=complete_task=True)とできない
 
     """
     daily = models.ForeignKey(Daily, verbose_name='登録日報', related_name='task', blank=True, null=True)
