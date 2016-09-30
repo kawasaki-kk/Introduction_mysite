@@ -52,12 +52,14 @@ class DailyForm(ModelForm):
             title = cleaned_data['title']
         except:
             raise forms.ValidationError('タイトルを入力してください')
+        if len(title.strip()) < 1:
+            raise forms.ValidationError('タイトルには、空白や改行を除き、1文字以上入力してください')
         try:
             create_date = cleaned_data['create_date']
         except:
             raise forms.ValidationError('形式に従って、日付を入力してください')
-        if len(title.strip()) < 1:
-            raise forms.ValidationError('タイトルには、空白や改行を除き、1文字以上入力してください')
+        if len(str(create_date).strip()) < 1:
+            raise forms.ValidationError('形式に従って、日付を入力してください')
         return cleaned_data
 
 
