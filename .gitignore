@@ -54,7 +54,5 @@ __pycache__/
 migrations/
 
 # Introduction_mysite/dailyreport/qiita
-dailyreport/qiita/data
-dailyreport/qiita/auth_token.json
 qiita/data/
-qiita/auth_token.json
+auth_token.json
