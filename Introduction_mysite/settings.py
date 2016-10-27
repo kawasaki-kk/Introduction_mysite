@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'bootstrapform',
     'dailyreport',
     'accounts',
+    'qiita',
 )
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
