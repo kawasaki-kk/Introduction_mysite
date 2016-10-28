@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from jubatus.recommender import client
-from jubatus.recommender import types
+# from jubatus.recommender import types
 from jubatus.common import Datum
 
 from services import load_json, get_all_files
@@ -13,13 +13,13 @@ NAME = "recommender_qiita"
 DATA_FILE_DIR = "./data/items/"
 
 if __name__ == '__main__':
-	recommender = client.Recommender(SERVER_IP, SERVER_PORT, NAME)
+    recommender = client.Recommender(SERVER_IP, SERVER_PORT, NAME)
 
-	for file_name in get_all_files(DATA_FILE_DIR):
-		data = load_json(DATA_FILE_DIR, file_name)
-		print(data["title"])
-		d = Datum(
-			get_AllNouns(data["body"])
-			)
+    for file_name in get_all_files(DATA_FILE_DIR):
+        data = load_json(DATA_FILE_DIR, file_name)
+        print(data["title"])
+        d = Datum(
+            get_AllNouns(data["body"])
+        )
 
-		recommender.update_row(file_name, d)
+        recommender.update_row(file_name, d)
