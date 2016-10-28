@@ -16,7 +16,7 @@ else:
 NAME = "recommender_qiita"
 
 
-def recommend_Qiita(title, content, recommend_num=4, learned_file_name=""):
+def recommend_Qiita(content, recommend_num=4, learned_file_name=""):
     recommender = client.Recommender("127.0.0.1", 9199, NAME)
     if learned_file_name:
         recommender.load(learned_file_name)  # 保存した学習モデルを読み込む
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     # nippo = f.read().split('\n')
     nippo = ["日報テスト", "Pythonが好きだ。" * 100]
 
-    data = recommend_Qiita(nippo[0], nippo[1])
+    data = recommend_Qiita(nippo[1])
     # print(sr)
 
     print("nippo ", nippo[0],  " is similar to :")

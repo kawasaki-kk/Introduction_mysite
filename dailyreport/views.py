@@ -18,7 +18,7 @@ from dailyreport.services.service_task import \
     get_next_task, get_all_task, edit_task, get_narrowing_task
 from dailyreport.services.service_utility import init_dictionary, create_pagination
 
-from dailyreport.qiita.yuba_analyze import recommend_Qiita
+from qiita.views import recommend_QiitaProcess
 
 u"""views.py
     各関数は、辞書型で引数をまとめ、renderにhtmlファイルの指定とともに渡します
@@ -104,16 +104,7 @@ def view_daily_detail(request, daily_id):
     flag, dictionary['comment_form'] = edit_comment_record(
         request=request, daily=dictionary['daily'],  comment=get_or_create_comment(request.user))
 
-    #2016/10/18 川崎追加。JubatusのQiita記事推薦結果をrcに保存。
-    #ここにごちゃごちゃと書くべき処理ではないため、リファクタした方がよい
-    temp = dictionary["daily"]
-    yuba_title = temp.title
-    yuba_content = temp.report_y + temp.report_w + temp.report_t
-    rc = recommend_Qiita(yuba_title, yuba_content)
-    dictionary.update(recommend = rc)
-    print("-----------------------")
-    from pprint import pprint
-    pprint(rc)
+    dictionary.update(recommend=recommend_QiitaProcess(dictionary["daily"]))
 
     return render_to_response('dailyreport/daily_detail.html', dictionary, context_instance=RequestContext(request))
 
