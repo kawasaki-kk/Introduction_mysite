@@ -9,26 +9,29 @@ from jubatus.common import Datum
 from qiita.services import load_json
 from qiita.mecab import get_AllNouns
 
+SERVER_IP = "127.0.0.1"
+SERVER_PORT = 9199
 NAME = "recommender_qiita"
 
 
 def recommend_Qiita(content, recommend_num=4, learned_file_name=""):
     # 日報本文を受け取り、出現する名詞とその出現回数のDatumをクエリとして、
     # Jubatus recomenderから類似記事を取得する。
-
+    #
     # content: 日報本文
     # recommend_num: おすすめする記事数
     # learned_file_name: 事前に保存しておいた学習モデルのファイル名
-
+    #
     # return 類似記事のタイトル、類似度スコア、url、tag情報
 
     # Jubatus recommenderサーバに接続
-    recommender = client.Recommender("127.0.0.1", 9199, NAME)
+    recommender = client.Recommender(SERVER_IP, SERVER_IP, NAME)
     if learned_file_name:
         recommender.load(learned_file_name)  # 保存した学習モデルを読み込む
 
     # 日報本文からDatum作成
     datum = Datum(get_AllNouns(content))
+
     # recommend_numで指定した数、類似記事の情報を取得
     similar_qiita_articles\
         = recommender.similar_row_from_datum(datum, recommend_num)
