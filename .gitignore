@@ -55,4 +55,4 @@ migrations/
 
 # Introduction_mysite/dailyreport/qiita
 qiita/data/
-auth_token.json
+auth_info.json
