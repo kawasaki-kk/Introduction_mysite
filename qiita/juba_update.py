@@ -20,7 +20,10 @@ if __name__ == '__main__':
     # サーバに接続
     recommender = QiitaRecommender()
 
+    # DATA_FILE_DIR以下の全ファイル名のリストを取得
     all_files = get_all_files(DATA_FILE_DIR)
+
+    # プログレスバーの設定
     progress = ProgressBar(maxval=len(all_files))
 
     for i, file_name in enumerate(all_files):
@@ -34,4 +37,5 @@ if __name__ == '__main__':
         # サーバにアップロード
         recommender.update_row(file_name, datum)
 
+        # プログレスバー表示
         progress.update(i + 1)
