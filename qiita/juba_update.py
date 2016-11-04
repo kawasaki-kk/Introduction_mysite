@@ -25,9 +25,9 @@ if __name__ == '__main__':
         # 指定したディレクトリ内の全ファイルを読み込んで、
         data = load_json(DATA_FILE_DIR, file_name)
         print(data["title"])
-        d = Datum(
+        datum = Datum(
             get_AllNouns(data["body"])  # body内に出現する名詞と、その出現回数の辞書をDatumとして作成
         )
 
         # サーバにアップロード
-        recommender.update_row(file_name, d)
+        recommender.update_row(file_name, datum)
