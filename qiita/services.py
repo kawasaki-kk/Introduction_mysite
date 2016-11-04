@@ -11,6 +11,3 @@ def load_json(file_dir, file_name):
 
 def get_all_files(file_dir):
     return os.listdir(file_dir)
-
-if __name__ == '__main__':
-    pass
