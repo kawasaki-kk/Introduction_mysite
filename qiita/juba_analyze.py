@@ -25,7 +25,7 @@ def recommend_Qiita(content, recommend_num=4, learned_file_name=""):
     # return 類似記事のタイトル、類似度スコア、url、tag情報
 
     # Jubatus recommenderサーバに接続
-    recommender = client.Recommender(SERVER_IP, SERVER_IP, NAME)
+    recommender = client.Recommender(SERVER_IP, SERVER_PORT, NAME)
     if learned_file_name:
         recommender.load(learned_file_name)  # 保存した学習モデルを読み込む
 
