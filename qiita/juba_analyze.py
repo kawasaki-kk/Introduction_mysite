@@ -6,13 +6,8 @@ from jubatus.recommender import client
 # from jubatus.recommender import types
 from jubatus.common import Datum
 
-# デバッグにシェルから読んだ時用と、Djangoから読んだ時用。
-if __name__ == '__main__':
-    from services import load_json
-    from mecab import get_AllNouns
-else:
-    from qiita.services import load_json
-    from qiita.mecab import get_AllNouns
+from qiita.services import load_json
+from qiita.mecab import get_AllNouns
 
 NAME = "recommender_qiita"
 
