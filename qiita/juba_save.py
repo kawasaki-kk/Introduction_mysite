@@ -15,8 +15,8 @@ SERVER_PORT = 9199
 NAME = "recommender_qiita"
 
 
-r_client = client.Recommender(SERVER_IP, SERVER_PORT, NAME)
+recommender = client.Recommender(SERVER_IP, SERVER_PORT, NAME)
 try:
-    r_client.save(sys.argv[1])
+    recommender.save(sys.argv[1])
 except:
-    r_client.save(time.strftime("%Y%m%d_%I%M%S", time.localtime()))
+    recommender.save(time.strftime("%Y%m%d_%I%M%S", time.localtime()))
