@@ -3,7 +3,6 @@
 import re
 from collections import Counter
 import MeCab
-import json
 
 
 # Mecabで形態素解析、名詞のみを取得する
@@ -29,13 +28,3 @@ def extract_Symbols(dic):
         if re.search(pattern, key) is not None:
             del dic[key]
     return dic
-
-
-if __name__ == '__main__':
-    # mecab()
-    with open("data/items/80e75fbdc358d9144215.json") as f:
-        data = json.load(f)
-    # text = '解析したいテキスト'
-    text = data["body"]
-
-    print(get_AllNouns(text))
