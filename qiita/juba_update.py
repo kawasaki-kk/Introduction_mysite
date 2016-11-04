@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# from jubatus.recommender import client
-# from jubatus.recommender import types
 from jubatus.common import Datum
 from progressbar import ProgressBar
 
