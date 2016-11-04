@@ -33,42 +33,24 @@ def recommend_Qiita(content, recommend_num=4, learned_file_name=""):
         recommender.load(learned_file_name)  # 保存した学習モデルを読み込む
 
     # 日報本文からDatum作成
-    d = Datum(get_AllNouns(content))
+    datum = Datum(get_AllNouns(content))
     # recommend_numで指定した数、類似記事の情報を取得
-    similars = recommender.similar_row_from_datum(d, recommend_num)
+    similar_qiita_articles\
+        = recommender.similar_row_from_datum(datum, recommend_num)
 
     data = []
-    for similar in similars:
+    for article in similar_qiita_articles:
         # 類似記事のid＝ファイル名から、類似記事のデータをロード
-        print("similar:", similar)
         item = load_json(
             os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
                 "data/items"),
-            similar.id)
+            article.id)
         # データから、各情報をappend
         data.append({
             "q_title": item["title"],
-            "score": similar.score,
+            "score": article.score,
             "url": item["url"],
             "tags": item["tags"]
         })
     return data
-
-
-if __name__ == '__main__':
-    # デバッグ用。
-
-    from pprint import pprint
-    recommender = client.Recommender("127.0.0.1", 9199, NAME)
-
-    # with open('') as f:
-    # nippo = f.read().split('\n')
-    nippo = ["日報テスト", "Pythonが好きだ。" * 100]
-
-    data = recommend_Qiita(nippo[1])
-    # print(sr)
-
-    print("nippo ", nippo[0],  " is similar to :")
-    for item in data:
-        pprint([item["q_title"], item["score"], item["url"], item["tags"]])
