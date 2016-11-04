@@ -2,16 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-from jubatus.recommender import client
-# from jubatus.recommender import types
 from jubatus.common import Datum
 
+from qiita.juba_abstract import QiitaRecommender
 from qiita.services import load_json
 from qiita.mecab import get_AllNouns
-
-SERVER_IP = "127.0.0.1"
-SERVER_PORT = 9199
-NAME = "recommender_qiita"
 
 
 def recommend_Qiita(content, recommend_num=4, learned_file_name=""):
@@ -25,7 +20,7 @@ def recommend_Qiita(content, recommend_num=4, learned_file_name=""):
     # return 類似記事のタイトル、類似度スコア、url、tag情報
 
     # Jubatus recommenderサーバに接続
-    recommender = client.Recommender(SERVER_IP, SERVER_PORT, NAME)
+    recommender = QiitaRecommender()
     if learned_file_name:
         recommender.load(learned_file_name)  # 保存した学習モデルを読み込む
 

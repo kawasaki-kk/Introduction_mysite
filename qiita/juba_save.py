@@ -8,15 +8,12 @@
 
 import sys
 import time
-from jubatus.recommender import client
-
-SERVER_IP = "127.0.0.1"
-SERVER_PORT = 9199
-NAME = "recommender_qiita"
+from juba_abstract import QiitaRecommender
 
 
-recommender = client.Recommender(SERVER_IP, SERVER_PORT, NAME)
+recommender = QiitaRecommender()
+
 try:
     recommender.save(sys.argv[1])
 except:
-    recommender.save(time.strftime("%Y%m%d_%I%M%S", time.localtime()))
+    recommender.save(time.strftime("%Y%m%d_%H%M%S", time.localtime()))
